@@ -41,6 +41,8 @@ export interface SoulBone {
     name: string; // Tên cốt suy biến
     iconUrl?: string; // Ảnh cốt suy biến (thường màu đỏ)
     star1Red: string; // 1 Sao Đỏ
+    star2Red: string; // 2 Sao Đỏ
+    star3Red: string; // 3 Sao Đỏ
     star4Red: string; // 4 Sao Đỏ
     star5Red: string; // 5 Sao Đỏ
     star6Red: string; // 6 Sao Đỏ

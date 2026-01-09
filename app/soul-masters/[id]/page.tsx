@@ -23,12 +23,12 @@ function SkillModal({
 
   const SkillIcon =
     skill.soulRingType.includes("Ma Nhện") ||
-    skill.soulRingType.includes("Giáp Thuẫn")
+      skill.soulRingType.includes("Giáp Thuẫn")
       ? GiSpiderWeb
       : GiSnakeSpiral;
   const iconColorClass =
     skill.soulRingType.includes("Ma Nhện") ||
-    skill.soulRingType.includes("Giáp Thuẫn")
+      skill.soulRingType.includes("Giáp Thuẫn")
       ? "text-red-500 bg-red-900/20 border-red-500"
       : "text-green-500 bg-green-900/20 border-green-500";
 
@@ -76,11 +76,10 @@ function SkillModal({
                 {skill.type}
               </span>
               <span
-                className={`px-2 py-0.5 rounded ${
-                  skill.soulRingType.includes("Ma Nhện")
-                    ? "bg-red-600/30 text-red-300"
-                    : "bg-green-600/30 text-green-300"
-                }`}
+                className={`px-2 py-0.5 rounded ${skill.soulRingType.includes("Ma Nhện")
+                  ? "bg-red-600/30 text-red-300"
+                  : "bg-green-600/30 text-green-300"
+                  }`}
               >
                 {skill.soulRingType}
               </span>
@@ -123,26 +122,38 @@ function SkillModal({
           )}
 
           {skill.note && (
-            <div>
-              {/* Đổi tiêu đề thành "Giải thích hiệu ứng" cho đúng ngữ cảnh */}
+            <div className="space-y-4"> {/* Khoảng cách giữa các khung Note */}
               <h4 className="text-sm font-bold text-yellow-500 uppercase mb-2 flex items-center gap-2">
                 <span className="text-lg">💡</span> Giải thích hiệu ứng
               </h4>
 
-              <div className="bg-slate-900/60 border border-yellow-500/20 p-4 rounded-lg text-sm text-slate-300">
-                {/* Tách phần tên hiệu ứng (trước dấu :) để in đậm nếu có */}
-                {skill.note.includes(":") ? (
-                  <>
-                    <span className="font-bold text-yellow-400 text-base block mb-1">
-                      {skill.note.split(":")[0]}
-                    </span>
-                    <span className="italic opacity-90">
-                      {skill.note.split(":").slice(1).join(":")}
-                    </span>
-                  </>
-                ) : (
-                  <p className="italic">{skill.note}</p>
-                )}
+              <div className="flex flex-col gap-3">
+                {skill.note.split("\n").map((line, index) => {
+                  // Loại bỏ khoảng trắng thừa ở hai đầu
+                  const content = line.trim();
+                  if (!content) return null; // Bỏ qua nếu dòng trống
+
+                  return (
+                    <div
+                      key={index}
+                      className="bg-slate-900/60 border border-yellow-500/20 p-4 rounded-lg text-sm text-slate-300 shadow-sm"
+                    >
+                      {/* Logic tách tiêu đề trong ngoặc vuông [] nếu có */}
+                      {content.includes(":") ? (
+                        <>
+                          <span className="font-bold text-yellow-400 text-base block mb-1">
+                            {content.split(":")[0].trim()}
+                          </span>
+                          <span className="italic opacity-90">
+                            {content.split(":").slice(1).join(":").trim()}
+                          </span>
+                        </>
+                      ) : (
+                        <p className="italic">{content}</p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -172,11 +183,10 @@ function SoulBoneModal({
       onClick={onClose}
     >
       <div
-        className={`bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border-2 shadow-2xl cursor-default no-scrollbar ${
-          isMutated
-            ? "border-red-600 shadow-red-900/50"
-            : "border-yellow-500 shadow-yellow-500/20"
-        }`}
+        className={`bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border-2 shadow-2xl cursor-default no-scrollbar ${isMutated
+          ? "border-red-600 shadow-red-900/50"
+          : "border-yellow-500 shadow-yellow-500/20"
+          }`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -193,11 +203,10 @@ function SoulBoneModal({
           </span>
 
           <div
-            className={`w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-2xl relative overflow-hidden border-2 ${
-              isMutated
-                ? "bg-red-900/20 border-red-500 text-red-500"
-                : "bg-yellow-900/20 border-yellow-500 text-yellow-500"
-            }`}
+            className={`w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-2xl relative overflow-hidden border-2 ${isMutated
+              ? "bg-red-900/20 border-red-500 text-red-500"
+              : "bg-yellow-900/20 border-yellow-500 text-yellow-500"
+              }`}
           >
             {displayIcon ? (
               <Image
@@ -212,11 +221,10 @@ function SoulBoneModal({
           </div>
 
           <h2
-            className={`text-2xl font-bold text-center ${
-              isMutated
-                ? "text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-200 to-red-400 animate-pulse drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]"
-                : "text-yellow-400 drop-shadow-[0_0_10px_rgba(234,179,8,0.3)]"
-            }`}
+            className={`text-2xl font-bold text-center ${isMutated
+              ? "text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-200 to-red-400 animate-pulse drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]"
+              : "text-yellow-400 drop-shadow-[0_0_10px_rgba(234,179,8,0.3)]"
+              }`}
           >
             {displayName}
           </h2>
@@ -278,6 +286,26 @@ function SoulBoneModal({
                   </span>
                   <p>{bone.mutation.star1Red}</p>
                 </div>
+
+                {/* 2 Sao Đỏ - Chỉ hiện nếu có dữ liệu star2Red */}
+                {bone.mutation.star2Red && (
+                  <div className="bg-red-950/30 p-3 rounded border border-red-900/30 animate-fadeIn">
+                    <span className="text-red-400 font-bold mb-1 flex items-center">
+                      {renderStarBadge(2, "text-red-500")} :
+                    </span>
+                    <p>{bone.mutation.star2Red}</p>
+                  </div>
+                )}
+
+                {/* 3 Sao Đỏ - Chỉ hiện nếu có dữ liệu star3Red */}
+                {bone.mutation.star3Red && (
+                  <div className="bg-red-950/30 p-3 rounded border border-red-900/30 animate-fadeIn">
+                    <span className="text-red-400 font-bold mb-1 flex items-center">
+                      {renderStarBadge(3, "text-red-500")} :
+                    </span>
+                    <p>{bone.mutation.star3Red}</p>
+                  </div>
+                )}
 
                 {/* 4 Sao Đỏ */}
                 <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
@@ -369,24 +397,22 @@ export default function SoulMasterDetail() {
         {/* --- CỘT TRÁI (Đã xóa Stats) --- */}
         <div className="lg:col-span-1 space-y-6">
           <div
-            className={`rounded-2xl overflow-hidden border-4 relative shadow-2xl ${
-              hero.rarity === "SP" || hero.rarity === "SP+"
-                ? "border-pink-400" // Viền SP vàng kim sáng
-                : hero.rarity === "SSR"
+            className={`rounded-2xl overflow-hidden border-4 relative shadow-2xl ${hero.rarity === "SP" || hero.rarity === "SP+"
+              ? "border-pink-400" // Viền SP vàng kim sáng
+              : hero.rarity === "SSR"
                 ? "border-yellow-500 shadow-yellow-500/20" // Viền SSR vàng
                 : "border-blue-500 shadow-blue-500/20" // SR giữ nguyên
-            }`}
+              }`}
           >
             {/* Badge Rarity */}
             <div className="absolute top-4 left-4 z-10">
               <span
-                className={`px-3 py-1 rounded font-bold text-sm ${
-                  hero.rarity === "SP" || hero.rarity === "SP+"
-                    ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
-                    : hero.rarity === "SSR"
+                className={`px-3 py-1 rounded font-bold text-sm ${hero.rarity === "SP" || hero.rarity === "SP+"
+                  ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
+                  : hero.rarity === "SSR"
                     ? "bg-yellow-500 text-white border-yellow-600"
                     : "bg-purple-600 text-white border-purple-800"
-                }`}
+                  }`}
               >
                 {hero.rarity}
               </span>
@@ -417,21 +443,19 @@ export default function SoulMasterDetail() {
           <div className="flex gap-4 border-b border-slate-700 mb-6">
             <button
               onClick={() => setActiveTab("build")}
-              className={`pb-3 px-4 font-bold text-sm transition border-b-2 ${
-                activeTab === "build"
-                  ? "border-blue-500 text-blue-400"
-                  : "border-transparent text-slate-500"
-              }`}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 ${activeTab === "build"
+                ? "border-blue-500 text-blue-400"
+                : "border-transparent text-slate-500"
+                }`}
             >
               Hồn Hoàn
             </button>
             <button
               onClick={() => setActiveTab("bones")}
-              className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${
-                activeTab === "bones"
-                  ? "border-yellow-500 text-yellow-400"
-                  : "border-transparent text-slate-500"
-              }`}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones"
+                ? "border-yellow-500 text-yellow-400"
+                : "border-transparent text-slate-500"
+                }`}
             >
               Hồn Cốt
             </button>
@@ -483,16 +507,15 @@ export default function SoulMasterDetail() {
                                   skillDetail && setSelectedSkill(skillDetail)
                                 }
                                 disabled={!skillDetail}
-                                className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 transition-all outline-none ${
-                                  !skillDetail
-                                    ? "opacity-50 cursor-not-allowed grayscale"
-                                    : "hover:scale-110 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30"
-                                } ${
+                                className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 transition-all outline-none ${!skillDetail
+                                  ? "opacity-50 cursor-not-allowed grayscale"
+                                  : "hover:scale-110 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30"
+                                  } ${
                                   // Màu viền fallback nếu chưa có ảnh
                                   isSpider
                                     ? "border-red-500/50"
                                     : "border-green-500/50"
-                                }`}
+                                  }`}
                               >
                                 {/* ƯU TIÊN 1: Nếu có iconUrl (Ảnh thật bạn upload) thì hiện ảnh */}
                                 {skillDetail?.iconUrl ? (
@@ -504,11 +527,10 @@ export default function SoulMasterDetail() {
                                 ) : (
                                   // ƯU TIÊN 2: Nếu chưa có ảnh, dùng Icon mặc định + Màu nền
                                   <div
-                                    className={`w-full h-full flex items-center justify-center text-2xl ${
-                                      isSpider
-                                        ? "bg-red-900/20 text-red-500"
-                                        : "bg-green-900/20 text-green-400"
-                                    }`}
+                                    className={`w-full h-full flex items-center justify-center text-2xl ${isSpider
+                                      ? "bg-red-900/20 text-red-500"
+                                      : "bg-green-900/20 text-green-400"
+                                      }`}
                                   >
                                     {isSpider ? (
                                       <GiSpiderWeb />
