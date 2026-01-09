@@ -202,7 +202,7 @@
         "id": "hoac-vu-hao-s1-2",
         "name": "Thám Trắc Tinh Thần",
         "type": "Chủ động",
-        "soulRingType": "Hệ Nhện",
+        "soulRingType": "Yếu Điểm",
         "description": "Hoặc Vũ Hạo gây sát thương bằng 297% lúc công lên toàn bộ kẻ địch, đồng thời áp dụng trạng thái Yêu Điểm kéo dài vĩnh viễn lên mục tiêu.Khi mục tiêu trong trạng thái này nhận đòn công từ Hoặc Vũ Hạo, cuối mà chúng phải chịu sẽ tăng 40%. Hiệu ứng này có thể cộng dồn tối đa 5 tầng Yêu Điểm.",
         "yearEffects": [
           {
