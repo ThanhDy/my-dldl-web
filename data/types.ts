@@ -45,6 +45,14 @@ export interface SoulBone {
     star5Red: string; // 5 Sao Đỏ
     star6Red: string; // 6 Sao Đỏ
   };
+
+  upgrade?: {
+    name: string; // Tên sau khi nâng cấp (VD: Cốt 10 vạn năm...)
+    iconUrl?: string; // Ảnh cốt mới
+    star2: string; // Dòng mới thêm
+    star3: string; // Dòng mới thêm
+    star5: string; // Dòng mới thêm
+  };
 }
 
 export interface SoulMaster {

@@ -57,6 +57,370 @@
           "star5Red": "Trong chế độ đấu trường, sau khi Hồn Sư phe ta bị tấn công, nếu trong lượt này đã mất ít nhất 2 tầng [Sa Hồn], sẽ nhận được Miễn Nhiễm sát thương kéo dài đến đầu lượt chiến trường tiếp theo, hiệu ứng này mỗi Hồn Sư phe ta chỉ được kích hoạt 1 lần",
           "star6Red": "Cứ mỗi 10 lần Hồn Sư phe ta hoàn thành lệnh, Tiểu Bạch giúp toàn bộ phe ta gây ST Cuối tăng vĩnh viễn 100%, cộng dồn tối đa 2 lần."
         }
+      },
+      {
+        "position": "Thân",
+        "name": "Thân Ma Hồn Đại Bạch Sa",
+        "standard": {
+          "base": "Tăng 5% Thủ.",
+          "star4": "Giảm 10% sát thương bạo kích nhận vào.",
+          "star6": "Khi bị tấn công, có 30% tỷ lệ phản kích."
+        },
+        "upgrade": {
+          "name": "Thân Bạch Sa",
+          "star1": "Tăng 5% Thủ.",
+          "star2": "Tăng thêm 5% Máu tối đa.",
+          "star3": "Mỗi hiệp hồi phục 5% Máu đã mất.",
+          "star5": "Khi máu trên 70%, tăng 20% Kháng Bạo."
+        }
+      }
+    ]
+  },
+  {
+    "id": "hoac-vu-hao",
+    "name": "Hoắc Vũ Hạo",
+    "image": "/images/hoac-vu-hao/avt.png",
+    "title": "Linh Băng Đấu La",
+    "rarity": "SP",
+    "type": "Khống Chế",
+    "story": "Truyền nhân của Đường Môn, sở hữu Linh Mâu và Băng Bích Hải Tiên Công.",
+    "builds": [{ "title": "PvE - 2222" }, { "title": "PvP - 1111" }],
+    "skillDetails": [
+      {
+        "id": "hoac-vu-hao-s1-1",
+        "name": "Băng Lưu Tinh",
+        "type": "Chủ động",
+        "soulRingType": "Hệ Rắn",
+        "description": "Hoắc Vũ Hạo gây sát thương bằng 297% lực công lên toàn bộ kẻ địch, đồng thời có 40% tỷ lệ áp dụng trạng thái [Suy Yếu] kéo dài 1 hiệp lên mục tiêu.",
+        "yearEffects": [
+          {
+            "year": "1k năm",
+            "description": "Tỷ lệ áp dụng trạng thái [Suy Yếu] tăng lên 50%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Kẻ địch trong trạng thái [Suy Yếu] bị giảm 30% sát thương từ Hồn Kỹ."
+          },
+          {
+            "year": "25k năm",
+            "description": "Kẻ địch trong trạng thái [Suy Yếu] bị giảm 50% sát thương từ Hồn Kỹ."
+          },
+          {
+            "year": "50k năm",
+            "description": "Kẻ địch trong trạng thái [Suy Yếu] bị giảm 75% sát thương từ Hồn Kỹ."
+          },
+          {
+            "year": "100k năm",
+            "description": "Tỷ lệ áp dụng trạng thái [Suy Yếu] tăng lên 60%, và mỗi khi Hoắc Vũ Hạo kích hoạt một Thần Vị [Cảm Xúc], tỷ lệ này tăng thêm 10%."
+          }
+        ],
+        "note": "[Suy Yếu]:  Hiệu ứng khống chế: Các đơn vị trong trạng thái Suy Yếu chỉ có thể sử dụng Hồn Kỹ và không thể sử dụng tấn công thường.",
+        "iconUrl": "/images/hoac-vu-hao/hh1-1.png"
+      },
+      {
+        "id": "hoac-vu-hao-s2-1",
+        "name": "Mệnh Vận Chi Thương",
+        "type": "Bị động",
+        "soulRingType": "Hệ Rắn",
+        "description": "Hoắc Vũ Hạo mỗi khi kích hoạt một Thần Vị [Cảm Xúc], sát thương cuối cùng của bản thân phải chịu sẽ giảm đi 10.00%.",
+        "yearEffects": [
+          {
+            "year": "1k năm",
+            "description": "Hiệu quả giảm sát thương cuối cùng sẽ được tăng thêm 10%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Hiệu quả giảm sát thương cuối cùng sẽ được tăng thêm 20%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Nếu số lượng Thần Vị [Cảm Xúc] mà Hoắc Vũ Hạo kích hoạt lớn hơn hoặc bằng 2, hiệu quả giảm sát thương cuối cùng sẽ áp dụng cho toàn bộ đồng đội."
+          },
+          {
+            "year": "50k năm",
+            "description": "Hiệu quả giảm sát thương cuối cùng sẽ được tăng thêm 40%."
+          },
+          {
+            "year": "100k năm",
+            "description": "Khi trận đấu bắt đầu, toàn bộ đồng đội sẽ nhận được miễn nhiễm sát thương, số lần miễn nhiễm này tương đương với số Thần Vị [Cảm Xúc] mà Hoắc Vũ Hạo đã kích hoạt. Sau khi bị tấn công bởi Hồn Kỹ, số lần miễn nhiễm sẽ bị giảm đi."
+          }
+        ],
+        "iconUrl": "/images/hoac-vu-hao/hh2-1.png"
+      },
+      {
+        "id": "hoac-vu-hao-s3-1",
+        "name": "Tinh Thần Xung Kích",
+        "type": "Bị động",
+        "soulRingType": "Hệ Rắn",
+        "description": "Hoắc Vũ Hạo gây sát thương bằng 150% sức tấn công lên một mục tiêu, và có 20% tỷ lệ áp dụng [Suy Yếu] cho mục tiêu, kéo dài 1 hiệp.",
+        "yearEffects": [
+          { "year": "1k năm", "description": "Tỷ lệ tăng lên 25%." },
+          { "year": "10k năm", "description": "Tỷ lệ tăng lên 30%." },
+          { "year": "25k năm", "description": "Tỷ lệ tăng lên 40%." },
+          { "year": "50k năm", "description": "Tỷ lệ tăng lên 50%." },
+          {
+            "year": "100k năm",
+            "description": "Tỷ lệ tăng lên 100% đối với mỗi kẻ địch lần đầu sử dụng Hồn Kỹ."
+          }
+        ],
+        "note": "[Suy Yếu] - Hiệu ứng khống chế: Các đơn vị trong trạng thái Suy Yếu chỉ có thể sử dụng Hồn Kỹ và không thể sử dụng tấn công thường.",
+        "iconUrl": "/images/hoac-vu-hao/hh3-1.png"
+      },
+      {
+        "id": "hoac-vu-hao-s4-1",
+        "name": "Thời Không Chi Quang",
+        "type": "Chủ động",
+        "soulRingType": "Hệ Rắn",
+        "description": "Hoắc Vũ Hạo gây sát thương bằng 900% sức tấn công lên mục tiêu và áp dụng [Linh Thị] cho mục tiêu, khiến mục tiêu nhận sát thương tăng 20%.Sau 4 lượt chiến trường, chuyển hóa thành [Băng Linh] và loại bỏ [Linh Thị], kéo dài 2 lượt.Mỗi lần hiệu ứng này được kích hoạt, số lượt cần thiết để chuyển thành [Băng Linh] sẽ tăng 3 lượt, tối đa là 10 lượt.Khi đối tượng ở trạng thái [Linh Thị], mỗi lần sử dụng Hồn Kỹ, số lượt cần để chuyển thành [Băng Linh] sẽ giảm 1 lượt.",
+        "yearEffects": [
+          {
+            "year": "1000 năm",
+            "description": "[Băng Linh] phản tăng sát thương lên 100%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Khi đối phương đang sử dụng Hồn Kỹ Không Chế, thời gian hồi chiêu của Hồn Kỹ này giảm 1 lượt, hiệu ứng này có thể kích hoạt 1 lần mỗi lượt."
+          },
+          {
+            "year": "25k năm",
+            "description": "Khi sử dụng lại Hồn Kỹ này, nếu mục tiêu đã ở trạng thái [Linh Thị], sẽ chuyển hóa trực tiếp thành [Băng Linh]."
+          },
+          {
+            "year": "50k năm",
+            "description": "Thời gian tồn tại của trạng thái [Băng Linh] trên đối phương sẽ giảm dần cho đến khi mục đích khác được chuyển thành [Băng Linh]."
+          },
+          {
+            "year": "100k năm",
+            "description": "Khi đối thủ không thể hồi phục ở trạng thái [Băng Linh], đối phương sẽ giảm chiến thắng, hiệu ứng này chỉ có hiệu lực trong Chế Độ Thi Đấu."
+          }
+        ],
+        "note": "[Linh Thị]  Trạng thái đặc biệt: Người sở hữu sẽ chuyển thành [Băng Linh] sau một số lượt nhất định, và việc sử dụng Hồn Kỹ sẽ giảm số lượt cần thiết để chuyển thành [Băng Linh]. \n [Băng Linh]  Hình thái đặc biệt: Khi chuyển thành hình thái này, loại bỏ tất cả các trạng thái bất lợi và các Hồn Kỹ và hiệu ứng bị động, có thể tái tấn công thường.",
+        "iconUrl": "/images/hoac-vu-hao/hh4-1.png"
+      },
+
+      {
+        "id": "hoac-vu-hao-s1-2",
+        "name": "Thám Trắc Tinh Thần",
+        "type": "Chủ động",
+        "soulRingType": "Hệ Nhện",
+        "description": "Hoặc Vũ Hạo gây sát thương bằng 297% lúc công lên toàn bộ kẻ địch, đồng thời áp dụng trạng thái Yêu Điểm kéo dài vĩnh viễn lên mục tiêu.Khi mục tiêu trong trạng thái này nhận đòn công từ Hoặc Vũ Hạo, cuối mà chúng phải chịu sẽ tăng 40%. Hiệu ứng này có thể cộng dồn tối đa 5 tầng Yêu Điểm.",
+        "yearEffects": [
+          {
+            "year": "1k năm",
+            "description": "Mỗi khi nhận đòn tấn công từ Hoặc Vũ Hạo, mục tiêu trong trạng thái Yêu Điểm sẽ bị tăng 60% sát thương cuối phải chịu."
+          },
+          {
+            "year": "10k năm",
+            "description": "Mỗi khi nhận đòn tấn công từ Hoặc Vũ Hạo, mục tiêu trong trạng thái Yêu Điểm sẽ bị tăng 80% sát thương cuối phải chịu."
+          },
+          {
+            "year": "25k năm",
+            "description": "Mỗi lần Hoặc Vũ Hạo sử dụng Hồn Kỹ này, giới hạn cộng dồn của hiệu ứng tăng sát thương cuối phải chịu từ trạng thái Yêu Điểm sẽ tăng thêm 5 tầng, tối đa tăng lên 20 tầng."
+          },
+          {
+            "year": "50k năm",
+            "description": "Mỗi khi nhận đòn tấn công từ Hoặc Vũ Hạo, mục tiêu trong trạng thái Yêu Điểm sẽ bị tăng 160% sát thương cuối phải chịu."
+          },
+          {
+            "year": "100k năm",
+            "description": "Khi mục tiêu trong trạng thái Yêu Điểm nhận đòn tấn công từ Hoặc Vũ Hạo, hiệu ứng tăng chịu sát thương cuối sẽ cộng dồn thêm 1 tầng."
+          }
+        ],
+        "note": "Trạng thái đặc biệt: Mục tiêu bị trạng thái này mỗi lần chịu tấn công từ Hoặc Vũ Hạo sẽ làm tăng sát thương cuối cùng mà chúng phải chịu cho đến khi kết thúc trận đấu.",
+        "iconUrl": "/images/hoac-vu-hao/hh1-2.png"
+      },
+      {
+        "id": "hoac-vu-hao-s2-2",
+        "name": "Tái Lập Tinh Thần",
+        "type": "Bị động",
+        "soulRingType": "Hệ Nhện",
+        "description": "Hoặc Vũ Hạo mỗi khi kích hoạt một Thần Vị Cảm Xúc, chịu sát thương cuối cùng của toàn bộ kẻ địch sẽ tăng lên 50.00%.",
+        "yearEffects": [
+          {
+            "year": "1k năm",
+            "description": "Nếu số lượng Thần Vị Cảm Xúc mà Hoặc Vũ Hạo kích hoạt lớn hơn hoặc bằng 4, hiệu quả tăng sát thương cuối cùng sẽ được tăng thêm 80%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Nếu số lượng Thần Vị Cảm Xúc mà Hoặc Vũ Hạo kích hoạt lớn hơn hoặc bằng 5, hiệu quả tăng sát thương cuối cùng sẽ được tăng thêm 100%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Nếu số lượng Thần Vị Cảm Xúc mà Hoặc Vũ Hạo kích hoạt lớn hơn hoặc bằng 6, hiệu quả tăng sát thương cuối cùng sẽ được tăng thêm 120%."
+          },
+          {
+            "year": "50k năm",
+            "description": "Nếu số lượng Thần Vị Cảm Xúc mà Hoặc Vũ Hạo kích hoạt bằng 7, hiệu quả tăng sát thương cuối cùng sẽ được gấp đôi."
+          },
+          {
+            "year": "100k năm",
+            "description": "Đối với mỗi Thần Vị Cảm Xúc, cứ 1% thuộc tính ban đầu do Hoặc Vũ Hạo cung cấp cho mỗi một kẻ địch của Thần Vị đó, sẽ làm hiệu quả tăng sát thương cuối cùng của toàn bộ kẻ địch cộng dồn thêm 2%, tối đa 40%."
+          }
+        ],
+        "iconUrl": "/images/hoac-vu-hao/hh2-2.png"
+      },
+      {
+        "id": "hoac-vu-hao-s3-2",
+        "name": "Linh Hồn Tước Đoạt",
+        "type": "Bị động",
+        "soulRingType": "Hệ Nhện",
+        "description": "Hoắc Vũ Hạo gây sát thương bằng 150% sức tấn công lên một mục tiêu, và có 20% tỷ lệ gây thêm 1 đợt sát thương. Đòn tấn công bổ sung này khiến mục tiêu chịu tăng sát thương cuối cùng lên 30%, kéo dài 1 hiệp.",
+        "yearEffects": [
+          {
+            "year": "1k năm",
+            "description": "Tỷ lệ tấn công bổ sung tăng lên 30%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Tỷ lệ tấn công bổ sung tăng lên 40%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Tỷ lệ tấn công bổ sung tăng lên 60%."
+          },
+          {
+            "year": "50k năm",
+            "description": "Tấn công bổ sung khiến mục tiêu chịu tăng sát thương cuối cùng lên 100%."
+          },
+          {
+            "year": "100k năm",
+            "description": "Tỷ lệ tấn công bổ sung tăng lên 100%."
+          }
+        ],
+        "iconUrl": "/images/hoac-vu-hao/hh3-2.png"
+      },
+      {
+        "id": "hoac-vu-hao-s4-2",
+        "name": "Tâm Linh Chia Sẻ",
+        "type": "Chủ động",
+        "soulRingType": "Hệ Nhện",
+        "description": "Hoắc Vũ Hợp mở [Tâm Linh Huyền Giới] kéo dài vĩnh viễn, trong suốt thời gian duy trì, toàn bộ đội phương nhận hiệu ứng [Tâm Linh Bộc Lộ] tăng chuỗi sát thương cộng dồn 50%, và nửa phe địch không phải là Boss thì sẽ chuyển thành [Băng Linh] sau 20 lượt của chính mình. Khi có [Tâm Linh Huyền Giới] tồn tại toàn bộ đội phương sẽ kháng tất cả hiệu ứng bất thường 80% sát thương cuối cùng.  Nếu đội phương chủ động thực hiện chuyển thành [Băng Linh], hiệu ứng [Tâm Linh Bộc Lộ] sẽ được chuyển sang đội địch khác. Khi đội phương chủ động nhận [Tâm Linh Bộc Lộ], mỗi tầng cộng dồn tăng 100% sát thương cuối cùng. Hiệu ứng này chỉ có hiệu lực trong các chế độ không phải Thần Điêu.",
+        "yearEffects": [
+          {
+            "year": "1k năm",
+            "description": "Mỗi lượt chiến đấu trôi qua, hiệu ứng tầng cộng dồn sát thương cuối cùng của [Tâm Linh Bộc Lộ] tăng 10%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Mỗi lượt chiến đấu trôi qua, hiệu ứng tầng cộng dồn sát thương cuối cùng của [Tâm Linh Bộc Lộ] tăng 20%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Mỗi khi đội phương có [Băng Linh], sát thương sẽ tăng thêm 150% sát thương cuối cùng."
+          },
+          {
+            "year": "50k năm",
+            "description": "Mỗi khi đội phương có trạng thái [Tâm Linh Bộc Lộ], mỗi tầng sẽ được tăng thêm 200% sát thương cuối cùng."
+          },
+          {
+            "year": "100k năm",
+            "description": "Nếu đội phương chủ động chuyển thành trạng thái [Băng Linh], cả đội phương sẽ nhận thêm 200% sát thương cuối cùng."
+          }
+        ],
+        "note": "[Tâm Linh Huyền Giới]: Hiệu Ứng Hợp Giới: Trong suốt thời gian duy trì, đội phương sẽ nhận thêm hiệu ứng kháng tất cả hiệu ứng bất thường và chuỗi sát thương cuối cùng. \n [Tâm Linh Bộc Lộ]: Trạng Thái Đặc Biệt: Nhận sát thương sẽ chuyển thành tầng, mỗi tầng sẽ tăng sát thương cuối cùng và sau mỗi lượt chuyển, trung tâm sẽ chuyển sang đội địch. \n [Băng Linh]: Trạng Thái Đặc Biệt: Khi chuyển thành hình thái này, sát thương triệt tiêu của người sở hữu sẽ tăng mạnh và kỹ năng tự động chủ động, có thể chủ động chuyển đổi.",
+        "iconUrl": "/images/hoac-vu-hao/hh4-2.png"
+      }
+    ],
+    "soulBones": [
+      {
+        "position": "Thân",
+        "name": "Thánh Đồng Cự Giáp",
+        "standard": {
+          "base": "Kẻ địch đang trong trạng thái [Suy Yếu] sẽ bị giảm 1 điểm hồn lực khi bắt đầu lượt của bản thân.",
+          "star4": "Kẻ địch đang trong trạng thái [Linh Thị] mỗi lần sử dụng Hồn Kỹ sẽ giảm thời gian duy trì trạng thái [Băng Linh] của bản thân đi 2 lượt.",
+          "star6": "Nếu Hoắc Vũ Hạo đã kích hoạt Thần Vị [Cảm Xúc], có từ 3 đồng đội trở lên còn sống và không ở trạng thái [Băng Linh], Hoắc Vũ Hạo sẽ không bị tử trận."
+        },
+        "mutation": {
+          "name": "Thánh Đồng Cự Giáp - Suy Biến",
+          "star1Red": "Hồn sư hệ Cường, Mẫn công hoặc Ám khí phe mình khi kích hoạt thành công Thần Vị [Cảm Xúc], sát thương cuối cùng tăng 80%.",
+          "star4Red": "Mỗi hiệp chỉ có 1 người tử vong, hiệu quả tăng sát thương cuối cùng của [Tình Thân Bộc Lộ] tăng 75%, tối đa tăng 300%.",
+          "star5Red": "[Tình Thân Bộc Lộ] khiến điều kiện biến thành [Băng Linh] giảm 2 lượt (áp dụng cho phe địch không phải là Boss),đồng thời sau mỗi lượt chiến đấu tiếp theo, sát thương cuối cùng mà [Băng Linh] phải chịu tăng 10%, tối đa tăng 200%.",
+          "star6Red": "Sau khi [Băng Linh] phe địch tử vong, toàn bộ phe ta thành Bỏ qua [Bất Tử] và [Miễn Nhiễm Sát Thương], duy trì 1 lượt chiến trường.Hiệu quả này chỉ có hiệu lực trong chế độ PVP."
+        }
+      },
+
+      {
+        "position": "Cốt Tay Phải",
+        "name": "Thần Tư Chi Thích",
+        "standard": {
+          "base": "Khi phe ta tấn công kẻ địch đang trong trạng thái [Yếu Điểm], sát thương cuối cùng tăng 50%.",
+          "star4": "Hiệu ứng tăng sát thương cuối cùng từ đòn đánh thường [Linh Hồn Tước Đoạt] có thể cộng dồn, tối đa cộng dồn 5 tầng.",
+          "star6": "Khi Hoắc Vũ Hạo tấn công mục tiêu đang trong trạng thái [Yếu Điểm], hiệu ứng tăng sát thương cuối cùng mà mục tiêu phải nhận sẽ được nhân đôi và áp dụng thêm hiệu ứng này cho toàn bộ đội hình đối phương."
+        },
+        "mutation": {
+          "name": "Thần Tư Chi Thích - Suy Biến",
+          "star1Red": "Khi phe ta tấn công, mỗi khi đánh trúng 1 mục tiêu [Băng Linh], sát thương cuối cùng của đòn tấn công đó tăng 15%, tối đa 60%.",
+          "star4Red": "Mỗi khi lượt của Hoắc Vũ Hạo kết thúc, khiến toàn bộ kẻ địch phải chịu thêm 40% sát thương cuối cùng, tối đa 200%.",
+          "star5Red": "Sát thương của phe ta lên [Băng Linh] tăng 50%, kẻ địch ở trạng thái [Băng Linh] sau khi chết không thể hồi sinh.",
+          "star6Red": "Trong chế độ Đấu Trường, nếu Hoắc Vũ Hạo kích hoạt ít nhất 2 loại Thần Vị [Cảm Xúc], phe địch sẽ không thể kích hoạt hiệu ứng [Tiên Cơ] của Hồn Sư.Nếu kích hoạt ít nhất 3 loại Thần Vị [Cảm Xúc], sẽ không thể kích hoạt hiệu ứng [Tiên Cơ] của Hồn Cốt."
+        }
+      },
+
+      {
+        "position": "Cốt Đầu",
+        "name": "Lục Giới Băng Linh",
+        "standard": {
+          "base": "Mỗi khi Hoắc Vũ Hạo kích hoạt 1 Thần Vị [Cảm Xúc], toàn phe ta tăng 60% sát thương cuối cùng.",
+          "star4": "Trong chế độ PVP, khi mang kỹ năng [Thời Không Chi Quang] hoặc [Hồn - Tâm Linh Chia Sẻ], nếu Hoắc Vũ Hạo kích hoạt ít nhất 3 loại [Cảm Xúc], khi bắt đầu trận chiến sẽ bỏ qua Miễn Nhiễm Trạng Thái và Ý Chí, ngẫu nhiên thi triển [Linh Thị] lên 3 kẻ địch.",
+          "star6": "Khi kích hoạt hiệu ứng trên, trực tiếp biến mục tiêu thành [Băng Linh], số lượng mục tiêu bằng với số Thần Vị [Cảm Xúc] đã kích hoạt, tối đa 5 mục tiêu."
+        },
+        "upgrade": {
+          "name": "Cốt Đầu - Nâng Cấp",
+          "star2": "Khi ra trận có Đường Vũ Đồng, Đường Vũ Đồng tăng 100% sát thương cuối từ hiệu ứng.",
+          "star3": "Trước khi kết thúc lượt đầu tiên, bị động [Tái Lập Tình Thần] (hh2-2) sẽ khiến mỗi Thần Vị [Cảm Xúc] đã được kích hoạt làm nhân đôi hiệu quả tăng sát thương cuối.",
+          "star5": "Cứ mỗi [Băng Linh] có mặt bên phe địch, toàn bộ phe ta được tăng 50% sát thương cuối."
+        }
+      },
+
+      {
+        "position": "Cốt Tay Trái",
+        "name": "Linh Mâu Nhập Nhận",
+        "standard": {
+          "base": "Mỗi khi địch có một [Băng Linh], toàn bộ địch nhận sát thương quần thể cuối cùng tăng 15%, tối đa tăng 60%. Mỗi khi một đơn vị địch giữ 1 tầng [Tinh Thần Bộc Lộ], đơn vị đó nhận sát thương đơn thể cuối cùng tăng 60%, tối đa tăng 300%.",
+          "star4": "Mỗi khi kích hoạt 1 loại [Thần Vị Cảm Xúc], đồng thời [Yếu Điểm] được kích hoạt, giới hạn số tầng hiệu quả [Tăng chịu sát thương cuối cùng] mà mục tiêu nhận được tăng thêm 5 tầng, tối đa tăng 35 tầng.",
+          "star6": "Cứ mỗi 1% thuộc tính ban đầu do [Thần Vị Cảm Xúc] cung cấp cho người kế thừa, hiệu ứng tăng sát thương cuối cùng từ [Yếu Điểm] tăng thêm 2% so với ban đầu, tối đa tăng 100%."
+        },
+        "mutation": {
+          "name": "Cốt Tay Trái - Suy Biến",
+          "star1Red": "Sau khi Hoắc Vũ Hạo sử dụng Hồn Kỹ, toàn bộ kẻ địch chịu sát thương tăng 10%, hiệu ứng này cộng dồn tối đa 5 lần.",
+          "star4Red": "Với mỗi một loại Thần Vị [Cảm Xúc] được Hoắc Vũ Hạo kích hoạt, sát thương cuối từ Hồn Kỹ của Đường Vũ Đồng tăng 20%.",
+          "star5Red": "Sau khi Hoắc Vũ Hạo mở [Tâm Linh Huyền Giới], toàn bộ kẻ địch nhận sát thương cuối tăng 40%, và tăng thêm 10% cho mỗi Thần Vị [Cảm Xúc] được kích hoạt.",
+          "star6Red": "Trong chế độ Đấu Trường, nếu thuộc tính của Thần Vị mà Đường Vũ Đồng kế thừa là cao nhất trong toàn trận, thì Hoắc Vũ Hạo sẽ tự động kích hoạt Thần Vị [Cảm Xúc] đó."
+        }
+      },
+
+      {
+        "position": "Cốt Chân Trái",
+        "name": "Linh Thám Chiếu Tê",
+        "standard": {
+          "base": "Sát thương hoặc hiệu ứng choáng sẽ khiến trạng thái [Cảm Xúc] hoặc Hoắc Vũ Hạo tăng 50%. Nếu kỹ năng [Cảm Xúc] đang được kích hoạt, hiệu ứng này tăng thêm 50%.",
+          "star4": "Kẻ địch sở hữu trạng thái [Yếu Đuối] nếu đang trong trạng thái Khống Chế, khi bị Hoắc Vũ Hạo tấn công sẽ thêm 1 tầng hiệu ứng tăng chịu sát thương cuối.",
+          "star6": "Khi kẻ địch chuyển sang trạng thái [Băng Linh], các Hồn Sư hệ Cường Mẫn Công của phe ta lập tức không cần hao sử dụng Đệ Nhất hoặc Đệ Bát Hồn Kỹ để công mục tiêu.Nếu mục tiêu bị băng chế, sẽ được tính giảm hồi chiêu của kỹ năng [Thần Không Chi Quang] hoặc [Hồn - Thần Linh Bộc Lộ] và áp dụng hiệu ứng [Linh Thức]."
+        },
+        "mutation": {
+          "name": "Cốt Chân Trái - Suy Biến",
+          "star1Red": "Số tầng [Yếu Điểm] có thể cộng dồn. Mỗi tầng [Yếu Điểm] khiến mục tiêu chịu sát thương cuối cùng tăng 1% so với ban đầu, tối đa cộng dồn 99 tầng. Đơn vị đang trong trạng thái [Yếu Điểm], mỗi khi chịu tấn công của Hoắc Vũ Hạo sẽ bị cộng thêm 1 tầng [Yếu Điểm].",
+          "star4Red": "Mỗi khi kích hoạt 1 Thần Vị [Cảm Xúc], Hoắc Vũ Hạo mỗi khi tấn công cộng [Yếu Điểm] lên mục tiêu sẽ cộng dồn thêm 1 tầng nữa.Đơn vị phe địch kích hoạt Thần Vị [Cảm Xúc], mỗi lần tấn công vào đơn vị đang có [Yếu Điểm] cũng sẽ cộng thêm 1 tầng [Yếu Điểm] cho mục tiêu đó.",
+          "star5Red": "Nội tại [Vận Mệnh Chi Thương] (bị động) giúp phe ta nhận được số lần miễn nhiễm sát thương phép: 1 lần trong sinh hoạt.Khi phe địch giảm Tỷ lệ chí mạng, lượng giảm số lần sẽ bị giảm 50%.",
+          "star6Red": "Nếu số lượng Thần Vị [Cảm Xúc] được kích hoạt bằng 7, mỗi đoạn tấn công của Hồn Sư hệ Cuồng Mẫn Công hoặc Ám Khí phe ta sẽ cộng thêm 7 tầng [Yếu Điểm] lên mục tiêu."
+        }
+      },
+
+      {
+        "position": "Cốt Chân Phải",
+        "name": "Động Thức Chi Hộ",
+        "standard": {
+          "base": "Khi Hoắc Vũ Hạo thi triển Đệ Nhất Hồn Kỹ: Đệ Bát Hồn Kỹ, có 30% xác suất gây [Cấm Hồn] lên mục tiêu, kéo dài 1 hiệp. Nếu tốc độ cơ bản của Hoắc Vũ Hạo là cao nhất đội, thì tỷ lệ kích hoạt tăng lên 50%.",
+          "star4": "Kẻ địch đang trong trạng thái bị khống chế sẽ chịu thêm 50% sát thương cuối.",
+          "star6": "Trong thời gian [Tam Linh Huyền Giới] còn hiệu lực, tất cả địch chịu thêm 30% sát thương cuối.Và mỗi cảm xúc mà Hoắc Vũ Hạo đã kích hoạt, hiệu quả tăng thêm 5% nữa."
+        },
+        "mutation": {
+          "name": "Cốt Chân Phải - Suy Biến",
+          "star1Red": "Hiệu ứng [Cấm Hồn] được kéo dài thêm 1 lượt, và trong thời gian duy trì, toàn bộ kẻ địch chịu sát thương cuối tăng thêm 100%.",
+          "star4Red": "Kẻ địch đang ở trong trạng thái khống chế sẽ phải chịu thêm 100% sát thương cuối mỗi khi Hoắc Vũ Hạo kích hoạt 1 Thần Vị [Cảm Xúc]. Hiệu quả tăng thêm 5%.",
+          "star5Red": "Nếu số lượng Thần Vị [Cảm Xúc] mà Hoắc Vũ Hạo kích hoạt vượt quá 3, thì khi tiến vào trạng thái [Thước Đế Bất Bại] lần kế, mỗi một loại Thần Vị [Cảm Xúc] được kích hoạt sẽ giúp hắn cường hóa Mẫn Công phép 1 lần.Nếu đang ở trạng thái [Tình Tự Cổ Vũ], mỗi tầng tăng 5% sát thương cuối, tối đa cộng dồn 40 tầng.",
+          "star6Red": "Trong Chế Độ Thi Đấu, khi Hoắc Vũ Hạo nhận phải sát thương chí mạng, hắn chia sẻ miễn dịch trong 1 lượt đó.Nếu số lượng Thần Vị [Cảm Xúc] đã kích hoạt vượt quá 3, Hoắc Vũ Hạo sẽ hồi phục 40% sinh mệnh tối đa và ngay lập tức tiến vào công thành [Băng Linh] trong 1 lượt.Hiệu ứng này trong mỗi trận chỉ có thể phát động 1 lần."
+        }
       }
     ]
   }

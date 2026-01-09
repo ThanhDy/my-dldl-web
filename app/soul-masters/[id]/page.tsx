@@ -5,7 +5,14 @@ import soulMastersRaw from "@/data/soulMasters.json";
 import { SoulMaster, SkillDetail, SoulBone } from "@/data/types";
 import { useState } from "react";
 import Link from "next/link";
-import { FaArrowLeft, FaTimes, FaBone, FaStar } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaTimes,
+  FaBone,
+  FaStar,
+  FaArrowUp,
+  FaDna,
+} from "react-icons/fa";
 import { GiSpiderWeb, GiSnakeSpiral } from "react-icons/gi";
 import Image from "next/image";
 
@@ -129,20 +136,33 @@ function SkillModal({
                 <span className="text-lg">💡</span> Giải thích hiệu ứng
               </h4>
 
-              <div className="bg-slate-900/60 border border-yellow-500/20 p-4 rounded-lg text-sm text-slate-300">
-                {/* Tách phần tên hiệu ứng (trước dấu :) để in đậm nếu có */}
-                {skill.note.includes(":") ? (
-                  <>
-                    <span className="font-bold text-yellow-400 text-base block mb-1">
-                      {skill.note.split(":")[0]}
-                    </span>
-                    <span className="italic opacity-90">
-                      {skill.note.split(":").slice(1).join(":")}
-                    </span>
-                  </>
-                ) : (
-                  <p className="italic">{skill.note}</p>
-                )}
+              <div className="flex flex-col gap-3">
+                {skill.note.split("\n").map((line, index) => {
+                  // Loại bỏ khoảng trắng thừa ở hai đầu
+                  const content = line.trim();
+                  if (!content) return null; // Bỏ qua nếu dòng trống
+
+                  return (
+                    <div
+                      key={index}
+                      className="bg-slate-900/60 border border-yellow-500/20 p-4 rounded-lg text-sm text-slate-300 shadow-sm"
+                    >
+                      {/* Logic tách tiêu đề trong ngoặc vuông [] nếu có */}
+                      {content.includes(":") ? (
+                        <>
+                          <span className="font-bold text-yellow-400 text-base block mb-1">
+                            {content.split(":")[0].trim()}
+                          </span>
+                          <span className="italic opacity-90">
+                            {content.split(":").slice(1).join(":").trim()}
+                          </span>
+                        </>
+                      ) : (
+                        <p className="italic">{content}</p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -162,9 +182,36 @@ function SoulBoneModal({
   if (!bone) return null;
 
   const isMutated = !!bone.mutation;
-  const displayName = isMutated ? `Trân∙${bone.name}` : bone.name;
-  const displayIcon =
-    isMutated && bone.mutation?.iconUrl ? bone.mutation.iconUrl : bone.iconUrl;
+  const isUpgraded = !!bone.upgrade;
+
+  // --- 1. XÁC ĐỊNH THEME MÀU SẮC ---
+  // Suy biến = Đỏ. Nâng cấp & Thường = Vàng.
+  const themeColor = isMutated ? "red" : "yellow";
+
+  // --- 2. XÁC ĐỊNH TÊN & ICON ---
+  let displayIcon = bone.iconUrl;
+  let displayName = bone.name;
+
+  if (isMutated) {
+    displayIcon = bone.mutation?.iconUrl || bone.iconUrl;
+    displayName = `Trân∙${bone.name}`;
+  } else if (isUpgraded) {
+    displayIcon = bone.upgrade?.iconUrl || bone.iconUrl;
+    displayName = bone.upgrade?.name || bone.name;
+  }
+
+  // --- 3. CSS CLASS ĐỘNG ---
+  const borderColor =
+    themeColor === "red"
+      ? "border-red-600 shadow-red-900/50"
+      : "border-yellow-500 shadow-yellow-500/20";
+
+  const iconBg =
+    themeColor === "red"
+      ? "bg-red-900/20 border-red-500 text-red-500"
+      : "bg-yellow-900/20 border-yellow-500 text-yellow-500";
+
+  const titleColor = themeColor === "red" ? "text-red-400" : "text-yellow-400";
 
   return (
     <div
@@ -172,11 +219,7 @@ function SoulBoneModal({
       onClick={onClose}
     >
       <div
-        className={`bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border-2 shadow-2xl cursor-default no-scrollbar ${
-          isMutated
-            ? "border-red-600 shadow-red-900/50"
-            : "border-yellow-500 shadow-yellow-500/20"
-        }`}
+        className={`bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border-2 shadow-2xl cursor-default no-scrollbar transition-all duration-300 ${borderColor}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -186,18 +229,14 @@ function SoulBoneModal({
           <FaTimes />
         </button>
 
-        {/* --- HEADER (Giữ nguyên) --- */}
+        {/* --- HEADER --- */}
         <div className="pt-8 pb-6 px-6 flex flex-col items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900">
           <span className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-4 border border-slate-600 px-2 py-1 rounded">
             Hồn Cốt {bone.position}
           </span>
 
           <div
-            className={`w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-2xl relative overflow-hidden border-2 ${
-              isMutated
-                ? "bg-red-900/20 border-red-500 text-red-500"
-                : "bg-yellow-900/20 border-yellow-500 text-yellow-500"
-            }`}
+            className={`w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-2xl relative overflow-hidden border-2 transition-colors duration-300 ${iconBg}`}
           >
             {displayIcon ? (
               <Image
@@ -212,11 +251,7 @@ function SoulBoneModal({
           </div>
 
           <h2
-            className={`text-2xl font-bold text-center ${
-              isMutated
-                ? "text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-200 to-red-400 animate-pulse drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]"
-                : "text-yellow-400 drop-shadow-[0_0_10px_rgba(234,179,8,0.3)]"
-            }`}
+            className={`text-2xl font-bold text-center transition-colors duration-300 ${titleColor} drop-shadow-md`}
           >
             {displayName}
           </h2>
@@ -224,83 +259,148 @@ function SoulBoneModal({
 
         {/* --- BODY --- */}
         <div className="p-6 space-y-8">
-          {/* --- CỐT THƯỜNG (VÀNG) --- */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 border-b border-yellow-500/30 pb-2">
-              <FaStar className="text-yellow-500" />
-              <h3 className="text-lg font-bold text-yellow-500 uppercase">
-                Kỹ Năng Huyễn Hoá
-              </h3>
-            </div>
-
-            <div className="space-y-3 pl-4 border-l-2 border-yellow-500/20 text-sm text-slate-300">
-              {/* Cơ bản */}
-              <div className="bg-slate-800/50 p-3 rounded">
-                <span className="text-yellow-200 font-bold block mb-1">
-                  Hiệu quả cơ bản:
-                </span>
-                <p>{bone.standard.base}</p>
+          {/* TRƯỜNG HỢP 1: SUY BIẾN (MUTATION - MÀU ĐỎ)
+               Giữ nguyên layout cũ: Trên là Cốt thường (Vàng), Dưới là Suy biến
+            */}
+          {isMutated ? (
+            <>
+              {/* Phần trên: Kỹ năng thường (Vàng) */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-yellow-500/30 pb-2">
+                  <FaStar className="text-yellow-500" />
+                  <h3 className="text-lg font-bold text-yellow-500 uppercase">
+                    Kỹ Năng Huyễn Hoá
+                  </h3>
+                </div>
+                <div className="space-y-3 pl-4 border-l-2 border-yellow-500/20 text-sm text-slate-300">
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <span className="text-yellow-200 font-bold block mb-1">
+                      Hiệu quả cơ bản:
+                    </span>
+                    <p>{bone.standard.base}</p>
+                  </div>
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <span className="text-yellow-400 font-bold mb-1 flex items-center">
+                      {renderStarBadge(4, "text-yellow-400")}:
+                    </span>
+                    <p>{bone.standard.star4}</p>
+                  </div>
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <span className="text-yellow-500 font-bold mb-1 flex items-center">
+                      {renderStarBadge(6, "text-yellow-500")}:
+                    </span>
+                    <p>{bone.standard.star6}</p>
+                  </div>
+                </div>
               </div>
 
-              {/* 4 Sao Vàng (Sửa hiển thị) */}
-              <div className="bg-slate-800/50 p-3 rounded">
-                <span className="text-yellow-400 font-bold mb-1 flex items-center">
-                  {renderStarBadge(4, "text-yellow-400")}:
-                </span>
-                <p>{bone.standard.star4}</p>
-              </div>
-
-              {/* 6 Sao Vàng (Sửa hiển thị) */}
-              <div className="bg-slate-800/50 p-3 rounded">
-                <span className="text-yellow-500 font-bold mb-1 flex items-center">
-                  {renderStarBadge(6, "text-yellow-500")}:
-                </span>
-                <p>{bone.standard.star6}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* --- SUY BIẾN  --- */}
-          {isMutated && bone.mutation && (
-            <div className="space-y-4 animate-fadeIn">
-              <div className="flex items-center gap-2 border-b border-red-500/30 pb-2 mt-2">
-                <FaStar className="text-red-500" />
-                <h3 className="text-lg font-bold text-red-500 uppercase">
-                  Hiệu Quả Tiến Hoá
+              {/* Phần dưới: Kỹ năng suy biến (Đỏ) */}
+              {bone.mutation && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div className="flex items-center gap-2 border-b border-red-500/30 pb-2 mt-2">
+                    <FaDna className="text-red-500" />
+                    <h3 className="text-lg font-bold text-red-500 uppercase">
+                      Hiệu Quả Tiến Hoá
+                    </h3>
+                  </div>
+                  <div className="space-y-3 pl-4 border-l-2 border-red-500/20 text-sm text-slate-300">
+                    <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                      <span className="text-red-400 font-bold mb-1 flex items-center">
+                        {renderStarBadge(1, "text-red-500")}:
+                      </span>
+                      <p>{bone.mutation.star1Red}</p>
+                    </div>
+                    <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                      <span className="text-red-400 font-bold mb-1 flex items-center">
+                        {renderStarBadge(4, "text-red-500")}:
+                      </span>
+                      <p>{bone.mutation.star4Red}</p>
+                    </div>
+                    <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                      <span className="text-red-400 font-bold mb-1 flex items-center">
+                        {renderStarBadge(5, "text-red-500")}:
+                      </span>
+                      <p>{bone.mutation.star5Red}</p>
+                    </div>
+                    <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                      <span className="text-red-400 font-bold mb-1 flex items-center">
+                        {renderStarBadge(6, "text-red-500")}:
+                      </span>
+                      <p>{bone.mutation.star6Red}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            /* TRƯỜNG HỢP 2: CỐT NÂNG CẤP HOẶC THƯỜNG (MÀU VÀNG)
+                   Hiển thị danh sách đan xen
+                */
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-yellow-500/30 pb-2">
+                {isUpgraded ? (
+                  <FaArrowUp className="text-yellow-400" />
+                ) : (
+                  <FaStar className="text-yellow-500" />
+                )}
+                <h3 className="text-lg font-bold text-yellow-500 uppercase">
+                  {isUpgraded ? "Hiệu Quả Nâng Cấp" : "Kỹ Năng Huyễn Hoá"}
                 </h3>
               </div>
 
-              <div className="space-y-3 pl-4 border-l-2 border-red-500/20 text-sm text-slate-300">
-                {/* 1 Sao Đỏ */}
-                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
-                  <span className="text-red-400 font-bold mb-1 flex items-center">
-                    {renderStarBadge(1, "text-red-500")} :
+              <div className="space-y-3 pl-4 border-l-2 border-yellow-500/20 text-sm text-slate-300">
+                {/* 1. CƠ BẢN (Luôn có) */}
+                <div className="bg-slate-800/50 p-3 rounded">
+                  <span className="text-yellow-200 font-bold block mb-1">
+                    Hiệu quả cơ bản:
                   </span>
-                  <p>{bone.mutation.star1Red}</p>
+                  <p>{bone.standard.base}</p>
                 </div>
 
-                {/* 4 Sao Đỏ */}
-                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
-                  <span className="text-red-400 font-bold mb-1 flex items-center">
-                    {renderStarBadge(4, "text-red-500")} :
+                {/* 2. DÒNG 2 SAO (Chỉ có khi Nâng cấp) */}
+                {isUpgraded && bone.upgrade?.star2 && (
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <span className="text-yellow-400 font-bold mb-1 flex items-center">
+                      {renderStarBadge(2, "text-yellow-400")}:
+                    </span>
+                    <p>{bone.upgrade.star2}</p>
+                  </div>
+                )}
+
+                {/* 3. DÒNG 3 SAO (Chỉ có khi Nâng cấp) */}
+                {isUpgraded && bone.upgrade?.star3 && (
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <span className="text-yellow-400 font-bold mb-1 flex items-center">
+                      {renderStarBadge(3, "text-yellow-400")}:
+                    </span>
+                    <p>{bone.upgrade.star3}</p>
+                  </div>
+                )}
+
+                {/* 4. DÒNG 4 SAO (Luôn có) */}
+                <div className="bg-slate-800/50 p-3 rounded">
+                  <span className="text-yellow-400 font-bold mb-1 flex items-center">
+                    {renderStarBadge(4, "text-yellow-400")}:
                   </span>
-                  <p>{bone.mutation.star4Red}</p>
+                  <p>{bone.standard.star4}</p>
                 </div>
 
-                {/* 5 Sao Đỏ */}
-                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
-                  <span className="text-red-400 font-bold mb-1 flex items-center">
-                    {renderStarBadge(5, "text-red-500")} :
-                  </span>
-                  <p>{bone.mutation.star5Red}</p>
-                </div>
+                {/* 5. DÒNG 5 SAO (Chỉ có khi Nâng cấp) */}
+                {isUpgraded && bone.upgrade?.star5 && (
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <span className="text-yellow-400 font-bold mb-1 flex items-center">
+                      {renderStarBadge(5, "text-yellow-400")}:
+                    </span>
+                    <p>{bone.upgrade.star5}</p>
+                  </div>
+                )}
 
-                {/* 6 Sao Đỏ */}
-                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
-                  <span className="text-red-500 font-bold mb-1 flex items-center">
-                    {renderStarBadge(6, "text-red-500")}:
+                {/* 6. DÒNG 6 SAO (Luôn có) */}
+                <div className="bg-slate-800/50 p-3 rounded">
+                  <span className="text-yellow-500 font-bold mb-1 flex items-center">
+                    {renderStarBadge(6, "text-yellow-500")}:
                   </span>
-                  <p>{bone.mutation.star6Red}</p>
+                  <p>{bone.standard.star6}</p>
                 </div>
               </div>
             </div>
