@@ -1,0 +1,596 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import soulMastersRaw from "@/data/soulMasters.json";
+import { SoulMaster, SkillDetail, SoulBone } from "@/data/types";
+import { useState } from "react";
+import Link from "next/link";
+import { FaArrowLeft, FaTimes, FaBone, FaStar } from "react-icons/fa";
+import { GiSpiderWeb, GiSnakeSpiral } from "react-icons/gi";
+import Image from "next/image";
+
+const soulMastersData = soulMastersRaw as unknown as SoulMaster[];
+
+// --- COMPONENT MODAL ---
+function SkillModal({
+  skill,
+  onClose,
+}: {
+  skill: SkillDetail | null;
+  onClose: () => void;
+}) {
+  if (!skill) return null;
+
+  const SkillIcon =
+    skill.soulRingType.includes("Ma Nhện") ||
+    skill.soulRingType.includes("Giáp Thuẫn")
+      ? GiSpiderWeb
+      : GiSnakeSpiral;
+  const iconColorClass =
+    skill.soulRingType.includes("Ma Nhện") ||
+    skill.soulRingType.includes("Giáp Thuẫn")
+      ? "text-red-500 bg-red-900/20 border-red-500"
+      : "text-green-500 bg-green-900/20 border-green-500";
+
+  return (
+    // 1. Thêm onClick={onClose} vào lớp nền đen (Overlay)
+    <div
+      className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 animate-fadeIn cursor-pointer"
+      onClick={onClose}
+    >
+      {/* 2. Thêm e.stopPropagation() vào khối nội dung để chặn sự kiện click xuyên qua */}
+      <div
+        className="bg-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border border-slate-700 shadow-2xl cursor-default no-scrollbar"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Nút đóng (X) vẫn giữ nguyên để người dùng có thể bấm chủ động */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-slate-700/50 rounded-full transition z-20"
+        >
+          <FaTimes />
+        </button>
+
+        {/* Header Modal */}
+        <div className="p-6 border-b border-slate-700 flex items-center gap-4 bg-slate-800/50 sticky top-0 z-10 backdrop-blur-md">
+          <div
+            className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2 relative overflow-hidden ${iconColorClass}`}
+          >
+            {skill.iconUrl ? (
+              // Nếu có link ảnh -> Hiển thị ảnh
+              <Image
+                src={skill.iconUrl}
+                alt={skill.name}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              // Nếu không có ảnh -> Hiển thị icon mặc định
+              <SkillIcon />
+            )}
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">{skill.name}</h3>
+            <div className="flex gap-2 mt-1 text-sm">
+              <span className="bg-blue-600/30 text-blue-300 px-2 py-0.5 rounded">
+                {skill.type}
+              </span>
+              <span
+                className={`px-2 py-0.5 rounded ${
+                  skill.soulRingType.includes("Ma Nhện")
+                    ? "bg-red-600/30 text-red-300"
+                    : "bg-green-600/30 text-green-300"
+                }`}
+              >
+                {skill.soulRingType}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Body Modal */}
+        <div className="p-6 space-y-6">
+          <div>
+            <h4 className="text-sm font-bold text-slate-300 uppercase mb-2">
+              Mô tả kỹ năng
+            </h4>
+            <p className="text-slate-200 leading-relaxed bg-slate-700/30 p-4 rounded-lg border border-slate-700/50">
+              {skill.description}
+            </p>
+          </div>
+
+          {skill.yearEffects.length > 0 && (
+            <div>
+              <h4 className="text-sm font-bold text-slate-300 uppercase mb-3">
+                Hiệu ứng theo niên đại
+              </h4>
+              <div className="space-y-3">
+                {skill.yearEffects.map((effect, index) => (
+                  <div
+                    key={index}
+                    className="flex gap-3 bg-slate-900/40 p-3 rounded-lg border-l-4 border-blue-500"
+                  >
+                    <span className="font-bold text-blue-400 whitespace-nowrap min-w-[80px]">
+                      {effect.year}
+                    </span>
+                    <p className="text-slate-300 text-sm">
+                      {effect.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {skill.note && (
+            <div>
+              {/* Đổi tiêu đề thành "Giải thích hiệu ứng" cho đúng ngữ cảnh */}
+              <h4 className="text-sm font-bold text-yellow-500 uppercase mb-2 flex items-center gap-2">
+                <span className="text-lg">💡</span> Giải thích hiệu ứng
+              </h4>
+
+              <div className="bg-slate-900/60 border border-yellow-500/20 p-4 rounded-lg text-sm text-slate-300">
+                {/* Tách phần tên hiệu ứng (trước dấu :) để in đậm nếu có */}
+                {skill.note.includes(":") ? (
+                  <>
+                    <span className="font-bold text-yellow-400 text-base block mb-1">
+                      {skill.note.split(":")[0]}
+                    </span>
+                    <span className="italic opacity-90">
+                      {skill.note.split(":").slice(1).join(":")}
+                    </span>
+                  </>
+                ) : (
+                  <p className="italic">{skill.note}</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SoulBoneModal({
+  bone,
+  onClose,
+}: {
+  bone: SoulBone | null;
+  onClose: () => void;
+}) {
+  if (!bone) return null;
+
+  const isMutated = !!bone.mutation;
+  const displayName = isMutated ? `Trân∙${bone.name}` : bone.name;
+  const displayIcon =
+    isMutated && bone.mutation?.iconUrl ? bone.mutation.iconUrl : bone.iconUrl;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fadeIn cursor-pointer"
+      onClick={onClose}
+    >
+      <div
+        className={`bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border-2 shadow-2xl cursor-default no-scrollbar ${
+          isMutated
+            ? "border-red-600 shadow-red-900/50"
+            : "border-yellow-500 shadow-yellow-500/20"
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-slate-800 rounded-full z-20 transition"
+        >
+          <FaTimes />
+        </button>
+
+        {/* --- HEADER (Giữ nguyên) --- */}
+        <div className="pt-8 pb-6 px-6 flex flex-col items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-4 border border-slate-600 px-2 py-1 rounded">
+            Hồn Cốt {bone.position}
+          </span>
+
+          <div
+            className={`w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-2xl relative overflow-hidden border-2 ${
+              isMutated
+                ? "bg-red-900/20 border-red-500 text-red-500"
+                : "bg-yellow-900/20 border-yellow-500 text-yellow-500"
+            }`}
+          >
+            {displayIcon ? (
+              <Image
+                src={displayIcon}
+                alt={displayName}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <FaBone />
+            )}
+          </div>
+
+          <h2
+            className={`text-2xl font-bold text-center ${
+              isMutated
+                ? "text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-200 to-red-400 animate-pulse drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]"
+                : "text-yellow-400 drop-shadow-[0_0_10px_rgba(234,179,8,0.3)]"
+            }`}
+          >
+            {displayName}
+          </h2>
+        </div>
+
+        {/* --- BODY --- */}
+        <div className="p-6 space-y-8">
+          {/* --- CỐT THƯỜNG (VÀNG) --- */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 border-b border-yellow-500/30 pb-2">
+              <FaStar className="text-yellow-500" />
+              <h3 className="text-lg font-bold text-yellow-500 uppercase">
+                Kỹ Năng Huyễn Hoá
+              </h3>
+            </div>
+
+            <div className="space-y-3 pl-4 border-l-2 border-yellow-500/20 text-sm text-slate-300">
+              {/* Cơ bản */}
+              <div className="bg-slate-800/50 p-3 rounded">
+                <span className="text-yellow-200 font-bold block mb-1">
+                  Hiệu quả cơ bản:
+                </span>
+                <p>{bone.standard.base}</p>
+              </div>
+
+              {/* 4 Sao Vàng (Sửa hiển thị) */}
+              <div className="bg-slate-800/50 p-3 rounded">
+                <span className="text-yellow-400 font-bold mb-1 flex items-center">
+                  {renderStarBadge(4, "text-yellow-400")}:
+                </span>
+                <p>{bone.standard.star4}</p>
+              </div>
+
+              {/* 6 Sao Vàng (Sửa hiển thị) */}
+              <div className="bg-slate-800/50 p-3 rounded">
+                <span className="text-yellow-500 font-bold mb-1 flex items-center">
+                  {renderStarBadge(6, "text-yellow-500")}:
+                </span>
+                <p>{bone.standard.star6}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* --- SUY BIẾN  --- */}
+          {isMutated && bone.mutation && (
+            <div className="space-y-4 animate-fadeIn">
+              <div className="flex items-center gap-2 border-b border-red-500/30 pb-2 mt-2">
+                <FaStar className="text-red-500" />
+                <h3 className="text-lg font-bold text-red-500 uppercase">
+                  Hiệu Quả Tiến Hoá
+                </h3>
+              </div>
+
+              <div className="space-y-3 pl-4 border-l-2 border-red-500/20 text-sm text-slate-300">
+                {/* 1 Sao Đỏ */}
+                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                  <span className="text-red-400 font-bold mb-1 flex items-center">
+                    {renderStarBadge(1, "text-red-500")} :
+                  </span>
+                  <p>{bone.mutation.star1Red}</p>
+                </div>
+
+                {/* 4 Sao Đỏ */}
+                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                  <span className="text-red-400 font-bold mb-1 flex items-center">
+                    {renderStarBadge(4, "text-red-500")} :
+                  </span>
+                  <p>{bone.mutation.star4Red}</p>
+                </div>
+
+                {/* 5 Sao Đỏ */}
+                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                  <span className="text-red-400 font-bold mb-1 flex items-center">
+                    {renderStarBadge(5, "text-red-500")} :
+                  </span>
+                  <p>{bone.mutation.star5Red}</p>
+                </div>
+
+                {/* 6 Sao Đỏ */}
+                <div className="bg-red-950/30 p-3 rounded border border-red-900/30">
+                  <span className="text-red-500 font-bold mb-1 flex items-center">
+                    {renderStarBadge(6, "text-red-500")}:
+                  </span>
+                  <p>{bone.mutation.star6Red}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const renderStarBadge = (count: number, colorClass: string) => (
+  <span className={`inline-flex items-center gap-0.5 mx-1 ${colorClass}`}>
+    <span className="text-xl font-extrabold leading-none">{count}</span>
+    <FaStar size={14} className="mb-0.5" />
+  </span>
+);
+// --- PAGE COMPONENT CHÍNH ---
+export default function SoulMasterDetail() {
+  const params = useParams();
+  const [activeTab, setActiveTab] = useState<"bones" | "build">("build");
+  const [selectedSkill, setSelectedSkill] = useState<SkillDetail | null>(null);
+  const [selectedBone, setSelectedBone] = useState<SoulBone | null>(null);
+
+  const hero = soulMastersData.find((h) => h.id === params.id);
+
+  // Hàm tìm skill chi tiết
+  const getSkillDetail = (
+    heroData: SoulMaster,
+    skillIndex: number,
+    typeCode: string
+  ) => {
+    const skillId = `${heroData.id}-s${skillIndex + 1}-${typeCode}`;
+    return heroData.skillDetails?.find((s) => s.id === skillId);
+  };
+
+  if (!hero)
+    return <div className="p-10 text-white">Không tìm thấy Hồn Sư.</div>;
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-white pb-20 relative">
+      {/* Modal Popup */}
+      {selectedSkill && (
+        <SkillModal
+          skill={selectedSkill}
+          onClose={() => setSelectedSkill(null)}
+        />
+      )}
+
+      {selectedBone && (
+        <SoulBoneModal
+          bone={selectedBone}
+          onClose={() => setSelectedBone(null)}
+        />
+      )}
+
+      <div className="p-6 max-w-6xl mx-auto">
+        <Link
+          href="/soul-masters"
+          className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition"
+        >
+          <FaArrowLeft /> Quay lại kho tướng
+        </Link>
+      </div>
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 px-6">
+        {/* --- CỘT TRÁI (Đã xóa Stats) --- */}
+        <div className="lg:col-span-1 space-y-6">
+          <div
+            className={`rounded-2xl overflow-hidden border-4 relative shadow-2xl ${
+              hero.rarity === "SP" || hero.rarity === "SP+"
+                ? "border-pink-400" // Viền SP vàng kim sáng
+                : hero.rarity === "SSR"
+                ? "border-yellow-500 shadow-yellow-500/20" // Viền SSR vàng
+                : "border-blue-500 shadow-blue-500/20" // SR giữ nguyên
+            }`}
+          >
+            {/* Badge Rarity */}
+            <div className="absolute top-4 left-4 z-10">
+              <span
+                className={`px-3 py-1 rounded font-bold text-sm ${
+                  hero.rarity === "SP" || hero.rarity === "SP+"
+                    ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
+                    : hero.rarity === "SSR"
+                    ? "bg-yellow-500 text-white border-yellow-600"
+                    : "bg-purple-600 text-white border-purple-800"
+                }`}
+              >
+                {hero.rarity}
+              </span>
+            </div>
+
+            <img
+              src={hero.image}
+              alt={hero.name}
+              className="w-full object-cover aspect-[3/4]"
+            />
+
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-20">
+              <p className="text-yellow-400 font-medium text-sm tracking-wider mb-1">
+                {hero.title}
+              </p>
+              <h1 className="text-3xl font-bold">{hero.name}</h1>
+              <div className="flex gap-2 mt-2">
+                <span className="bg-white/20 px-2 py-0.5 rounded text-xs">
+                  {hero.type}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* --- CỘT PHẢI --- */}
+        <div className="lg:col-span-2">
+          <div className="flex gap-4 border-b border-slate-700 mb-6">
+            <button
+              onClick={() => setActiveTab("build")}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 ${
+                activeTab === "build"
+                  ? "border-blue-500 text-blue-400"
+                  : "border-transparent text-slate-500"
+              }`}
+            >
+              Hồn Hoàn
+            </button>
+            <button
+              onClick={() => setActiveTab("bones")}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${
+                activeTab === "bones"
+                  ? "border-yellow-500 text-yellow-400"
+                  : "border-transparent text-slate-500"
+              }`}
+            >
+              Hồn Cốt
+            </button>
+          </div>
+
+          {activeTab === "build" && (
+            <div className="space-y-6">
+              {hero.builds.map((build, index) => {
+                // LOGIC MỚI: Tách chuỗi 4 số từ Title (Ví dụ: "PvE - 1111" -> lấy được "1111")
+                const codeMatch = build.title.match(/\d{4}/);
+                const codeString = codeMatch ? codeMatch[0] : "0000";
+                const codes = codeString.split(""); // -> ["1", "1", "1", "1"]
+
+                return (
+                  <div
+                    key={index}
+                    className="bg-slate-800 rounded-xl p-6 border border-slate-700"
+                  >
+                    {/* Hiển thị Title */}
+                    <h3 className="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
+                      <span className="bg-blue-500/20 px-3 py-1 rounded text-lg">
+                        {build.title}
+                      </span>
+                    </h3>
+
+                    <div className="bg-slate-900/50 rounded-lg p-4">
+                      <p className="text-xs text-slate-500 mb-3 uppercase tracking-wide font-bold flex justify-between items-center">
+                        Cấu hình Skill
+                        <span className="text-[10px] font-normal normal-case italic opacity-70">
+                          (Chạm để xem chi tiết)
+                        </span>
+                      </p>
+
+                      <div className="flex items-center gap-4">
+                        {codes.map((num, i) => {
+                          // Tìm thông tin skill dựa trên vị trí (i) và mã (num)
+                          const skillDetail = getSkillDetail(hero, i, num);
+
+                          // Kiểm tra xem là hệ 1 (Rắn) hay hệ 2 (Nhện) để tô màu fallback
+                          const isSpider = num === "2";
+
+                          return (
+                            <div
+                              key={i}
+                              className="flex flex-col items-center gap-2 group relative"
+                            >
+                              <button
+                                onClick={() =>
+                                  skillDetail && setSelectedSkill(skillDetail)
+                                }
+                                disabled={!skillDetail}
+                                className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 transition-all outline-none ${
+                                  !skillDetail
+                                    ? "opacity-50 cursor-not-allowed grayscale"
+                                    : "hover:scale-110 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30"
+                                } ${
+                                  // Màu viền fallback nếu chưa có ảnh
+                                  isSpider
+                                    ? "border-red-500/50"
+                                    : "border-green-500/50"
+                                }`}
+                              >
+                                {/* ƯU TIÊN 1: Nếu có iconUrl (Ảnh thật bạn upload) thì hiện ảnh */}
+                                {skillDetail?.iconUrl ? (
+                                  <img
+                                    src={skillDetail.iconUrl}
+                                    alt={skillDetail.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  // ƯU TIÊN 2: Nếu chưa có ảnh, dùng Icon mặc định + Màu nền
+                                  <div
+                                    className={`w-full h-full flex items-center justify-center text-2xl ${
+                                      isSpider
+                                        ? "bg-red-900/20 text-red-500"
+                                        : "bg-green-900/20 text-green-400"
+                                    }`}
+                                  >
+                                    {isSpider ? (
+                                      <GiSpiderWeb />
+                                    ) : (
+                                      <GiSnakeSpiral />
+                                    )}
+                                  </div>
+                                )}
+                              </button>
+
+                              {/* Số thứ tự skill */}
+
+                              {/* Tooltip tên skill */}
+                              {skillDetail && (
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition pointer-events-none z-20">
+                                  {skillDetail.name}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {activeTab === "bones" && (
+            <div className="space-y-6 animate-fadeIn">
+              {!hero.soulBones || hero.soulBones.length === 0 ? (
+                <div className="text-slate-500 italic">
+                  Chưa có dữ liệu hồn cốt cho tướng này.
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {hero.soulBones.map((bone, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedBone(bone)}
+                      className="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col items-center gap-3 cursor-pointer hover:border-yellow-500 hover:bg-slate-800/80 transition group relative overflow-hidden"
+                    >
+                      {/* Hiệu ứng nền khi hover */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+
+                      {/* Icon Hồn cốt */}
+                      <div className="w-16 h-16 rounded-full bg-slate-900 border-2 border-yellow-600 flex items-center justify-center text-2xl text-yellow-600 group-hover:scale-110 transition shadow-lg">
+                        {bone.iconUrl ? (
+                          <Image
+                            src={bone.iconUrl}
+                            alt={bone.name}
+                            width={40}
+                            height={40}
+                          />
+                        ) : (
+                          <FaBone />
+                        )}
+                      </div>
+
+                      {/* Tên & Vị trí */}
+                      <div className="text-center z-10">
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1">
+                          {bone.position}
+                        </span>
+                        <h4 className="text-sm font-bold text-yellow-100 group-hover:text-yellow-400 transition line-clamp-2 min-h-[2.5em]">
+                          {bone.name}
+                        </h4>
+                      </div>
+
+                      {/* Badge nếu có Suy Biến */}
+                      {bone.mutation && (
+                        <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]"></div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "tieu-bach",
+    "name": "Tiểu Bạch",
+    "image": "/images/tieu-bach/avt.jpg",
+    "title": "Thâm Hải Lãnh Chúa",
+    "rarity": "SP",
+    "type": "Phụ Trợ",
+    "story": "Vua của loài Ma Hồn Đại Bạch Sa, người bảo vệ Hải Thần Đảo.",
+    "builds": [{ "title": "PvE - 1121" }, { "title": "PvP - 2212" }],
+    "skillDetails": [
+      {
+        "id": "tieu-bach-s2-1",
+        "name": "Quần Sa Vệ Sĩ",
+        "type": "Bị động",
+        "soulRingType": "Quần Sa Vệ Sĩ",
+        "description": "Tiểu Bạch dựa theo tốc độ ban đầu của đồng đội, lần lượt phân cho mỗi Hồn Sư phe ta 1 thân phận [Quần Sa Vệ Sĩ], mỗi lượt đồng đội tối đa hoàn thành 1 lần chỉ lệnh tương ứng với thân phận. Khi đồng đội hoàn thành chỉ lệnh, Tiểu Bạch sẽ cổ vũ, giúp toàn bộ Hồn Sư phe ta gây ST Cuối tăng vĩnh viễn, tối đa hoàn thành 5 lần chỉ lệnh.",
+        "yearEffects": [
+          {
+            "year": "1000 năm",
+            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 60%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 80%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 120%."
+          },
+          {
+            "year": "50k năm",
+            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 160%."
+          },
+          {
+            "year": "100k năm",
+            "description": "Nếu toàn bộ Hồn Sư phe ta đều đã hoàn thành 5 lần chỉ lệnh, hiệu ứng ST Cuối tăng từ sự cổ vũ của Tiểu Bạch sẽ được nhân đôi"
+          }
+        ],
+        "note": "Vệ Sĩ Bầy Cá Mập: Hiệu ứng đặc biệt, sau khi thực hiện lệnh tương ứng, Tiểu Bạch cổ vũ Hồn Sư phe ta, khiến ST Cuối của toàn bộ Hồn Sư phe ta được tăng vĩnh viễn.",
+        "iconUrl": "/images/tieu-bach/hh2-1.jpg"
+      }
+    ],
+    "soulBones": [
+      {
+        "position": "Tay Phải",
+        "name": "Tật Sa Kinh Đào",
+        "standard": {
+          "base": "Hồn Sư phe ta có [Thược Hành] gây ST Cuối tăng 50% trong lượt của bản thân",
+          "star4": "Cứ mỗi Hồn Sư phe ta thực hiện 5 lệnh, ST Cuối do Hồn Sư phe ta có [Thược Hành] gây ra tăng 100%",
+          "star6": "Sau khi Hồn Sư phe ta có [Thược Hành] thực hiện 5 lệnh, trạng thái nhận được từ phe ta sẽ không biến mất tự nhiên, duy trì ít nhất 1 hiệp"
+        },
+        "mutation": {
+          "name": "Nguyên Cốt Tiến Hoá Tật Sa Kinh Đào",
+          "star1Red": "Hồn Sư phe ta sở hữu [Ma Sa Thiết Vệ] hoặc [Quần Sa Thiết Vệ] trong lượt của mình gây ST Cuối tăng 50%",
+          "star4Red": "Sau khi Tiểu Bạch hành động trong lượt của mình hoặc sau khi Hồn Sư phe ta hoàn thành lệnh, trong lượt chiến trường tiếp theo, khi bất kỳ Hồn Sư phe ta nào hoàn thành lệnh sẽ được hoàn thành thêm 1 lần.",
+          "star5Red": "Trong chế độ đấu trường, sau khi Hồn Sư phe ta bị tấn công, nếu trong lượt này đã mất ít nhất 2 tầng [Sa Hồn], sẽ nhận được Miễn Nhiễm sát thương kéo dài đến đầu lượt chiến trường tiếp theo, hiệu ứng này mỗi Hồn Sư phe ta chỉ được kích hoạt 1 lần",
+          "star6Red": "Cứ mỗi 10 lần Hồn Sư phe ta hoàn thành lệnh, Tiểu Bạch giúp toàn bộ phe ta gây ST Cuối tăng vĩnh viễn 100%, cộng dồn tối đa 2 lần"
+        }
+      }
+    ]
+  }
+]
