@@ -134,8 +134,6 @@
         "note": " Tật Hành : Kỹ năng của Tiểu Bạch,giúp một đồng minh nhận được hiệu ứng [Tật Hành], cho phép họ thực hiện hành động liên tiếp 2 lượt và tăng mạnh sát thương cuối. Tuy nhiên, chỉ có thể tồn tại duy nhất một hiệu ứng này trong phe ta, lúc đó chỉ có một nhân vật có thể nhận hiệu ứng [Tật Hành] cùng lúc.",
         "iconUrl": "/images/tieu-bach/hh4-1.png"
       }
-
-
     ],
     "soulBones": [
       {
@@ -152,22 +150,6 @@
           "star4Red": "Sau khi Tiểu Bạch hành động trong lượt của mình hoặc sau khi Hồn Sư phe ta hoàn thành lệnh, trong lượt chiến trường tiếp theo, khi bất kỳ Hồn Sư phe ta nào hoàn thành lệnh sẽ được hoàn thành thêm 1 lần.",
           "star5Red": "Trong chế độ đấu trường, sau khi Hồn Sư phe ta bị tấn công, nếu trong lượt này đã mất ít nhất 2 tầng [Sa Hồn], sẽ nhận được Miễn Nhiễm sát thương kéo dài đến đầu lượt chiến trường tiếp theo, hiệu ứng này mỗi Hồn Sư phe ta chỉ được kích hoạt 1 lần",
           "star6Red": "Cứ mỗi 10 lần Hồn Sư phe ta hoàn thành lệnh, Tiểu Bạch giúp toàn bộ phe ta gây ST Cuối tăng vĩnh viễn 100%, cộng dồn tối đa 2 lần."
-        }
-      },
-      {
-        "position": "Thân",
-        "name": "Thân Ma Hồn Đại Bạch Sa",
-        "standard": {
-          "base": "Tăng 5% Thủ.",
-          "star4": "Giảm 10% sát thương bạo kích nhận vào.",
-          "star6": "Khi bị tấn công, có 30% tỷ lệ phản kích."
-        },
-        "upgrade": {
-          "name": "Thân Bạch Sa",
-          "star1": "Tăng 5% Thủ.",
-          "star2": "Tăng thêm 5% Máu tối đa.",
-          "star3": "Mỗi hiệp hồi phục 5% Máu đã mất.",
-          "star5": "Khi máu trên 70%, tăng 20% Kháng Bạo."
         }
       }
     ]
@@ -436,7 +418,7 @@
       },
 
       {
-        "position": "Cốt Tay Phải",
+        "position": "Tay Phải",
         "name": "Thần Tư Chi Thích",
         "standard": {
           "base": "Khi phe ta tấn công kẻ địch đang trong trạng thái [Yếu Điểm], sát thương cuối cùng tăng 50%.",
@@ -453,7 +435,7 @@
       },
 
       {
-        "position": "Cốt Đầu",
+        "position": "Đầu",
         "name": "Lục Giới Băng Linh",
         "standard": {
           "base": "Mỗi khi Hoắc Vũ Hạo kích hoạt 1 Thần Vị [Cảm Xúc], toàn phe ta tăng 60% sát thương cuối cùng.",
@@ -461,7 +443,7 @@
           "star6": "Khi kích hoạt hiệu ứng trên, trực tiếp biến mục tiêu thành [Băng Linh], số lượng mục tiêu bằng với số Thần Vị [Cảm Xúc] đã kích hoạt, tối đa 5 mục tiêu."
         },
         "upgrade": {
-          "name": "Cốt Đầu - Nâng Cấp",
+          "name": "Lục Giới Băng Linh - Nâng Cấp",
           "star2": "Khi ra trận có Đường Vũ Đồng, Đường Vũ Đồng tăng 100% sát thương cuối từ hiệu ứng.",
           "star3": "Trước khi kết thúc lượt đầu tiên, bị động [Tái Lập Tình Thần] (hh2-2) sẽ khiến mỗi Thần Vị [Cảm Xúc] đã được kích hoạt làm nhân đôi hiệu quả tăng sát thương cuối.",
           "star5": "Cứ mỗi [Băng Linh] có mặt bên phe địch, toàn bộ phe ta được tăng 50% sát thương cuối."
@@ -469,7 +451,7 @@
       },
 
       {
-        "position": "Cốt Tay Trái",
+        "position": "Tay Trái",
         "name": "Linh Mâu Nhập Nhận",
         "standard": {
           "base": "Mỗi khi địch có một [Băng Linh], toàn bộ địch nhận sát thương quần thể cuối cùng tăng 15%, tối đa tăng 60%. Mỗi khi một đơn vị địch giữ 1 tầng [Tinh Thần Bộc Lộ], đơn vị đó nhận sát thương đơn thể cuối cùng tăng 60%, tối đa tăng 300%.",
@@ -477,7 +459,7 @@
           "star6": "Cứ mỗi 1% thuộc tính ban đầu do [Thần Vị Cảm Xúc] cung cấp cho người kế thừa, hiệu ứng tăng sát thương cuối cùng từ [Yếu Điểm] tăng thêm 2% so với ban đầu, tối đa tăng 100%."
         },
         "mutation": {
-          "name": "Cốt Tay Trái - Suy Biến",
+          "name": "Tay Trái - Suy Biến",
           "star1Red": "Sau khi Hoắc Vũ Hạo sử dụng Hồn Kỹ, toàn bộ kẻ địch chịu sát thương tăng 10%, hiệu ứng này cộng dồn tối đa 5 lần.",
           "star4Red": "Với mỗi một loại Thần Vị [Cảm Xúc] được Hoắc Vũ Hạo kích hoạt, sát thương cuối từ Hồn Kỹ của Đường Vũ Đồng tăng 20%.",
           "star5Red": "Sau khi Hoắc Vũ Hạo mở [Tâm Linh Huyền Giới], toàn bộ kẻ địch nhận sát thương cuối tăng 40%, và tăng thêm 10% cho mỗi Thần Vị [Cảm Xúc] được kích hoạt.",
@@ -486,7 +468,7 @@
       },
 
       {
-        "position": "Cốt Chân Trái",
+        "position": "Chân Trái",
         "name": "Linh Thám Chiếu Tê",
         "standard": {
           "base": "Sát thương hoặc hiệu ứng choáng sẽ khiến trạng thái [Cảm Xúc] hoặc Hoắc Vũ Hạo tăng 50%. Nếu kỹ năng [Cảm Xúc] đang được kích hoạt, hiệu ứng này tăng thêm 50%.",
@@ -494,7 +476,7 @@
           "star6": "Khi kẻ địch chuyển sang trạng thái [Băng Linh], các Hồn Sư hệ Cường Mẫn Công của phe ta lập tức không cần hao sử dụng Đệ Nhất hoặc Đệ Bát Hồn Kỹ để công mục tiêu.Nếu mục tiêu bị băng chế, sẽ được tính giảm hồi chiêu của kỹ năng [Thần Không Chi Quang] hoặc [Hồn - Thần Linh Bộc Lộ] và áp dụng hiệu ứng [Linh Thức]."
         },
         "mutation": {
-          "name": "Cốt Chân Trái - Suy Biến",
+          "name": "Chân Trái - Suy Biến",
           "star1Red": "Số tầng [Yếu Điểm] có thể cộng dồn. Mỗi tầng [Yếu Điểm] khiến mục tiêu chịu sát thương cuối cùng tăng 1% so với ban đầu, tối đa cộng dồn 99 tầng. Đơn vị đang trong trạng thái [Yếu Điểm], mỗi khi chịu tấn công của Hoắc Vũ Hạo sẽ bị cộng thêm 1 tầng [Yếu Điểm].",
           "star4Red": "Mỗi khi kích hoạt 1 Thần Vị [Cảm Xúc], Hoắc Vũ Hạo mỗi khi tấn công cộng [Yếu Điểm] lên mục tiêu sẽ cộng dồn thêm 1 tầng nữa.Đơn vị phe địch kích hoạt Thần Vị [Cảm Xúc], mỗi lần tấn công vào đơn vị đang có [Yếu Điểm] cũng sẽ cộng thêm 1 tầng [Yếu Điểm] cho mục tiêu đó.",
           "star5Red": "Nội tại [Vận Mệnh Chi Thương] (bị động) giúp phe ta nhận được số lần miễn nhiễm sát thương phép: 1 lần trong sinh hoạt.Khi phe địch giảm Tỷ lệ chí mạng, lượng giảm số lần sẽ bị giảm 50%.",
@@ -503,7 +485,7 @@
       },
 
       {
-        "position": "Cốt Chân Phải",
+        "position": "Chân Phải",
         "name": "Động Thức Chi Hộ",
         "standard": {
           "base": "Khi Hoắc Vũ Hạo thi triển Đệ Nhất Hồn Kỹ: Đệ Bát Hồn Kỹ, có 30% xác suất gây [Cấm Hồn] lên mục tiêu, kéo dài 1 hiệp. Nếu tốc độ cơ bản của Hoắc Vũ Hạo là cao nhất đội, thì tỷ lệ kích hoạt tăng lên 50%.",
@@ -511,7 +493,7 @@
           "star6": "Trong thời gian [Tam Linh Huyền Giới] còn hiệu lực, tất cả địch chịu thêm 30% sát thương cuối.Và mỗi cảm xúc mà Hoắc Vũ Hạo đã kích hoạt, hiệu quả tăng thêm 5% nữa."
         },
         "mutation": {
-          "name": "Cốt Chân Phải - Suy Biến",
+          "name": "Chân Phải - Suy Biến",
           "star1Red": "Hiệu ứng [Cấm Hồn] được kéo dài thêm 1 lượt, và trong thời gian duy trì, toàn bộ kẻ địch chịu sát thương cuối tăng thêm 100%.",
           "star4Red": "Kẻ địch đang ở trong trạng thái khống chế sẽ phải chịu thêm 100% sát thương cuối mỗi khi Hoắc Vũ Hạo kích hoạt 1 Thần Vị [Cảm Xúc]. Hiệu quả tăng thêm 5%.",
           "star5Red": "Nếu số lượng Thần Vị [Cảm Xúc] mà Hoắc Vũ Hạo kích hoạt vượt quá 3, thì khi tiến vào trạng thái [Thước Đế Bất Bại] lần kế, mỗi một loại Thần Vị [Cảm Xúc] được kích hoạt sẽ giúp hắn cường hóa Mẫn Công phép 1 lần.Nếu đang ở trạng thái [Tình Tự Cổ Vũ], mỗi tầng tăng 5% sát thương cuối, tối đa cộng dồn 40 tầng.",
