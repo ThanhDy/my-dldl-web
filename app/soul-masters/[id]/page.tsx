@@ -30,12 +30,12 @@ function SkillModal({
 
   const SkillIcon =
     skill.soulRingType.includes("Ma Nhện") ||
-      skill.soulRingType.includes("Giáp Thuẫn")
+    skill.soulRingType.includes("Giáp Thuẫn")
       ? GiSpiderWeb
       : GiSnakeSpiral;
   const iconColorClass =
     skill.soulRingType.includes("Ma Nhện") ||
-      skill.soulRingType.includes("Giáp Thuẫn")
+    skill.soulRingType.includes("Giáp Thuẫn")
       ? "text-red-500 bg-red-900/20 border-red-500"
       : "text-green-500 bg-green-900/20 border-green-500";
 
@@ -50,7 +50,6 @@ function SkillModal({
         className="bg-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border border-slate-700 shadow-2xl cursor-default no-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Nút đóng (X) vẫn giữ nguyên để người dùng có thể bấm chủ động */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-slate-700/50 rounded-full transition z-20"
@@ -83,10 +82,11 @@ function SkillModal({
                 {skill.type}
               </span>
               <span
-                className={`px-2 py-0.5 rounded ${skill.soulRingType.includes("Ma Nhện")
-                  ? "bg-red-600/30 text-red-300"
-                  : "bg-green-600/30 text-green-300"
-                  }`}
+                className={`px-2 py-0.5 rounded ${
+                  skill.soulRingType.includes("Ma Nhện")
+                    ? "bg-red-600/30 text-red-300"
+                    : "bg-green-600/30 text-green-300"
+                }`}
               >
                 {skill.soulRingType}
               </span>
@@ -129,74 +129,91 @@ function SkillModal({
           )}
 
           {skill.note && (
-  <div className="mt-4">
-    <h4 className="text-sm font-bold text-yellow-500 uppercase mb-3 flex items-center gap-2">
-      <span className="text-lg">💡</span> Giải thích hiệu ứng
-    </h4>
+            <div className="mt-4">
+              <h4 className="text-sm font-bold text-yellow-500 uppercase mb-3 flex items-center gap-2">
+                <span className="text-lg">💡</span> Giải thích hiệu ứng
+              </h4>
 
-    <div className="flex flex-col gap-3">
-      {skill.note.split("\n").map((line, index) => {
-        const content = line.trim();
-        if (!content) return null;
+              <div className="flex flex-col gap-3">
+                {skill.note.split("\n").map((line, index) => {
+                  const content = line.trim();
+                  if (!content) return null;
 
-        // Hàm xử lý tô màu theo tag [color|text]
-        const formatText = (text: string, defaultColorClass: string) => {
-          const parts = text.split(/(\[.*?\|.*?\])/g);
-          return parts.map((part, i) => {
-            if (part.startsWith("[") && part.endsWith("]")) {
-              const [color, label] = part.slice(1, -1).split("|");
-              
-              const colorMap: Record<string, string> = {
-                red: "text-red-500",
-                yellow: "text-yellow-400",
-                blue: "text-blue-400",
-                green: "text-green-400",
-                purple: "text-purple-400",
-                orange: "text-orange-500",
-                cyan: "text-cyan-400",
-                white: "text-white"
-              };
+                  // Hàm xử lý tô màu theo tag [color|text]
+                  const formatText = (
+                    text: string,
+                    defaultColorClass: string
+                  ) => {
+                    const parts = text.split(/(\[.*?\|.*?\])/g);
+                    return parts.map((part, i) => {
+                      if (part.startsWith("[") && part.endsWith("]")) {
+                        const [color, label] = part.slice(1, -1).split("|");
 
-              return (
-                <span key={i} className={`font-bold ${colorMap[color] || defaultColorClass}`}>
-                  {label}
-                </span>
-              );
-            }
-            // Nếu không có tag màu, trả về màu mặc định được truyền vào
-            return <span key={i} className={defaultColorClass}>{part}</span>;
-          });
-        };
+                        const colorMap: Record<string, string> = {
+                          red: "text-red-500",
+                          yellow: "text-yellow-400",
+                          blue: "text-blue-400",
+                          green: "text-green-400",
+                          purple: "text-purple-400",
+                          orange: "text-orange-500",
+                          cyan: "text-cyan-400",
+                          white: "text-white",
+                        };
 
-        return (
-          <div
-            key={index}
-            className="bg-slate-900/60 border border-yellow-500/10 p-4 rounded-lg text-sm shadow-sm hover:border-yellow-500/30 transition-colors"
-          >
-            {content.includes(":") ? (
-              <>
-                {/* TIÊU ĐỀ: Trước dấu ":" mặc định là màu VÀNG */}
-                <div className="mb-1 text-base block font-bold tracking-wide">
-                  {formatText(content.split(":")[0].trim(), "text-yellow-400")}
-                </div>
-                {/* NỘI DUNG: Sau dấu ":" mặc định là màu XÁM nhạt */}
-                <div className="italic leading-relaxed border-t border-slate-700/50 pt-1 mt-1">
-                  {formatText(content.split(":").slice(1).join(":").trim(), "text-slate-300")}
-                </div>
-              </>
-            ) : (
-              // Nếu không có dấu ":", mặc định toàn bộ là màu VÀNG
-              <div className="italic leading-relaxed">
-                {formatText(content, "text-yellow-400")}
+                        return (
+                          <span
+                            key={i}
+                            className={`font-bold ${
+                              colorMap[color] || defaultColorClass
+                            }`}
+                          >
+                            {label}
+                          </span>
+                        );
+                      }
+                      // Nếu không có tag màu, trả về màu mặc định được truyền vào
+                      return (
+                        <span key={i} className={defaultColorClass}>
+                          {part}
+                        </span>
+                      );
+                    });
+                  };
+
+                  return (
+                    <div
+                      key={index}
+                      className="bg-slate-900/60 border border-yellow-500/10 p-4 rounded-lg text-sm shadow-sm hover:border-yellow-500/30 transition-colors"
+                    >
+                      {content.includes(":") ? (
+                        <>
+                          {/* TIÊU ĐỀ: Trước dấu ":" mặc định là màu VÀNG */}
+                          <div className="mb-1 text-base block font-bold tracking-wide">
+                            {formatText(
+                              content.split(":")[0].trim(),
+                              "text-yellow-400"
+                            )}
+                          </div>
+                          {/* NỘI DUNG: Sau dấu ":" mặc định là màu XÁM nhạt */}
+                          <div className="italic leading-relaxed border-t border-slate-700/50 pt-1 mt-1">
+                            {formatText(
+                              content.split(":").slice(1).join(":").trim(),
+                              "text-slate-300"
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        // Nếu không có dấu ":", mặc định toàn bộ là màu VÀNG
+                        <div className="italic leading-relaxed">
+                          {formatText(content, "text-yellow-400")}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  </div>
-)}
-
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -500,22 +517,24 @@ export default function SoulMasterDetail() {
         {/* --- CỘT TRÁI (Đã xóa Stats) --- */}
         <div className="lg:col-span-1 space-y-6">
           <div
-            className={`rounded-2xl overflow-hidden border-4 relative shadow-2xl ${hero.rarity === "SP" || hero.rarity === "SP+"
-              ? "border-pink-400" // Viền SP vàng kim sáng
-              : hero.rarity === "SSR"
+            className={`rounded-2xl overflow-hidden border-4 relative shadow-2xl ${
+              hero.rarity === "SP" || hero.rarity === "SP+"
+                ? "border-pink-400" // Viền SP vàng kim sáng
+                : hero.rarity === "SSR"
                 ? "border-yellow-500 shadow-yellow-500/20" // Viền SSR vàng
                 : "border-blue-500 shadow-blue-500/20" // SR giữ nguyên
-              }`}
+            }`}
           >
             {/* Badge Rarity */}
             <div className="absolute top-4 left-4 z-10">
               <span
-                className={`px-3 py-1 rounded font-bold text-sm ${hero.rarity === "SP" || hero.rarity === "SP+"
-                  ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
-                  : hero.rarity === "SSR"
+                className={`px-3 py-1 rounded font-bold text-sm ${
+                  hero.rarity === "SP" || hero.rarity === "SP+"
+                    ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
+                    : hero.rarity === "SSR"
                     ? "bg-yellow-500 text-white border-yellow-600"
                     : "bg-purple-600 text-white border-purple-800"
-                  }`}
+                }`}
               >
                 {hero.rarity}
               </span>
@@ -546,19 +565,21 @@ export default function SoulMasterDetail() {
           <div className="flex gap-4 border-b border-slate-700 mb-6">
             <button
               onClick={() => setActiveTab("build")}
-              className={`pb-3 px-4 font-bold text-sm transition border-b-2 ${activeTab === "build"
-                ? "border-blue-500 text-blue-400"
-                : "border-transparent text-slate-500"
-                }`}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 ${
+                activeTab === "build"
+                  ? "border-blue-500 text-blue-400"
+                  : "border-transparent text-slate-500"
+              }`}
             >
               Hồn Hoàn
             </button>
             <button
               onClick={() => setActiveTab("bones")}
-              className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones"
-                ? "border-yellow-500 text-yellow-400"
-                : "border-transparent text-slate-500"
-                }`}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${
+                activeTab === "bones"
+                  ? "border-yellow-500 text-yellow-400"
+                  : "border-transparent text-slate-500"
+              }`}
             >
               Hồn Cốt
             </button>
@@ -610,15 +631,16 @@ export default function SoulMasterDetail() {
                                   skillDetail && setSelectedSkill(skillDetail)
                                 }
                                 disabled={!skillDetail}
-                                className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 transition-all outline-none ${!skillDetail
-                                  ? "opacity-50 cursor-not-allowed grayscale"
-                                  : "hover:scale-110 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30"
-                                  } ${
+                                className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 transition-all outline-none ${
+                                  !skillDetail
+                                    ? "opacity-50 cursor-not-allowed grayscale"
+                                    : "hover:scale-110 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30"
+                                } ${
                                   // Màu viền fallback nếu chưa có ảnh
                                   isSpider
                                     ? "border-red-500/50"
                                     : "border-green-500/50"
-                                  }`}
+                                }`}
                               >
                                 {/* ƯU TIÊN 1: Nếu có iconUrl (Ảnh thật bạn upload) thì hiện ảnh */}
                                 {skillDetail?.iconUrl ? (
@@ -630,10 +652,11 @@ export default function SoulMasterDetail() {
                                 ) : (
                                   // ƯU TIÊN 2: Nếu chưa có ảnh, dùng Icon mặc định + Màu nền
                                   <div
-                                    className={`w-full h-full flex items-center justify-center text-2xl ${isSpider
-                                      ? "bg-red-900/20 text-red-500"
-                                      : "bg-green-900/20 text-green-400"
-                                      }`}
+                                    className={`w-full h-full flex items-center justify-center text-2xl ${
+                                      isSpider
+                                        ? "bg-red-900/20 text-red-500"
+                                        : "bg-green-900/20 text-green-400"
+                                    }`}
                                   >
                                     {isSpider ? (
                                       <GiSpiderWeb />
