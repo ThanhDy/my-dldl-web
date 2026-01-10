@@ -10,36 +10,132 @@
     "builds": [{ "title": "PvE - 1121" }, { "title": "PvP - 2212" }],
     "skillDetails": [
       {
-        "id": "tieu-bach-s2-1",
-        "name": "Quần Sa Vệ Sĩ",
-        "type": "Bị động",
-        "soulRingType": "Quần Sa Vệ Sĩ",
-        "description": "Tiểu Bạch dựa theo tốc độ ban đầu của đồng đội, lần lượt phân cho mỗi Hồn Sư phe ta 1 thân phận [Quần Sa Vệ Sĩ], mỗi lượt đồng đội tối đa hoàn thành 1 lần chỉ lệnh tương ứng với thân phận. Khi đồng đội hoàn thành chỉ lệnh, Tiểu Bạch sẽ cổ vũ, giúp toàn bộ Hồn Sư phe ta gây ST Cuối tăng vĩnh viễn, tối đa hoàn thành 5 lần chỉ lệnh.",
+        "id": "tieu-bach-s1-1",
+        "name": "Lướt Gió Đạp Sóng",
+        "type": "Chủ động",
+        "soulRingType": "Thực Vật",
+        "description": "Thâm Hải Lãnh Chủ Tiểu Bạch thúc đẩy 30% thanh hành động cho toàn phe ta, và làm cho tất cả hỗn kỹ của phe ta gây ra sát thương cuối vĩnh viễn tăng 20%, cộng dồn tối đa 5 tầng.",
         "yearEffects": [
           {
             "year": "1000 năm",
-            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 60%."
+            "description": "Hiệu quả tăng cường sát thương cuối cùng của hỗn kỹ sẽ tăng thêm 10%."
           },
           {
             "year": "10k năm",
-            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 80%."
+            "description": "Hiệu quả tăng cường sát thương cuối cùng của hỗn kỹ sẽ tăng thêm 20%."
           },
           {
             "year": "25k năm",
-            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 120%."
+            "description": "Hiệu quả tăng cường sát thương cuối cùng của hỗn kỹ sẽ tăng thêm 30%."
           },
           {
             "year": "50k năm",
-            "description": "Cứ mỗi 1 Hồn Sư phe ta hoàn thành 5 lần chỉ lệnh, hiệu ứng cổ vũ của Tiểu Bạch được tăng thêm 160%."
+            "description": "Sau khi tích lũy đến 5 tầng, mỗi lượt đầu tiên của tiểu đơn surphe ta sát thương cuối gây ra sẽ được tăng 200%."
           },
           {
             "year": "100k năm",
-            "description": "Nếu toàn bộ Hồn Sư phe ta đều đã hoàn thành 5 lần chỉ lệnh, hiệu ứng ST Cuối tăng từ sự cổ vũ của Tiểu Bạch sẽ được nhân đôi"
+            "description": "NHiệu quả tăng cường sát thương cuối cùng của hỗn kỹ sẽ tăng thêm 50%."
           }
         ],
-        "note": "Vệ Sĩ Bầy Cá Mập: Hiệu ứng đặc biệt, sau khi thực hiện lệnh tương ứng, Tiểu Bạch cổ vũ Hồn Sư phe ta, khiến ST Cuối của toàn bộ Hồn Sư phe ta được tăng vĩnh viễn.",
-        "iconUrl": "/images/tieu-bach/hh2-1.jpg"
+        "iconUrl": "/images/tieu-bach/hh1-1.png"
+      },
+
+      {
+        "id": "tieu-bach-s2-1",
+        "name": "Quần Sa Vệ Sĩ",
+        "type": "Bị động",
+        "soulRingType": "Thực Vật",
+        "description": "Tốc Biến sẽ căn cứ vào thuộc tính tốc độ ban đầu của đồng đội để lần lượt phân phối cho tất cả đồng minh một danh hiệu [Quán Sư Về Sự Nổ], mỗi đồng đội có thể hoàn thành chỉ lệnh liên quan đến danh hiệu này để nhận buff. Khi đồng đội thực hiện chỉ lệnh thông qua kỹ năng của chính mình, Tốc Biến sẽ tích lũy chỉ số sát thương đội, chuẩn cho lần kích phát chỉ số sát thương gấp 4 tương ứng đồng minh với số lần sử dụng nhiều. Mỗi đồng minh có thể hoàn thành [Quán Sư Về Sự Nổ] một lần.",
+        "yearEffects": [
+          {
+            "year": "1000 năm",
+            "description": "Mỗi khi một nhân vật hoàn thành 1 lần chỉ lệnh, hiệu quả kích thích của Tốc Biến tăng thêm 60%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Mỗi khi một nhân vật hoàn thành 1.5 lần chỉ lệnh, hiệu quả kích thích của Tốc Biến tăng thêm 80%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Mỗi khi một nhân vật hoàn thành 2.5 lần chỉ lệnh, hiệu quả kích thích của Tốc Biến tăng thêm 100%."
+          },
+          {
+            "year": "50k năm",
+            "description": "Mỗi khi một nhân vật hoàn thành 5 lần chỉ lệnh, hiệu quả kích thích của Tốc Biến tăng thêm 200%."
+          },
+          {
+            "year": "100k năm",
+            "description": "Mỗi khi nhân vật thực hiện đủ 10 lần chỉ lệnh, Tốc Biến sẽ kích phát chỉ số sát thương đội, kích thích chỉ số sát thương của tổ đội cao nhất trên diện rộng."
+          }
+        ],
+        "note": " Quán Sư Về Sự Nổ : Hiệu ứng kỹ năng : Sau khi thực hiện chỉ lệnh tương ứng, Tốc Biến sẽ kích hoạt các hiệu ứng buff, kịch tính cho tổ đội, mỗi đồng minh nhận được sự tăng trưởng vĩnh viễn trong sát thương cơ bản.\n [red|Thứ tự cá] : \n [blue|Quần Sa Tốc Vệ] : Trong lượt của bản thân áp dụng trạng thái khống chế lên phe địch.\n [yellow|Quần Sa Tiêu Vệ] : Khi lượt của bản thân kết thúc, ít nhất có 1 Lãnh Vực hoặc Kết Giới được kích hoạt.\n [green|Quần Sa Thuẫn Vệ] : Nếu trong lượt bản thân, giới trị máu thay đổi hoặc thực hiện việc tạo khiên cho phe ta... \n [purple|Quần Sa Viện Vệ] : Trong lượt của bản thân hồi phục hiệu lực cho phe ta. \n [orange|Quần Sa Thiết Vệ] : Bản thân thực hiện tấn công trong 2 lượt liên tiếp.",
+        "iconUrl": "/images/tieu-bach/hh2-1.png"
+      },
+
+      {
+        "id": "tieu-bach-s3-2",
+        "name": "Kinh Tao",
+        "type": "Bị động",
+        "soulRingType": "Giáp Thuẫn",
+        "description": "Thâm Hải Lãnh Chủ Tiểu Bạch tấn công một mục tiêu của đối phương, gây ra 150% sát thương công kích. Đồng thời, cô ấy khiến các hồn sư Cường Mẫn công nhận được 20% tăng sát thương cho lần sử dụng hồn kỹ hoặc tấn công tiếp theo.",
+        "yearEffects": [
+          {
+            "year": "1000 năm",
+            "description": "Sát thương gây ra sẽ tăng lên 30%."
+          },
+          {
+            "year": "10k năm",
+            "description": "Sát thương gây ra sẽ tăng lên 40%."
+          },
+          {
+            "year": "25k năm",
+            "description": "Sát thương gây ra sẽ tăng lên 60%."
+          },
+          {
+            "year": "50k năm",
+            "description": "Khiến các hồn sư Cường Mẫn công nhận được hiệu quả tăng sát thương khi giải phóng hồn kỹ hoặc sử dụng chiêu thức tấn công trong 2 hiệp tiếp theo."
+          },
+          {
+            "year": "100k năm",
+            "description": "Sát thương gây ra sẽ tăng lên 100%."
+          }
+        ],
+        "iconUrl": "/images/tieu-bach/hh3-2.png"
+      },
+
+      {
+        "id": "tieu-bach-s4-1",
+        "name": "Phong Trì Điện Xế",
+        "type": "Chủ động",
+        "soulRingType": "Thực Vật",
+        "description": "Thám Hải Lãnh Chủ Tiểu Bạch chọn một hồn sư phe ta, khiến họ vĩnh viễn sở hữu hiệu ứng [Tật Hành], mỗi lần hành động đều sẽ liên tục thực hiện 2 lượt hành động và sát thương cuối gây ra sẽ tăng 120%. Tuy nhiên, chỉ tồn tại duy nhất 1 hiệu quả [Tật Hành] trong phe ta.",
+        "yearEffects": [
+          {
+            "year": "1000 năm",
+            "description": "Khi bắt đầu lượt thứ hai của hành động liên tiếp, sẽ hồi phục thêm 2 điểm hồn lực."
+          },
+          {
+            "year": "10k năm",
+            "description": "Khi bắt đầu lượt thứ hai của hành động liên tiếp, tất cả kỹ năng của bản thân sẽ làm mới thời gian hồi chiêu."
+          },
+          {
+            "year": "25k năm",
+            "description": "Trong lượt thứ hai của hành động liên tiếp, sát thương cuối gây ra sẽ tăng 200%."
+          },
+          {
+            "year": "50k năm",
+            "description": "Trong lượt thứ hai của hành động liên tiếp, sát thương cuối gây ra sẽ tăng 300%."
+          },
+          {
+            "year": "100k năm",
+            "description": "Thời gian hồi hơn sự này nhận được từ phe ta sẽ được duy trì cho đến lượt thứ hai và sau đó mới biến mất."
+          }
+        ],
+        "note": " Tật Hành : Kỹ năng của Tiểu Bạch,giúp một đồng minh nhận được hiệu ứng [Tật Hành], cho phép họ thực hiện hành động liên tiếp 2 lượt và tăng mạnh sát thương cuối. Tuy nhiên, chỉ có thể tồn tại duy nhất một hiệu ứng này trong phe ta, lúc đó chỉ có một nhân vật có thể nhận hiệu ứng [Tật Hành] cùng lúc.",
+        "iconUrl": "/images/tieu-bach/hh4-1.png"
       }
+
+
     ],
     "soulBones": [
       {
