@@ -18,6 +18,16 @@ import Image from "next/image";
 
 const soulMastersData = soulMastersRaw as unknown as SoulMaster[];
 
+const YEAR_LABELS: Record<string, string> = {
+  y1k: "1k Năm",
+  y10k: "10k Năm",
+  y25k: "25k Năm",
+  y50k: "50k Năm",
+  y100k: "100k Năm",
+};
+
+const YEAR_ORDER = ["y1k", "y10k", "y25k", "y50k", "y100k"];
+
 // --- COMPONENT MODAL ---
 function SkillModal({
   skill,
@@ -105,41 +115,55 @@ function SkillModal({
             </p>
           </div>
 
-          {skill.yearEffects.length > 0 && (
+          {skill.yearEffects && Object.keys(skill.yearEffects).length > 0 && (
             <div>
-              <h4 className="text-sm font-bold text-slate-300 uppercase mb-3">
-                Hiệu ứng theo niên đại
-              </h4>
-              <div className="space-y-3">
-                {skill.yearEffects.map((effect, index) => (
-                  <div
-                    key={index}
-                    className="flex gap-3 bg-slate-900/40 p-3 rounded-lg border-l-4 border-blue-500"
-                  >
-                    <span className="font-bold text-blue-400 whitespace-nowrap min-w-[80px]">
-                      {effect.year}
-                    </span>
-                    <p className="text-slate-300 text-sm">
-                      {effect.description}
-                    </p>
-                  </div>
-                ))}
+              <div className="space-y-3 mt-4">
+                {skill.yearEffects &&
+                  YEAR_ORDER.map((key) => {
+                    // Lấy dữ liệu an toàn
+                    const effects = skill.yearEffects as any;
+                    const desc = effects[key];
+
+                    // Không có nội dung thì ẩn
+                    if (!desc) return null;
+
+                    return (
+                      <div
+                        key={key}
+                        className="flex gap-3 bg-slate-900/40 p-3 rounded-lg border-l-4 border-blue-500"
+                      >
+                        {/* Cột Năm (Bên trái) */}
+                        <span className="font-bold text-blue-400 whitespace-nowrap min-w-[80px]">
+                          {YEAR_LABELS[key]}
+                        </span>
+
+                        {/* Cột Mô tả (Bên phải) */}
+                        <p className="text-slate-300 text-sm leading-relaxed">
+                          {desc}
+                        </p>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           )}
 
-          {skill.note && (
-            <div className="mt-4">
-              <h4 className="text-sm font-bold text-yellow-500 uppercase mb-3 flex items-center gap-2">
-                <span className="text-lg">💡</span> Giải thích hiệu ứng
-              </h4>
+          {skill.note && skill.note.length > 0 && (
+            <div className="mt-4 animate-fadeIn">
+              {/* Tiêu đề nhỏ (Optional - để phân cách rõ ràng hơn) */}
+              <div className="mb-2 flex items-center gap-2">
+                <span className="w-1 h-4 bg-yellow-500 rounded-full"></span>
+                <span className="text-xs font-bold text-yellow-500 uppercase tracking-widest">
+                  Giải thích hiệu ứng
+                </span>
+              </div>
 
               <div className="flex flex-col gap-3">
-                {skill.note.split("\n").map((line, index) => {
+                {skill.note.map((line, index) => {
                   const content = line.trim();
                   if (!content) return null;
 
-                  // Hàm xử lý tô màu theo tag [color|text]
+                  // --- HÀM XỬ LÝ MÀU SẮC (Giữ nguyên logic cũ của bạn) ---
                   const formatText = (
                     text: string,
                     defaultColorClass: string
@@ -148,7 +172,6 @@ function SkillModal({
                     return parts.map((part, i) => {
                       if (part.startsWith("[") && part.endsWith("]")) {
                         const [color, label] = part.slice(1, -1).split("|");
-
                         const colorMap: Record<string, string> = {
                           red: "text-red-500",
                           yellow: "text-yellow-400",
@@ -159,7 +182,6 @@ function SkillModal({
                           cyan: "text-cyan-400",
                           white: "text-white",
                         };
-
                         return (
                           <span
                             key={i}
@@ -171,7 +193,6 @@ function SkillModal({
                           </span>
                         );
                       }
-                      // Nếu không có tag màu, trả về màu mặc định được truyền vào
                       return (
                         <span key={i} className={defaultColorClass}>
                           {part}
@@ -180,22 +201,24 @@ function SkillModal({
                     });
                   };
 
+                  // --- RENDER GIAO DIỆN (Giữ nguyên CSS cũ) ---
                   return (
                     <div
                       key={index}
-                      className="bg-slate-900/60 border border-yellow-500/10 p-4 rounded-lg text-sm shadow-sm hover:border-yellow-500/30 transition-colors"
+                      className="bg-slate-900/60 border border-yellow-500/10 p-4 rounded-lg text-sm shadow-sm hover:border-yellow-500/30 transition-colors group"
                     >
                       {content.includes(":") ? (
                         <>
-                          {/* TIÊU ĐỀ: Trước dấu ":" mặc định là màu VÀNG */}
-                          <div className="mb-1 text-base block font-bold tracking-wide">
+                          {/* TIÊU ĐỀ: Trước dấu ":" (Màu Vàng) */}
+                          <div className="mb-1 text-base block font-bold tracking-wide group-hover:text-yellow-300 transition-colors">
                             {formatText(
                               content.split(":")[0].trim(),
                               "text-yellow-400"
                             )}
                           </div>
-                          {/* NỘI DUNG: Sau dấu ":" mặc định là màu XÁM nhạt */}
-                          <div className="italic leading-relaxed border-t border-slate-700/50 pt-1 mt-1">
+
+                          {/* NỘI DUNG: Sau dấu ":" (Màu Xám) */}
+                          <div className="leading-relaxed border-t border-slate-700/50 pt-2 mt-1">
                             {formatText(
                               content.split(":").slice(1).join(":").trim(),
                               "text-slate-300"
@@ -203,7 +226,7 @@ function SkillModal({
                           </div>
                         </>
                       ) : (
-                        // Nếu không có dấu ":", mặc định toàn bộ là màu VÀNG
+                        // Nếu không có dấu ":", mặc định toàn bộ là màu Vàng
                         <div className="italic leading-relaxed">
                           {formatText(content, "text-yellow-400")}
                         </div>

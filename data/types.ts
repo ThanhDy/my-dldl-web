@@ -3,8 +3,11 @@ export interface Build {
 }
 
 export interface SkillYearEffect {
-  year: string; // Ví dụ: "1000 năm", "10k năm", "50k năm"
-  description: string;
+  y1k?: string;
+  y10k?: string; // 1 Vạn năm
+  y25k?: string; // 2.5 Vạn năm
+  y50k?: string; // 5 Vạn năm
+  y100k?: string; // 10 Vạn năm
 }
 
 export interface SkillDetail {
@@ -13,8 +16,8 @@ export interface SkillDetail {
   type: "Chủ động" | "Bị động"; // Loại (Phần 1)
   soulRingType: string;
   description: string; // Mô tả chính (Phần 2)
-  yearEffects: SkillYearEffect[]; // Các mốc kích hoạt (Phần 3)
-  note?: string; // Chú thích thêm (Phần 4 - Optional)
+  yearEffects: SkillYearEffect; // Các mốc kích hoạt (Phần 3)
+  note?: string[]; // Chú thích thêm (Phần 4 - Optional)
   iconUrl?: string;
 }
 
@@ -62,7 +65,6 @@ export interface SoulMaster {
   rarity: "SP" | "SSR" | "SP+";
   type: "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ" | "Phòng Ngự";
   image: string; // Link ảnh
-  story: string;
   builds: Build[]; // Danh sách các cách build
   skillDetails: SkillDetail[];
   soulBones: SoulBone[];
