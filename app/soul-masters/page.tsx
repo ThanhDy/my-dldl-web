@@ -145,6 +145,7 @@ export default function SoulMastersPage() {
                       width={300}
                       height={400}
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-slate-600">
