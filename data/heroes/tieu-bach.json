@@ -1,7 +1,7 @@
 {
   "id": "tieu-bach",
   "name": "Tiểu Bạch",
-  "image": "/images/tieu-bach/avt.jpg",
+  "image": "/images/tieu-bach/avt.webp",
   "title": "Thâm Hải Lãnh Chúa",
   "rarity": "SP",
   "type": "Phụ Trợ",
@@ -27,7 +27,7 @@
         "y50k": "Sau khi tích lũy đến 5 tầng, mỗi lượt đầu tiên của tiểu đơn surphe ta sát thương cuối gây ra sẽ được tăng 200%.",
         "y100k": "Hiệu quả tăng cường sát thương cuối cùng của hỗn kỹ sẽ tăng thêm 50%."
       },
-      "iconUrl": "/images/tieu-bach/hh1-1.png"
+      "iconUrl": "/images/tieu-bach/hh1-1.webp"
     },
     {
       "id": "tieu-bach-s2-1",
@@ -51,7 +51,7 @@
         "[purple|Quần Sa Viện Vệ] : Trong lượt của bản thân hồi phục hiệu lực cho phe ta.",
         "[orange|Quần Sa Thiết Vệ] : Bản thân thực hiện tấn công trong 2 lượt liên tiếp."
       ],
-      "iconUrl": "/images/tieu-bach/hh2-1.png"
+      "iconUrl": "/images/tieu-bach/hh2-1.webp"
     },
     {
       "id": "tieu-bach-s3-2",
@@ -66,7 +66,7 @@
         "y50k": "Khiến các hồn sư Cường Mẫn công nhận được hiệu quả tăng sát thương khi giải phóng hồn kỹ hoặc sử dụng chiêu thức tấn công trong 2 hiệp tiếp theo.",
         "y100k": "Sát thương gây ra sẽ tăng lên 100%."
       },
-      "iconUrl": "/images/tieu-bach/hh3-2.png"
+      "iconUrl": "/images/tieu-bach/hh3-2.webp"
     },
     {
       "id": "tieu-bach-s4-1",
@@ -84,7 +84,7 @@
       "note": [
         "Tật Hành: Kỹ năng của Tiểu Bạch, giúp một đồng minh nhận được hiệu ứng [Tật Hành], cho phép họ thực hiện hành động liên tiếp 2 lượt và tăng mạnh sát thương cuối. Tuy nhiên, chỉ có thể tồn tại duy nhất một hiệu ứng này trong phe ta, lúc đó chỉ có một nhân vật có thể nhận hiệu ứng [Tật Hành] cùng lúc."
       ],
-      "iconUrl": "/images/tieu-bach/hh4-1.png"
+      "iconUrl": "/images/tieu-bach/hh4-1.webp"
     }
   ],
   "soulBones": [

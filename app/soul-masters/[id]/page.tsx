@@ -166,7 +166,7 @@ function SkillModal({
 
                   const formatText = (
                     text: string,
-                    defaultColorClass: string
+                    defaultColorClass: string,
                   ) => {
                     const parts = text.split(/(\[.*?\|.*?\])/g);
                     return parts.map((part, i) => {
@@ -211,13 +211,13 @@ function SkillModal({
                           <div className="mb-1 text-base block font-bold tracking-wide group-hover:text-yellow-300 transition-colors">
                             {formatText(
                               content.split(":")[0].trim(),
-                              "text-yellow-400"
+                              "text-yellow-400",
                             )}
                           </div>
                           <div className="leading-relaxed border-t border-slate-700/50 pt-2 mt-1">
                             {formatText(
                               content.split(":").slice(1).join(":").trim(),
-                              "text-slate-300"
+                              "text-slate-300",
                             )}
                           </div>
                         </>
@@ -508,21 +508,11 @@ export default function SoulMasterDetail() {
   const getSkillDetail = (
     heroData: SoulMaster,
     skillIndex: number,
-    typeCode: string
+    typeCode: string,
   ) => {
     const skillId = `${heroData.id}-s${skillIndex + 1}-${typeCode}`;
     return heroData.skillDetails?.find((s) => s.id === skillId);
   };
-
-  // 5. HIỂN THỊ LOADING
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mr-2"></div>
-        Đang tải dữ liệu...
-      </div>
-    );
-  }
 
   if (!hero)
     return <div className="p-10 text-white">Không tìm thấy Hồn Sư.</div>;

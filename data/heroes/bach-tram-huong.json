@@ -1,8 +1,8 @@
 {
   "id": "bach-tram-huong",
   "name": "Bạch Trầm Hương",
-  "image": "/images/bach-tram-huong/avt.png",
-  "title": "Linh Yến Chúc Phúc",
+  "image": "/images/bach-tram-huong/avt.webp",
+  "title": "Linh Yến",
   "rarity": "SP",
   "type": "Phụ Trợ",
   "builds": [
@@ -30,7 +30,7 @@
       "note": [
         "Vũ Yến: Mỗi [Vũ Yến] khiến Hồn Kỹ của người sở hữu giảm 1 điểm tiêu hao hồn lực.Khi tiêu hao hồn lực của Hồn Sư vượt quá mức tiêu hao hồn lực cơ bản, mỗi điểm giảm sẽ tăng sát thương cuối cùng gây ra."
       ],
-      "iconUrl": "/images/bach-tram-huong/hh1-1.png"
+      "iconUrl": "/images/bach-tram-huong/hh1-1.webp"
     }
   ]
 }

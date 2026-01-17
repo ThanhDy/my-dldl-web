@@ -19,7 +19,7 @@ const getDefaultSkillType = (order: number) => {
 const createEmptySkill = (
   order: number,
   branch: number,
-  heroId: string = ""
+  heroId: string = "",
 ) => ({
   id: heroId ? `${heroId}-s${order}-${branch}` : "",
   _tempOrder: order,
@@ -66,7 +66,7 @@ const createEmptySoulBone = (position: string) => ({
   _extraType: "none",
 });
 const INITIAL_SOUL_BONES = SOUL_BONE_POSITIONS.map((pos) =>
-  createEmptySoulBone(pos)
+  createEmptySoulBone(pos),
 );
 
 const INITIAL_HERO = {
@@ -105,7 +105,7 @@ export default function EditHeroPage() {
         if (!res.ok) {
           // Nếu API trả về lỗi (404), hiển thị thông báo rõ ràng
           setMessage(
-            `❌ Không tìm thấy dữ liệu cho ID: "${heroId}". Hãy kiểm tra lại thư mục data/heroes/`
+            `❌ Không tìm thấy dữ liệu cho ID: "${heroId}". Hãy kiểm tra lại thư mục data/heroes/`,
           );
           return;
         }
@@ -138,7 +138,7 @@ export default function EditHeroPage() {
         // B. Merge Bones
         const mergedBones = INITIAL_SOUL_BONES.map((emptyBone) => {
           const existingBone = foundHero.soulBones?.find(
-            (b: any) => b.position === emptyBone.position
+            (b: any) => b.position === emptyBone.position,
           );
 
           if (existingBone) {
@@ -234,7 +234,7 @@ export default function EditHeroPage() {
   const updateSoulBoneStandard = (
     index: number,
     key: string,
-    value: string
+    value: string,
   ) => {
     const newBones = [...formData.soulBones];
     newBones[index].standard[key] = value;
@@ -244,7 +244,7 @@ export default function EditHeroPage() {
   const updateSoulBoneMutation = (
     index: number,
     key: string,
-    value: string
+    value: string,
   ) => {
     const newBones = [...formData.soulBones];
     newBones[index].mutation[key] = value;
@@ -261,16 +261,41 @@ export default function EditHeroPage() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+
     try {
-      // Gọi API PUT thay vì POST
+      // --- BƯỚC QUAN TRỌNG: CHUẨN HÓA DỮ LIỆU TRƯỚC KHI GỬI ---
+      const cleanData = { ...formData };
+
+      // 1. Tự động sinh ID cho skill nếu bị thiếu
+      cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
+        // Nếu skill chưa có ID hoặc ID rỗng, hãy tạo mới theo chuẩn
+        if (!skill.id) {
+          return {
+            ...skill,
+            id: `${cleanData.id}-s${skill._tempOrder}-${skill._tempBranch}`,
+            // Tự động tạo luôn link icon nếu chưa có (Optional)
+            iconUrl:
+              skill.iconUrl ||
+              `/images/${cleanData.id}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
+          };
+        }
+        return skill;
+      });
+
+      // 3. Gửi dữ liệu đã chuẩn hóa lên API
       const res = await fetch("/api/admin/update-hero", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(cleanData),
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
+
       setMessage("✅ Cập nhật thành công! Kiểm tra file JSON.");
+
+      // Cập nhật lại state để UI hiển thị đúng dữ liệu mới nhất (có ID)
+      setFormData(cleanData);
     } catch (err: any) {
       setMessage(`❌ Lỗi: ${err.message}`);
     } finally {
@@ -528,7 +553,7 @@ export default function EditHeroPage() {
                                 >
                                   {tag}
                                 </button>
-                              )
+                              ),
                             )}
                           </div>
                         </div>
@@ -571,7 +596,7 @@ export default function EditHeroPage() {
                                   className="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"
                                 />
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </div>
@@ -619,8 +644,8 @@ export default function EditHeroPage() {
                           bone._extraType === "mutation"
                             ? "bg-red-900/30 text-red-400 border-red-500/30"
                             : bone._extraType === "upgrade"
-                            ? "bg-yellow-900/30 text-yellow-400 border-yellow-500/30"
-                            : "bg-slate-800 text-slate-500 border-slate-700"
+                              ? "bg-yellow-900/30 text-yellow-400 border-yellow-500/30"
+                              : "bg-slate-800 text-slate-500 border-slate-700"
                         }`}
                       >
                         <option value="none">Mở rộng: Không</option>
@@ -676,7 +701,7 @@ export default function EditHeroPage() {
                               updateSoulBoneMutation(
                                 idx,
                                 "name",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             placeholder="Tên Hồn Cốt Suy Biến..."
@@ -697,7 +722,7 @@ export default function EditHeroPage() {
                                   updateSoulBoneMutation(
                                     idx,
                                     key,
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 placeholder={`${key}...`}
@@ -728,7 +753,7 @@ export default function EditHeroPage() {
                                   updateSoulBoneUpgrade(
                                     idx,
                                     key,
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 placeholder={`${key}...`}

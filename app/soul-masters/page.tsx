@@ -138,13 +138,7 @@ export default function SoulMastersPage() {
 
                 {/* Ảnh */}
                 <div className="aspect-[3/4] bg-slate-700 relative">
-                  {/* Kiểm tra nếu có ảnh thì hiện, không có thì hiện chữ cái đầu */}
                   {char.image ? (
-                    // <img
-                    //   src={char.image}
-                    //   alt={char.name}
-                    //   className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                    // />
                     <Image
                       src={char.image}
                       alt={char.name}

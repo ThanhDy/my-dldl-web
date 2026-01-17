@@ -17,7 +17,7 @@ const getDefaultSkillType = (order: number) => {
 const createEmptySkill = (
   order: number,
   branch: number,
-  heroId: string = ""
+  heroId: string = "",
 ) => ({
   id: heroId ? `${heroId}-s${order}-${branch}` : "",
   _tempOrder: order,
@@ -78,7 +78,7 @@ const createEmptySoulBone = (position: string) => ({
 
 // Tự động tạo 6 hồn cốt rỗng
 const INITIAL_SOUL_BONES = SOUL_BONE_POSITIONS.map((pos) =>
-  createEmptySoulBone(pos)
+  createEmptySoulBone(pos),
 );
 
 const INITIAL_HERO = {
@@ -117,13 +117,13 @@ export default function AddHeroPage() {
       const updatedSkills = prev.skillDetails.map((skill: any) => ({
         ...skill,
         id: `${slug}-s${skill._tempOrder}-${skill._tempBranch}`,
-        iconUrl: `/images/${slug}/hh${skill._tempOrder}-${skill._tempBranch}.png`,
+        iconUrl: `/images/${slug}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
       }));
 
       return {
         ...prev,
         id: slug, // ID vẫn được lưu vào state nhưng không hiển thị input
-        image: `/images/${slug}/avt.png`,
+        image: `/images/${slug}/avt.webp`,
         skillDetails: updatedSkills,
       };
     });
@@ -175,7 +175,7 @@ export default function AddHeroPage() {
   const updateSoulBoneStandard = (
     index: number,
     key: string,
-    value: string
+    value: string,
   ) => {
     const newBones = [...formData.soulBones];
     newBones[index].standard[key] = value;
@@ -186,7 +186,7 @@ export default function AddHeroPage() {
   const updateSoulBoneMutation = (
     index: number,
     key: string,
-    value: string
+    value: string,
   ) => {
     const newBones = [...formData.soulBones];
     newBones[index].mutation[key] = value;
@@ -583,8 +583,8 @@ export default function AddHeroPage() {
                           bone._extraType === "mutation"
                             ? "bg-red-900/30 text-red-400 border-red-500/30"
                             : bone._extraType === "upgrade"
-                            ? "bg-yellow-900/30 text-yellow-400 border-yellow-500/30"
-                            : "bg-slate-800 text-slate-500 border-slate-700"
+                              ? "bg-yellow-900/30 text-yellow-400 border-yellow-500/30"
+                              : "bg-slate-800 text-slate-500 border-slate-700"
                         }`}
                       >
                         <option value="none">Mở rộng: Không</option>
@@ -638,7 +638,7 @@ export default function AddHeroPage() {
                               updateSoulBoneStandard(
                                 idx,
                                 "star4",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             className="w-full bg-slate-950/50 border border-slate-700 rounded p-2 text-[10px] text-slate-300 h-16 outline-none focus:border-yellow-600/50"
@@ -655,7 +655,7 @@ export default function AddHeroPage() {
                               updateSoulBoneStandard(
                                 idx,
                                 "star6",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             className="w-full bg-slate-950/50 border border-slate-700 rounded p-2 text-[10px] text-slate-300 h-16 outline-none focus:border-red-600/50"
@@ -679,7 +679,7 @@ export default function AddHeroPage() {
                               updateSoulBoneMutation(
                                 idx,
                                 "name",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             placeholder="Tên Hồn Cốt Suy Biến..."
@@ -701,7 +701,7 @@ export default function AddHeroPage() {
                                   updateSoulBoneMutation(
                                     idx,
                                     key,
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 placeholder={`${key
@@ -743,12 +743,12 @@ export default function AddHeroPage() {
                                   updateSoulBoneUpgrade(
                                     idx,
                                     key,
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 placeholder={`${key.replace(
                                   "star",
-                                  ""
+                                  "",
                                 )} Sao...`}
                                 className="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-[10px] text-slate-300 outline-none focus:border-yellow-500"
                               />

@@ -4,7 +4,7 @@
   "title": "Huyền Giáp Thánh Long",
   "rarity": "SP",
   "type": "Phòng Ngự",
-  "image": "/images/thac-bat-van/avt.png",
+  "image": "/images/thac-bat-van/avt.webp",
   "builds": [
     {
       "title": "PvE - 1111"
@@ -33,7 +33,7 @@
         "Huyền Giáp Thuẫn: Trạng thái hộ thuẫn, mỗi tầng hộ thuẫn có thể chặn 1 lần tấn công từ địch, tối đa cộng dồn đến 8 tầng.",
         "Huyền Giáp Quy Hư: Trạng thái đặc biệt, trong thời gian tồn tại, phe ta sẽ không chịu sát thương của địch và không bị ảnh hưởng bởi hiệu ứng kỹ năng của địch, khi trên sân phe ta có [Huyền Giáp Quy Hư], việc áp dụng hiệu ứng [Huyền Giáp Thuẫn] sẽ đổi thành hồi số tầng của [Huyền Giáp Quy Hư], tối đa hồi 2 tầng."
       ],
-      "iconUrl": "/images/thac-bat-van/hh1-1.png"
+      "iconUrl": "/images/thac-bat-van/hh1-1.webp"
     },
     {
       "id": "thac-bat-van-s2-1",
@@ -51,7 +51,7 @@
         "y100k": "Nếu phe ta có hồn sư nào có sinh lực cơ bản thấp hơn Thác Bạt Vân, khi Thác Bạt Vẫn nhận được [Long Lân], hiệu quả tăng sát thương cuối sẽ nhân đôi."
       },
       "note": [],
-      "iconUrl": "/images/thac-bat-van/hh2-1.png"
+      "iconUrl": "/images/thac-bat-van/hh2-1.webp"
     },
     {
       "id": "thac-bat-van-s3-1",
@@ -69,7 +69,7 @@
         "y100k": "Tỷ lệ tạo [Huyền Giáp Thuẫn] tăng lên 50%."
       },
       "note": [],
-      "iconUrl": "/images/thac-bat-van/hh3-1.png"
+      "iconUrl": "/images/thac-bat-van/hh3-1.webp"
     },
     {
       "id": "thac-bat-van-s4-1",
@@ -89,7 +89,7 @@
       "note": [
         "Thánh Long Ấn Ký: Trạng thái đặc biệt, đơn vị sở hữu sẽ tăng chịu sát thương cuối, mỗi lần bị đơn vị có [Huyền Giáp Thuẫn] tấn công, hiệu ứng tăng sát thương cuối cùng này sẽ càng tăng."
       ],
-      "iconUrl": "/images/thac-bat-van/hh4-1.png"
+      "iconUrl": "/images/thac-bat-van/hh4-1.webp"
     },
     {
       "id": "thac-bat-van-s1-2",
@@ -107,7 +107,7 @@
         "y100k": "[Huyền Giáp Thuẫn] có thể chặn 5 lần tấn công."
       },
       "note": [],
-      "iconUrl": ""
+      "iconUrl": "/images/thac-bat-van/hh1-2.webp"
     },
     {
       "id": "thac-bat-van-s2-2",
@@ -125,7 +125,7 @@
         "y100k": "[Huyền Giáp Quy Hư] sẽ không bị đánh thường làm giảm số lần chịu đựng bị tấn công."
       },
       "note": [],
-      "iconUrl": ""
+      "iconUrl": "/images/thac-bat-van/hh2-2.webp"
     },
     {
       "id": "thac-bat-van-s3-2",
@@ -143,7 +143,7 @@
         "y100k": "Đẩy cho bản thân 25% thanh hành động."
       },
       "note": [],
-      "iconUrl": ""
+      "iconUrl": "/images/thac-bat-van/hh3-2.webp"
     },
     {
       "id": "thac-bat-van-s4-2",
@@ -161,7 +161,7 @@
         "y100k": "Khi [Bạch Long Thánh Giới] kích hoạt, tất cả hồn sư Cường công và Mẫn công có thể dùng Đệ Nhất hoặc Đệ Bát hồn kỹ để phản công kẻ địch mà không tiêu hao và mỗi lượt có thể kích hoạt tối đa 3 lần."
       },
       "note": [],
-      "iconUrl": ""
+      "iconUrl": "/images/thac-bat-van/hh4-2.webp"
     }
   ],
   "soulBones": [
