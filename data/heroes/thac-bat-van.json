@@ -90,7 +90,139 @@
         "Thánh Long Ấn Ký: Trạng thái đặc biệt, đơn vị sở hữu sẽ tăng chịu sát thương cuối, mỗi lần bị đơn vị có [Huyền Giáp Thuẫn] tấn công, hiệu ứng tăng sát thương cuối cùng này sẽ càng tăng."
       ],
       "iconUrl": "/images/thac-bat-van/hh4-1.png"
+    },
+    {
+      "id": "thac-bat-van-s1-2",
+      "_tempOrder": 1,
+      "_tempBranch": 2,
+      "name": "Quang Lân - Hộ Thể",
+      "type": "Chủ động",
+      "soulRingType": "Hộ Thuẫn",
+      "description": "Thác Bạt Vân gây sát thương bằng 400% lực công cho toàn bộ kẻ địch, sau đó tự mình nhận [Huyền Giáp Thuẫn] có thể chịu được 3 lần tấn công. Đồng thời hồi cho toàn thể đồng minh 10% thanh Ý Chí.",
+      "yearEffects": {
+        "y1k": "Khi tạo [Huyền Giáp Thuẫn], nó có thể chặn 4 lần tấn công.",
+        "y10k": "Đồng minh có [Huyền Giáp Thuẫn] nhận hiệu quả hồi phục Ý Chí tăng thêm 5%.",
+        "y25k": "Đồng minh có [Huyền Giáp Thuẫn] nhận hiệu quả hồi phục Ý Chí tăng thêm 10%.",
+        "y50k": "Thời gian hồi chiêu giảm 1 lượt.",
+        "y100k": "[Huyền Giáp Thuẫn] có thể chặn 5 lần tấn công."
+      },
+      "note": [],
+      "iconUrl": ""
+    },
+    {
+      "id": "thac-bat-van-s2-2",
+      "_tempOrder": 2,
+      "_tempBranch": 2,
+      "name": "Bất Diệt Huyền Giáp",
+      "type": "Bị động",
+      "soulRingType": "Long Lân",
+      "description": "Khi bắt đầu lượt, mỗi lần [Huyền Giáp Thuẫn] của bản thân còn khả năng chịu một đòn tấn công, Thác Bạt Vân nhận 1 tầng [Long Lân] duy trì đến hết lượt. Khi Thác Bạt Vân thi triển [Huyền Giáp Thuẫn], dựa vào số tầng [Long Lân] sẽ kích hoạt hiệu quả bổ sung:\n- Mỗi 2 tầng [Long Lân], thêm 1 đồng minh nhận [Huyền Giáp Thuẫn].\n- Khi đạt 5 tầng, [Huyền Giáp Thuẫn] có thể chịu thêm 1 lần tấn công.\n- Khi đạt 10 tầng, loại bỏ tất cả [Huyền Giáp Thuẫn] trên phe ta và triệu hồi [Huyền Giáp Quy Hư] có số lần chịu đòn bằng số tầng [Long Lân), tối đa 10 lần.\nMỗi lần nhận được [Long Lân], tăng 15% giới hạn sinh lực cho toàn đội, duy trì 2 lượt.",
+      "yearEffects": {
+        "y1k": "Khi bắt đầu trận, Thác Bạt Vẫn nhận [Huyền Giáp Thuẫn] chịu 3 lần tấn công.",
+        "y10k": "Khi phe ta chịu sát thương diện rộng, [Huyền Giáp Thuẫn] không bị trừ số lần chịu đòn (hiệu quả này kích hoạt tối đa 1 lần mỗi lượt).",
+        "y25k": "Giảm 2 tầng [Long Lân] cần thiết để triệu hồi [Huyền Giáp Quy Hư].",
+        "y50k": "Mỗi đơn vị địch trong một lượt chỉ được phép giảm số lần chịu đòn của [Huyền Giáp Thuẫn] hoặc [Huyền Giáp Quy Hư] tối đa 1 lần.",
+        "y100k": "[Huyền Giáp Quy Hư] sẽ không bị đánh thường làm giảm số lần chịu đựng bị tấn công."
+      },
+      "note": [],
+      "iconUrl": ""
+    },
+    {
+      "id": "thac-bat-van-s3-2",
+      "_tempOrder": 3,
+      "_tempBranch": 2,
+      "name": "Lưu Vân Giảo Sát",
+      "type": "Công thường",
+      "soulRingType": "Đẩy tốc",
+      "description": "Thác Bạt Vân gây sát thương bằng 202% lực công cho 1 mục tiêu địch, sau đó đẩy thanh hành động của bản thân thêm 5%.",
+      "yearEffects": {
+        "y1k": "Đẩy cho bản thân 10% thanh hành động.",
+        "y10k": "Đẩy cho bản thân 15% thanh hành động.",
+        "y25k": "Đẩy cho bản thân 20% thanh hành động.",
+        "y50k": "Sau khi thi triển [Huyền Giáp Thuẫn], Thác Bạt Vẫn lập tức dùng kỹ năng này tấn công 1 mục tiêu ngẫu nhiên, mỗi hiệp nhiều nhất kích hoạt 1 lần.",
+        "y100k": "Đẩy cho bản thân 25% thanh hành động."
+      },
+      "note": [],
+      "iconUrl": ""
+    },
+    {
+      "id": "thac-bat-van-s4-2",
+      "_tempOrder": 4,
+      "_tempBranch": 2,
+      "name": "Chung Thiên -  Long Khiếu Không Vực",
+      "type": "Chủ động",
+      "soulRingType": "Kết Giới",
+      "description": "Thác Bạt Vân gây sát thương bằng 1215% lực công lên mục tiêu, sau đó mở Kết Giới [Bạch Long Thánh Giới] kéo dài 3 lượt. Trong thời gian tồn tại Kết Giới, khi số lần chịu đòn của [Huyền Giáp Thuẫn] của Thác Bạt Vân giảm xuống, một hồn sư thuộc phe ta ngẫu nhiên trong nhóm Cường công hoặc Mẫn công sẽ dùng Đệ Nhất hoặc Đệ Bát hồn kỹ để phản công kẻ tấn công, và đòn phản công này tăng thêm 50% sát thương. Hiệu ứng này mỗi lượt chỉ kích hoạt tối đa 1 lần.",
+      "yearEffects": {
+        "y1k": "Khi mở [Bạch Long Thánh Giới] nếu Thác Bạt Vân không có [Huyền Giáp Thuẫn] sẽ tự nhận một lá chắn [Huyền Giáp Thuẫn] chịu được 3 lần tấn công.",
+        "y10k": "Khi Kết Giới tồn tại, vào đầu bất kỳ lượt nào của phe ta, toàn phe ta hồi phục 5% thanh Ý Chí.",
+        "y25k": "Khi Kết Giới tồn tại, vào đầu bất kỳ lượt nào của phe ta, toàn phe ta hồi phục 8% thanh Ý Chí.",
+        "y50k": " Khi mở [Huyền Giáp Quy Hư] sẽ tự động mở [Bạch Long Thánh Giới]. Nếu Kết Giới đã mở thì làm mới thời gian duy trì.",
+        "y100k": "Khi [Bạch Long Thánh Giới] kích hoạt, tất cả hồn sư Cường công và Mẫn công có thể dùng Đệ Nhất hoặc Đệ Bát hồn kỹ để phản công kẻ địch mà không tiêu hao và mỗi lượt có thể kích hoạt tối đa 3 lần."
+      },
+      "note": [],
+      "iconUrl": ""
     }
   ],
-  "soulBones": []
+  "soulBones": [
+    {
+      "position": "Đầu",
+      "name": "Long Hoàng Thánh Miện",
+      "standard": {
+        "base": "Thác Bạt Vân áp dụng [Huyền Giáp Thuẫn], sẽ loại bỏ ngẫu nhiên 2 trạng thái bất lợi trên người mục tiêu.",
+        "star4": "Khi hồn sư phe ta thuộc loại Cường Mẫn công Ám khítấn công mục tiêu có [Thánh Long Ấn Ký], sát thương cuối tăng 80%.",
+        "star6": "Trong chế độ thi đấu, số tầng [Long Lân] cần để kích hoạt lần đầu [Huyền Giáp Quy Hư] giảm 5 tầng."
+      }
+    },
+    {
+      "position": "Thân",
+      "name": "Toái Tinh Long Ngâm",
+      "standard": {
+        "base": "Thác Bạt Vân nhận được kỹ năng [Quy Hư • Phá]. Khi đang tồn tại [Huyền Giáp Quy Hư], có thể kích hoạt kỹ năng này. Sau khi dùng, kỹ năng sẽ phá huỷ toàn bộ lớp [Huyền Giáp Quy Hư], đồng thời gây sát thương bằng 200% sinh lực bản thân lên toàn bộ kẻ địch.",
+        "star4": "Trong thời gian [Huyền Giáp Quy Hư] duy trì, toàn bộ lượng sát thương mà phe địch nhận phải sẽ được ghi lại, khi kích hoạt [Quy Hư • Phá], Thác Bạt Vân sẽ gây thêm sát thương bằng 100% giá trị đã được ghi lại.",
+        "star6": "Nếu Thác Bạt Vân có sinh lực cơ bản ban đầu cao nhất trong phe ta, tỷ lệ sát thương cộng thêm từ giá trị ghi lại tăng lên 200% sau khi sử dụng [Quy Hư • Phá], tự động hồi phục lại 3 tầng [Huyền Giáp Quy Hư]."
+      }
+    },
+    {
+      "position": "Tay Trái",
+      "name": "Thiên Ti Long Ngục",
+      "standard": {
+        "base": "Khi Thác Bạt Vân sở hữu [Huyền Giáp Thuẫn], toàn bộ phe ta được tăng 50% sát thương cuối.",
+        "star4": "Ở đầu lượt của Thác Bạt Vân, bản thân sẽ nhận thêm 1 tầng [Long Lân].",
+        "star6": "Mỗi khi nhận 1 tầng [Long Lân], tăng 50% sát thương cuối quần thể cho toàn bộ phe ta, hiệu quả này kéo dài cho đến trước khi bắt đầu lượt tiếp theo của Thác Bạt Vân."
+      },
+      "mutation": {
+        "name": "Trân - Thiên Ti Long Ngục",
+        "star1Red": "Khi bắt đầu bất kỳ lượt nào, nếu phe ta trên sân đã mở trạng thái [Huyền Giáp Quy Hư], thì toàn thể phe ta vĩnh viễn tăng 10% sát thương cuối, tối đa cộng dồn tới 200%.",
+        "star4Red": "Sau khi [Huyền Giáp Quy Hư] được mở, khi đến lượt Thác Bạt Vân, dựa theo số tầng [Huyền Giáp Quy Hư] sẽ nhận được [Long Lân]. Nếu đã tích lũy đủ 20 tầng [Long Lân], thì phe ta toàn thể được tăng thêm 100% sát thương cuối.",
+        "star5Red": "Nếu Thác Bạt Vân đang có 5 tầng [Long Lân], thì khi [Huyền Giáp Quy Hư] hồi phục số tầng, sẽ được hồi thêm 1 tầng phụ.",
+        "star6Red": "Khi Thác Bạt Vân kích hoạt [Huyền Giáp Quy Hư], sẽ xóa bỏ toàn bộ hiệu quả khiên bảo hộ của địch, đồng thời khiến địch không thể nhận thêm khiên mới. Hiệu quả này kéo dài cho đến khi kết thúc lượt kế tiếp của Thác Bạt Vân."
+      }
+    },
+    {
+      "position": "Tay Phải",
+      "name": "Địa Long Thâm Uyên",
+      "standard": {
+        "base": "Khi Thác Bạt Vân thi triển [Thánh Long Ấn Ký), toàn bộ phe ta được tăng 60% sát thương cuối.",
+        "star4": "Mỗi khi phe ta có 1 đơn vị sở hữu [Huyền Giáp Thuẫn], hiệu quả tăng sát thương cuối của [Thánh Long Ẩn Ký] sẽ tăng thêm 20%.",
+        "star6": "Trong chế độ Thi Đấu, khi [Bạch Long Thánh Giới] kích hoạt hiệu quả phản kích thì sẽ không kích hoạt hiệu quả hồn hoàn bị động của mục tiêu."
+      },
+      "mutation": {
+        "name": "Trân - Địa Long Thâm Uyên",
+        "star1Red": "Thác Bạt Vân, mỗi khi tích lũy được 10 tầng [Long Lân], sẽ ngẫu nhiên tiến hóa [Huyền Giáp Thuẫn] của một hệ trong phe ta, khiến hệ đó nhận thêm hiệu quả bổ sung:  Cường, Mẫn công hoặc Ám khí thì sát thương cuối tăng 100%.  Khống chế thì đầu lượt tự hồi 1 điểm hồn lực.  Phòng ngự hoặc Phụ trợ thì cuối lượt hồi 25% sinh lực tối đa.  Thần thì sát thương cuối của thần kỹ bạo phát tăng 200%.",
+        "star4Red": "Khi tiến hóa [Huyền Giáp Thuẫn], số tầng [Long Lân] cần thiết giảm xuống còn 5 tầng.",
+        "star5Red": "Mỗi khi tiến hóa được một loại [Huyền Giáp Thuẫn], toàn bộ phe ta tăng thêm 50% sát thương cuối.",
+        "star6Red": "Sau khi tất cả các hệ đều được tiến hoá [Huyền Giáp Thuẫn] thì hiệu quả tiến hóa sẽ tăng gấp đôi."
+      }
+    },
+    {
+      "position": "Chân Phải",
+      "name": "Huyền Long Chi Tức",
+      "standard": {
+        "base": "Khi Thác Bạt Vân áp dụng trạng thái [Huyền Giáp Thuẫn] cho phe ta, mục tiêu được tăng vĩnh viễn 60% sát thương cuối.",
+        "star4": "Nếu tại thời điểm đó, sinh lực cơ bản ban đầu của mục tiêu thấp hơn Thác Bạt Vân, thì mục tiêu đó còn được tăng thêm 100% sát thương cuối.",
+        "star6": "Khi mở [Huyền Giáp Quy Hư], hồi phục cho toàn bộ phe ta 100% sinh lực và xóa bỏ toàn bộ trạng thái bất lợi do địch gây ra."
+      }
+    }
+  ]
 }
