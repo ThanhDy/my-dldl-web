@@ -1,14 +1,11 @@
-// app/soul-masters/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
-// 1. Import dữ liệu từ file data chung thay vì khai báo biến cục bộ
-import soulMastersRaw from "@/data/soulMasters.json";
-import { SoulMaster } from "@/data/types";
 
-const soulMastersData = soulMastersRaw as unknown as SoulMaster[];
+// 1. Xóa dòng import soulMastersRaw từ json
+// Chúng ta sẽ dùng State để chứa dữ liệu lấy từ API
 
 const types = [
   "Tất cả",
@@ -20,11 +17,34 @@ const types = [
 ];
 
 export default function SoulMastersPage() {
+  // 2. Thêm state để lưu danh sách tướng và trạng thái loading
+  const [heroes, setHeroes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("Tất cả");
 
-  // 2. Sử dụng soulMastersData để lọc
-  const filteredList = soulMastersData.filter((char) => {
+  // 3. Sử dụng useEffect để gọi API khi vào trang
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Gọi API lấy danh sách vắn tắt (nhẹ)
+        const res = await fetch("/api/heroes");
+        if (!res.ok) throw new Error("Lỗi tải dữ liệu");
+        const data = await res.json();
+        setHeroes(data);
+      } catch (error) {
+        console.error("Lỗi:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // 4. Lọc trên danh sách 'heroes' (state) thay vì biến tĩnh
+  const filteredList = heroes.filter((char) => {
     const matchName = char.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -78,61 +98,76 @@ export default function SoulMastersPage() {
       </div>
 
       {/* Grid Danh sách Tướng */}
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {filteredList.map((char) => (
-          <Link
-            href={`/soul-masters/${char.id}`}
-            key={char.id}
-            className="group"
-          >
-            <div
-              className={`relative bg-slate-800 rounded-xl overflow-hidden border-2 transition-transform group-hover:-translate-y-1 ${
-                char.rarity === "SP" || char.rarity === "SP+" // Hỗ trợ cả SP và SP+
-                  ? "border-pink-400 " // Viền vàng kim sáng hơn, bóng mạnh hơn
-                  : char.rarity === "SSR"
-                  ? "border-yellow-500" // Đổi sang viền vàng
-                  : "border-slate-600"
-              }`}
+      {loading ? (
+        // Hiển thị khi đang tải
+        <div className="text-center text-slate-500 py-20">
+          <div className="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-2"></div>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+      ) : (
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {filteredList.map((char) => (
+            <Link
+              href={`/soul-masters/${char.id}`}
+              key={char.id}
+              className="group"
             >
-              {/* Badge Rarity */}
               <div
-                className={`absolute top-2 right-2 px-3 py-0.5 rounded-full text-xs font-bold z-10 border ${
-                  char.rarity === "SP" || char.rarity === "SP+"
-                    ? // Gradient dọc: Hồng -> Tím -> Xanh dương + viền vàng nhạt
-                      "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
+                className={`relative bg-slate-800 rounded-xl overflow-hidden border-2 transition-transform group-hover:-translate-y-1 ${
+                  char.rarity === "SP" || char.rarity === "SP+" // Hỗ trợ cả SP và SP+
+                    ? "border-pink-400 " // Viền vàng kim sáng hơn, bóng mạnh hơn
                     : char.rarity === "SSR"
-                    ? "bg-yellow-500 text-white border-yellow-600" // Nền vàng
-                    : "bg-purple-600 text-white border-purple-800"
+                    ? "border-yellow-500" // Đổi sang viền vàng
+                    : "border-slate-600"
                 }`}
               >
-                {char.rarity}
-              </div>
+                {/* Badge Rarity */}
+                <div
+                  className={`absolute top-2 right-2 px-3 py-0.5 rounded-full text-xs font-bold z-10 border ${
+                    char.rarity === "SP" || char.rarity === "SP+"
+                      ? // Gradient dọc: Hồng -> Tím -> Xanh dương + viền vàng nhạt
+                        "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
+                      : char.rarity === "SSR"
+                      ? "bg-yellow-500 text-white border-yellow-600" // Nền vàng
+                      : "bg-purple-600 text-white border-purple-800"
+                  }`}
+                >
+                  {char.rarity}
+                </div>
 
-              {/* Ảnh */}
-              <div className="aspect-[3/4] bg-slate-700 relative">
-                <img
-                  src={char.image}
-                  alt={char.name}
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                />
+                {/* Ảnh */}
+                <div className="aspect-[3/4] bg-slate-700 relative">
+                  {/* Kiểm tra nếu có ảnh thì hiện, không có thì hiện chữ cái đầu */}
+                  {char.image ? (
+                    <img
+                      src={char.image}
+                      alt={char.name}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-slate-600">
+                      {char.name.charAt(0)}
+                    </div>
+                  )}
 
-                {/* Hệ (Icon nhỏ góc trái dưới) */}
-                <div className="absolute bottom-2 left-2 bg-black/60 px-2 py-1 rounded text-xs text-blue-200">
-                  {char.type}
+                  {/* Hệ (Icon nhỏ góc trái dưới) */}
+                  <div className="absolute bottom-2 left-2 bg-black/60 px-2 py-1 rounded text-xs text-blue-200">
+                    {char.type}
+                  </div>
+                </div>
+
+                {/* Tên */}
+                <div className="p-3 text-center">
+                  <h3 className="font-bold text-sm truncate">{char.name}</h3>
                 </div>
               </div>
+            </Link>
+          ))}
+        </div>
+      )}
 
-              {/* Tên */}
-              <div className="p-3 text-center">
-                <h3 className="font-bold text-sm truncate">{char.name}</h3>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      {/* Thông báo nếu không tìm thấy */}
-      {filteredList.length === 0 && (
+      {/* Thông báo nếu không tìm thấy (Chỉ hiện khi đã load xong và list rỗng) */}
+      {!loading && filteredList.length === 0 && (
         <div className="text-center text-slate-500 mt-12">
           Không tìm thấy hồn sư nào phù hợp.
         </div>

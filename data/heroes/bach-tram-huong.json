@@ -1,0 +1,36 @@
+{
+  "id": "bach-tram-huong",
+  "name": "Bạch Trầm Hương",
+  "image": "/images/bach-tram-huong/avt.png",
+  "title": "Linh Yến Chúc Phúc",
+  "rarity": "SP",
+  "type": "Phụ Trợ",
+  "builds": [
+    {
+      "title": "PvE - 1111"
+    },
+    {
+      "title": "PvP - 2222"
+    }
+  ],
+  "skillDetails": [
+    {
+      "id": "bach-tram-huong-s1-1",
+      "name": "Thiên Vũ Trì",
+      "type": "Chủ động",
+      "soulRingType": "Thực Vật",
+      "description": "Chọn 1 Hồn Sư phe ta để hồi phục 3 điểm hồn lực, đồng thời vĩnh viễn tăng 30% sát thương cuối cùng gây ra cho toàn phe ta, cộng dồn tối đa 5 tầng.Nếu Hồn Sư được chọn sở hữu [Vũ Yến], sẽ thu hồi [Vũ Yến] và phân phối cho Hồn Sư có sức tấn công ban đầu cao nhất phe ta.",
+      "yearEffects": {
+        "y1k": "Khi thi triển kỹ năng này, mục tiêu lập tức hành động. Hiệu ứng này mỗi 3 điểm Hồn Sư phe ta trong trận chiến có thể kích hoạt 1 lần.",
+        "y10k": "Tăng 30% sát thương cuối cùng cho toàn phe ta.",
+        "y25k": "Tăng 50% sát thương cuối cùng cho toàn phe ta.",
+        "y50k": "Khi thi triển kỹ năng này, sẽ hồi phục 3 điểm hồn lực cho toàn bộ Hồn Sư phe ta.",
+        "y100k": "Tăng 100% sát thương cuối cùng cho toàn phe ta."
+      },
+      "note": [
+        "Vũ Yến: Mỗi [Vũ Yến] khiến Hồn Kỹ của người sở hữu giảm 1 điểm tiêu hao hồn lực.Khi tiêu hao hồn lực của Hồn Sư vượt quá mức tiêu hao hồn lực cơ bản, mỗi điểm giảm sẽ tăng sát thương cuối cùng gây ra."
+      ],
+      "iconUrl": "/images/bach-tram-huong/hh1-1.png"
+    }
+  ]
+}

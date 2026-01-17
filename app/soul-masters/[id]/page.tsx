@@ -1,9 +1,10 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import soulMastersRaw from "@/data/soulMasters.json";
+// 1. XÓA DÒNG IMPORT FILE JSON CŨ
+// import soulMastersRaw from "@/data/soulMasters.json";
 import { SoulMaster, SkillDetail, SoulBone } from "@/data/types";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Thêm useEffect
 import Link from "next/link";
 import {
   FaArrowLeft,
@@ -16,7 +17,8 @@ import {
 import { GiSpiderWeb, GiSnakeSpiral } from "react-icons/gi";
 import Image from "next/image";
 
-const soulMastersData = soulMastersRaw as unknown as SoulMaster[];
+// 2. XÓA BIẾN DỮ LIỆU TĨNH
+// const soulMastersData = soulMastersRaw as unknown as SoulMaster[];
 
 const YEAR_LABELS: Record<string, string> = {
   y1k: "1k Năm",
@@ -28,7 +30,7 @@ const YEAR_LABELS: Record<string, string> = {
 
 const YEAR_ORDER = ["y1k", "y10k", "y25k", "y50k", "y100k"];
 
-// --- COMPONENT MODAL ---
+// --- COMPONENT MODAL (Giữ nguyên không đổi) ---
 function SkillModal({
   skill,
   onClose,
@@ -50,12 +52,10 @@ function SkillModal({
       : "text-green-500 bg-green-900/20 border-green-500";
 
   return (
-    // 1. Thêm onClick={onClose} vào lớp nền đen (Overlay)
     <div
       className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 animate-fadeIn cursor-pointer"
       onClick={onClose}
     >
-      {/* 2. Thêm e.stopPropagation() vào khối nội dung để chặn sự kiện click xuyên qua */}
       <div
         className="bg-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border border-slate-700 shadow-2xl cursor-default no-scrollbar"
         onClick={(e) => e.stopPropagation()}
@@ -73,7 +73,6 @@ function SkillModal({
             className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2 relative overflow-hidden ${iconColorClass}`}
           >
             {skill.iconUrl ? (
-              // Nếu có link ảnh -> Hiển thị ảnh
               <Image
                 src={skill.iconUrl}
                 alt={skill.name}
@@ -81,7 +80,6 @@ function SkillModal({
                 className="object-cover"
               />
             ) : (
-              // Nếu không có ảnh -> Hiển thị icon mặc định
               <SkillIcon />
             )}
           </div>
@@ -110,9 +108,19 @@ function SkillModal({
             <h4 className="text-sm font-bold text-slate-300 uppercase mb-2">
               Mô tả kỹ năng
             </h4>
-            <p className="text-slate-200 leading-relaxed bg-slate-700/30 p-4 rounded-lg border border-slate-700/50">
-              {skill.description}
-            </p>
+            <div className="text-slate-200 whitespace-pre-wrap leading-relaxed bg-slate-700/30 p-4 rounded-lg border border-slate-700/50 ">
+              {skill.description ? (
+                skill.description
+                  .split("\n")
+                  .map((line: string, index: number) => (
+                    <div key={index} className="min-h-[1.5em] mb-1">
+                      {line === "" ? <br /> : line}
+                    </div>
+                  ))
+              ) : (
+                <span className="italic text-slate-500">Chưa có mô tả</span>
+              )}
+            </div>
           </div>
 
           {skill.yearEffects && Object.keys(skill.yearEffects).length > 0 && (
@@ -120,11 +128,8 @@ function SkillModal({
               <div className="space-y-3 mt-4">
                 {skill.yearEffects &&
                   YEAR_ORDER.map((key) => {
-                    // Lấy dữ liệu an toàn
                     const effects = skill.yearEffects as any;
                     const desc = effects[key];
-
-                    // Không có nội dung thì ẩn
                     if (!desc) return null;
 
                     return (
@@ -132,13 +137,10 @@ function SkillModal({
                         key={key}
                         className="flex gap-3 bg-slate-900/40 p-3 rounded-lg border-l-4 border-blue-500"
                       >
-                        {/* Cột Năm (Bên trái) */}
                         <span className="font-bold text-blue-400 whitespace-nowrap min-w-[80px]">
                           {YEAR_LABELS[key]}
                         </span>
-
-                        {/* Cột Mô tả (Bên phải) */}
-                        <p className="text-slate-300 text-sm leading-relaxed">
+                        <p className="text-300 text-sm leading-relaxed">
                           {desc}
                         </p>
                       </div>
@@ -150,7 +152,6 @@ function SkillModal({
 
           {skill.note && skill.note.length > 0 && (
             <div className="mt-4 animate-fadeIn">
-              {/* Tiêu đề nhỏ (Optional - để phân cách rõ ràng hơn) */}
               <div className="mb-2 flex items-center gap-2">
                 <span className="w-1 h-4 bg-yellow-500 rounded-full"></span>
                 <span className="text-xs font-bold text-yellow-500 uppercase tracking-widest">
@@ -163,7 +164,6 @@ function SkillModal({
                   const content = line.trim();
                   if (!content) return null;
 
-                  // --- HÀM XỬ LÝ MÀU SẮC (Giữ nguyên logic cũ của bạn) ---
                   const formatText = (
                     text: string,
                     defaultColorClass: string
@@ -201,7 +201,6 @@ function SkillModal({
                     });
                   };
 
-                  // --- RENDER GIAO DIỆN (Giữ nguyên CSS cũ) ---
                   return (
                     <div
                       key={index}
@@ -209,15 +208,12 @@ function SkillModal({
                     >
                       {content.includes(":") ? (
                         <>
-                          {/* TIÊU ĐỀ: Trước dấu ":" (Màu Vàng) */}
                           <div className="mb-1 text-base block font-bold tracking-wide group-hover:text-yellow-300 transition-colors">
                             {formatText(
                               content.split(":")[0].trim(),
                               "text-yellow-400"
                             )}
                           </div>
-
-                          {/* NỘI DUNG: Sau dấu ":" (Màu Xám) */}
                           <div className="leading-relaxed border-t border-slate-700/50 pt-2 mt-1">
                             {formatText(
                               content.split(":").slice(1).join(":").trim(),
@@ -226,7 +222,6 @@ function SkillModal({
                           </div>
                         </>
                       ) : (
-                        // Nếu không có dấu ":", mặc định toàn bộ là màu Vàng
                         <div className="italic leading-relaxed">
                           {formatText(content, "text-yellow-400")}
                         </div>
@@ -254,12 +249,8 @@ function SoulBoneModal({
 
   const isMutated = !!bone.mutation;
   const isUpgraded = !!bone.upgrade;
-
-  // --- 1. XÁC ĐỊNH THEME MÀU SẮC ---
-  // Suy biến = Đỏ. Nâng cấp & Thường = Vàng.
   const themeColor = isMutated ? "red" : "yellow";
 
-  // --- 2. XÁC ĐỊNH TÊN & ICON ---
   let displayIcon = bone.iconUrl;
   let displayName = bone.name;
 
@@ -271,7 +262,6 @@ function SoulBoneModal({
     displayName = bone.upgrade?.name || bone.name;
   }
 
-  // --- 3. CSS CLASS ĐỘNG ---
   const borderColor =
     themeColor === "red"
       ? "border-red-600 shadow-red-900/50"
@@ -330,9 +320,6 @@ function SoulBoneModal({
 
         {/* --- BODY --- */}
         <div className="p-6 space-y-8">
-          {/* TRƯỜNG HỢP 1: SUY BIẾN (MUTATION - MÀU ĐỎ)
-               Giữ nguyên layout cũ: Trên là Cốt thường (Vàng), Dưới là Suy biến
-            */}
           {isMutated ? (
             <>
               {/* Phần trên: Kỹ năng thường (Vàng) */}
@@ -404,9 +391,6 @@ function SoulBoneModal({
               )}
             </>
           ) : (
-            /* TRƯỜNG HỢP 2: CỐT NÂNG CẤP HOẶC THƯỜNG (MÀU VÀNG)
-                   Hiển thị danh sách đan xen
-                */
             <div className="space-y-4">
               <div className="flex items-center gap-2 border-b border-yellow-500/30 pb-2">
                 {isUpgraded ? (
@@ -488,14 +472,37 @@ const renderStarBadge = (count: number, colorClass: string) => (
     <FaStar size={14} className="mb-0.5" />
   </span>
 );
-// --- PAGE COMPONENT CHÍNH ---
+
+// --- PAGE COMPONENT CHÍNH (Đã sửa lỗi Import) ---
 export default function SoulMasterDetail() {
   const params = useParams();
   const [activeTab, setActiveTab] = useState<"bones" | "build">("build");
   const [selectedSkill, setSelectedSkill] = useState<SkillDetail | null>(null);
   const [selectedBone, setSelectedBone] = useState<SoulBone | null>(null);
 
-  const hero = soulMastersData.find((h) => h.id === params.id);
+  // 3. THÊM STATE ĐỂ LƯU DỮ LIỆU TƯỚNG (THAY VÌ DÙNG JSON TĨNH)
+  const [hero, setHero] = useState<SoulMaster | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // 4. THÊM USE EFFECT ĐỂ GỌI API LẤY CHI TIẾT TƯỚNG
+  useEffect(() => {
+    const fetchHero = async () => {
+      try {
+        const res = await fetch(`/api/heroes/${params.id}`);
+        if (!res.ok) throw new Error("Hero not found");
+        const data = await res.json();
+        setHero(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (params.id) {
+      fetchHero();
+    }
+  }, [params.id]);
 
   // Hàm tìm skill chi tiết
   const getSkillDetail = (
@@ -506,6 +513,16 @@ export default function SoulMasterDetail() {
     const skillId = `${heroData.id}-s${skillIndex + 1}-${typeCode}`;
     return heroData.skillDetails?.find((s) => s.id === skillId);
   };
+
+  // 5. HIỂN THỊ LOADING
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mr-2"></div>
+        Đang tải dữ liệu...
+      </div>
+    );
+  }
 
   if (!hero)
     return <div className="p-10 text-white">Không tìm thấy Hồn Sư.</div>;
@@ -610,7 +627,7 @@ export default function SoulMasterDetail() {
 
           {activeTab === "build" && (
             <div className="space-y-6">
-              {hero.builds.map((build, index) => {
+              {hero.builds?.map((build, index) => {
                 // LOGIC MỚI: Tách chuỗi 4 số từ Title (Ví dụ: "PvE - 1111" -> lấy được "1111")
                 const codeMatch = build.title.match(/\d{4}/);
                 const codeString = codeMatch ? codeMatch[0] : "0000";
@@ -689,8 +706,6 @@ export default function SoulMasterDetail() {
                                   </div>
                                 )}
                               </button>
-
-                              {/* Số thứ tự skill */}
 
                               {/* Tooltip tên skill */}
                               {skillDetail && (

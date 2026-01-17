@@ -44,28 +44,20 @@ export async function POST(request: Request) {
         return cleanBone;
       });
     }
-    // Đường dẫn file
-    const filePath = path.join(process.cwd(), "data", "soulMasters.json");
+    // --- KHÁC BIỆT Ở ĐÂY: Ghi vào file riêng ---
+    const dirPath = path.join(process.cwd(), "data", "heroes");
+    if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 
-    // Đọc dữ liệu cũ
-    const fileData = fs.readFileSync(filePath, "utf8");
-    const soulMasters = JSON.parse(fileData);
+    const filePath = path.join(dirPath, `${newHero.id}.json`);
 
-    // Kiểm tra trùng ID
-    const exists = soulMasters.find((h: any) => h.id === newHero.id);
-    if (exists) {
+    if (fs.existsSync(filePath)) {
       return NextResponse.json(
-        { error: `ID "${newHero.id}" đã tồn tại!` },
+        { error: `ID ${newHero.id} đã tồn tại!` },
         { status: 400 }
       );
     }
 
-    // Thêm tướng mới vào đầu danh sách (hoặc cuối tùy bạn)
-    soulMasters.push(newHero);
-
-    // Ghi lại file
-    fs.writeFileSync(filePath, JSON.stringify(soulMasters, null, 2), "utf8");
-
+    fs.writeFileSync(filePath, JSON.stringify(newHero, null, 2), "utf8");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);

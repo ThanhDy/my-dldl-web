@@ -134,6 +134,15 @@ export default function AddHeroPage() {
     setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
+  const updateBuild = (index: number, value: string) => {
+    const newBuilds = [...formData.builds];
+    // Đảm bảo cấu trúc mảng không bị lỗi
+    if (!newBuilds[index]) newBuilds[index] = { title: "" };
+
+    newBuilds[index].title = value;
+    setFormData({ ...formData, builds: newBuilds });
+  };
+
   const updateSkill = (index: number, field: string, value: any) => {
     const newSkills = [...formData.skillDetails];
     newSkills[index][field] = value;
@@ -328,6 +337,70 @@ export default function AddHeroPage() {
                 />
               </div>
 
+              {/* --- MỚI THÊM: CẤU HÌNH BUILD --- */}
+              <div className="bg-slate-950/50 p-3 rounded-lg border border-slate-800 space-y-3">
+                <p className="text-[10px] font-bold text-slate-500 uppercase">
+                  Gợi ý Build Kỹ Năng
+                </p>
+
+                {/* Build PVE */}
+                <div>
+                  <label className="text-[10px] font-bold text-blue-400 mb-1 block">
+                    PVE
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.builds[0]?.title || ""}
+                      onChange={(e) => updateBuild(0, e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-white focus:border-blue-500 outline-none"
+                      placeholder="VD: PvE - 1112"
+                    />
+                    {/* Nút gợi ý nhanh */}
+                    <div className="absolute right-1 top-1 flex gap-1">
+                      {["1111", "1212", "2222"].map((code) => (
+                        <button
+                          type="button"
+                          key={code}
+                          onClick={() => updateBuild(0, `PvE - ${code}`)}
+                          className="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 hover:text-white border border-slate-700"
+                        >
+                          {code}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Build PVP */}
+                <div>
+                  <label className="text-[10px] font-bold text-red-400 mb-1 block">
+                    PVP
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.builds[1]?.title || ""}
+                      onChange={(e) => updateBuild(1, e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-white focus:border-red-500 outline-none"
+                      placeholder="VD: PvP - 2212"
+                    />
+                    <div className="absolute right-1 top-1 flex gap-1">
+                      {["2222", "2121", "1111"].map((code) => (
+                        <button
+                          type="button"
+                          key={code}
+                          onClick={() => updateBuild(1, `PvP - ${code}`)}
+                          className="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 hover:text-white border border-slate-700"
+                        >
+                          {code}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Hiển thị đường dẫn ảnh (Read-only để user biết cần upload ảnh vào đâu) */}
               {formData.id && (
                 <div className="bg-slate-950 p-3 rounded border border-slate-800 text-[10px] text-slate-500 font-mono break-all">
@@ -402,7 +475,7 @@ export default function AddHeroPage() {
                       </div>
                       <div className="md:col-span-4">
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                          Định vị (Tag)
+                          Loại Kỹ Năng
                         </label>
                         <input
                           type="text"
@@ -410,7 +483,7 @@ export default function AddHeroPage() {
                           onChange={(e) =>
                             updateSkill(idx, "soulRingType", e.target.value)
                           }
-                          placeholder="VD: Khống chế..."
+                          placeholder="VD: Khống chế, Tăng Ích,..."
                           className="w-full bg-transparent border-b border-slate-700 focus:border-slate-400 py-1.5 text-sm text-slate-300 outline-none transition placeholder-slate-600"
                         />
                       </div>

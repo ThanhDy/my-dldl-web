@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 // Sửa dòng dưới đây: Đổi GiBurningRing thành GiMagicPortal
-import { GiBroadsword, GiMagicPortal, GiCube } from "react-icons/gi";
+import { GiMagicPortal } from "react-icons/gi";
 
 const features = [
   {
@@ -11,13 +11,13 @@ const features = [
     active: true,
     description: "Tra cứu kỹ năng, build hồn hoàn, đội hình.",
   },
-  {
-    title: "Thần Khí",
-    icon: <GiBroadsword size={40} />,
-    href: "/divine-weapons",
-    active: false,
-    description: "Thông tin các loại thần khí và hiệu ứng.",
-  },
+  // {
+  //   title: "Thần Khí",
+  //   icon: <GiBroadsword size={40} />,
+  //   href: "/divine-weapons",
+  //   active: false,
+  //   description: "Thông tin các loại thần khí và hiệu ứng.",
+  // },
   {
     title: "Hồn Hoàn Thông Dụng",
     icon: <GiMagicPortal size={40} />,
@@ -25,13 +25,13 @@ const features = [
     active: false,
     description: "Các loại hồn hoàn dùng chung cho mọi tướng.",
   },
-  {
-    title: "Hồn Đạo Khí",
-    icon: <GiCube size={40} />,
-    href: "/soul-tools",
-    active: false,
-    description: "Cường hóa chỉ số và cơ chế ẩn.",
-  },
+  // {
+  //   title: "Hồn Đạo Khí",
+  //   icon: <GiCube size={40} />,
+  //   href: "/soul-tools",
+  //   active: false,
+  //   description: "Cường hóa chỉ số và cơ chế ẩn.",
+  // },
 ];
 
 export default function Home() {
