@@ -561,8 +561,8 @@ export default function SoulMasterDetail() {
               hero.rarity === "SP" || hero.rarity === "SP+"
                 ? "border-pink-400" // Viền SP vàng kim sáng
                 : hero.rarity === "SSR"
-                ? "border-yellow-500 shadow-yellow-500/20" // Viền SSR vàng
-                : "border-blue-500 shadow-blue-500/20" // SR giữ nguyên
+                  ? "border-yellow-500 shadow-yellow-500/20" // Viền SSR vàng
+                  : "border-blue-500 shadow-blue-500/20" // SR giữ nguyên
             }`}
           >
             {/* Badge Rarity */}
@@ -572,8 +572,8 @@ export default function SoulMasterDetail() {
                   hero.rarity === "SP" || hero.rarity === "SP+"
                     ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
                     : hero.rarity === "SSR"
-                    ? "bg-yellow-500 text-white border-yellow-600"
-                    : "bg-purple-600 text-white border-purple-800"
+                      ? "bg-yellow-500 text-white border-yellow-600"
+                      : "bg-purple-600 text-white border-purple-800"
                 }`}
               >
                 {hero.rarity}

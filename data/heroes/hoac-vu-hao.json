@@ -1,7 +1,7 @@
 {
   "id": "hoac-vu-hao",
   "name": "Hoắc Vũ Hạo",
-  "image": "/images/hoac-vu-hao/avt.png",
+  "image": "/images/hoac-vu-hao/avt.webp",
   "title": "Linh Băng Đấu La",
   "rarity": "SP",
   "type": "Khống Chế",
@@ -30,7 +30,7 @@
       "note": [
         "[Suy Yếu]:  Hiệu ứng khống chế: Các đơn vị trong trạng thái Suy Yếu chỉ có thể sử dụng Hồn Kỹ và không thể sử dụng tấn công thường."
       ],
-      "iconUrl": "/images/hoac-vu-hao/hh1-1.png"
+      "iconUrl": "/images/hoac-vu-hao/hh1-1.webp"
     },
     {
       "id": "hoac-vu-hao-s2-1",
@@ -45,7 +45,7 @@
         "y50k": "Hiệu quả giảm sát thương cuối cùng sẽ được tăng thêm 40%.",
         "y100k": "Khi trận đấu bắt đầu, toàn bộ đồng đội sẽ nhận được miễn nhiễm sát thương, số lần miễn nhiễm này tương đương với số Thần Vị [Cảm Xúc] mà Hoắc Vũ Hạo đã kích hoạt. Sau khi bị tấn công bởi Hồn Kỹ, số lần miễn nhiễm sẽ bị giảm đi."
       },
-      "iconUrl": "/images/hoac-vu-hao/hh2-1.png"
+      "iconUrl": "/images/hoac-vu-hao/hh2-1.webp"
     },
     {
       "id": "hoac-vu-hao-s3-1",
@@ -63,7 +63,7 @@
       "note": [
         "[Suy Yếu] - Hiệu ứng khống chế: Các đơn vị trong trạng thái Suy Yếu chỉ có thể sử dụng Hồn Kỹ và không thể sử dụng tấn công thường."
       ],
-      "iconUrl": "/images/hoac-vu-hao/hh3-1.png"
+      "iconUrl": "/images/hoac-vu-hao/hh3-1.webp"
     },
     {
       "id": "hoac-vu-hao-s4-1",
@@ -82,7 +82,7 @@
         "Linh Thị: Trạng thái đặc biệt: Người sở hữu sẽ chuyển thành [Băng Linh] sau một số lượt nhất định, và việc sử dụng Hồn Kỹ sẽ giảm số lượt cần thiết để chuyển thành [Băng Linh].",
         "Băng Linh: Hình thái đặc biệt: Khi chuyển thành hình thái này, loại bỏ tất cả các trạng thái bất lợi và các Hồn Kỹ và hiệu ứng bị động, có thể tái tấn công thường."
       ],
-      "iconUrl": "/images/hoac-vu-hao/hh4-1.png"
+      "iconUrl": "/images/hoac-vu-hao/hh4-1.webp"
     },
     {
       "id": "hoac-vu-hao-s1-2",
@@ -100,7 +100,7 @@
       "note": [
         "Yếu Điểm: Mục tiêu bị trạng thái này mỗi lần chịu tấn công từ Hoặc Vũ Hạo sẽ làm tăng sát thương cuối cùng mà chúng phải chịu cho đến khi kết thúc trận đấu."
       ],
-      "iconUrl": "/images/hoac-vu-hao/hh1-2.png"
+      "iconUrl": "/images/hoac-vu-hao/hh1-2.webp"
     },
     {
       "id": "hoac-vu-hao-s2-2",
@@ -115,7 +115,7 @@
         "y50k": "Nếu số lượng Thần Vị Cảm Xúc mà Hoặc Vũ Hạo kích hoạt bằng 7, hiệu quả tăng sát thương cuối cùng sẽ được gấp đôi.",
         "y100k": "Đối với mỗi Thần Vị Cảm Xúc, cứ 1% thuộc tính ban đầu do Hoặc Vũ Hạo cung cấp cho mỗi một kẻ địch của Thần Vị đó, sẽ làm hiệu quả tăng sát thương cuối cùng của toàn bộ kẻ địch cộng dồn thêm 2%, tối đa 40%."
       },
-      "iconUrl": "/images/hoac-vu-hao/hh2-2.png"
+      "iconUrl": "/images/hoac-vu-hao/hh2-2.webp"
     },
     {
       "id": "hoac-vu-hao-s3-2",
@@ -130,7 +130,7 @@
         "y50k": "Tấn công bổ sung khiến mục tiêu chịu tăng sát thương cuối cùng lên 100%.",
         "y100k": "Tỷ lệ tấn công bổ sung tăng lên 100%."
       },
-      "iconUrl": "/images/hoac-vu-hao/hh3-2.png"
+      "iconUrl": "/images/hoac-vu-hao/hh3-2.webp"
     },
     {
       "id": "hoac-vu-hao-s4-2",
@@ -150,7 +150,7 @@
         "Tâm Linh Bộc Lộ: Trạng Thái Đặc Biệt: Nhận sát thương sẽ chuyển thành tầng, mỗi tầng sẽ tăng sát thương cuối cùng và sau mỗi lượt chuyển, trung tâm sẽ chuyển sang đội địch.",
         "Băng Linh: Trạng Thái Đặc Biệt: Khi chuyển thành hình thái này, sát thương triệt tiêu của người sở hữu sẽ tăng mạnh và kỹ năng tự động chủ động, có thể chủ động chuyển đổi."
       ],
-      "iconUrl": "/images/hoac-vu-hao/hh4-2.png"
+      "iconUrl": "/images/hoac-vu-hao/hh4-2.webp"
     }
   ],
   "soulBones": [

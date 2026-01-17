@@ -58,6 +58,11 @@ export interface SoulBone {
   };
 }
 
+export interface Skin {
+  name: string;
+  image: string;
+}
+
 export interface SoulMaster {
   id: string;
   name: string;
@@ -68,4 +73,5 @@ export interface SoulMaster {
   builds: Build[]; // Danh sách các cách build
   skillDetails: SkillDetail[];
   soulBones: SoulBone[];
+  skins?: Skin[];
 }

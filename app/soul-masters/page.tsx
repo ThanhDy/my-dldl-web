@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
+import Image from "next/image";
 
 // 1. Xóa dòng import soulMastersRaw từ json
 // Chúng ta sẽ dùng State để chứa dữ liệu lấy từ API
@@ -117,8 +118,8 @@ export default function SoulMastersPage() {
                   char.rarity === "SP" || char.rarity === "SP+" // Hỗ trợ cả SP và SP+
                     ? "border-pink-400 " // Viền vàng kim sáng hơn, bóng mạnh hơn
                     : char.rarity === "SSR"
-                    ? "border-yellow-500" // Đổi sang viền vàng
-                    : "border-slate-600"
+                      ? "border-yellow-500" // Đổi sang viền vàng
+                      : "border-slate-600"
                 }`}
               >
                 {/* Badge Rarity */}
@@ -128,8 +129,8 @@ export default function SoulMastersPage() {
                       ? // Gradient dọc: Hồng -> Tím -> Xanh dương + viền vàng nhạt
                         "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border-yellow-200/50"
                       : char.rarity === "SSR"
-                      ? "bg-yellow-500 text-white border-yellow-600" // Nền vàng
-                      : "bg-purple-600 text-white border-purple-800"
+                        ? "bg-yellow-500 text-white border-yellow-600" // Nền vàng
+                        : "bg-purple-600 text-white border-purple-800"
                   }`}
                 >
                   {char.rarity}
@@ -139,9 +140,16 @@ export default function SoulMastersPage() {
                 <div className="aspect-[3/4] bg-slate-700 relative">
                   {/* Kiểm tra nếu có ảnh thì hiện, không có thì hiện chữ cái đầu */}
                   {char.image ? (
-                    <img
+                    // <img
+                    //   src={char.image}
+                    //   alt={char.name}
+                    //   className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    // />
+                    <Image
                       src={char.image}
                       alt={char.name}
+                      width={300}
+                      height={400}
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                     />
                   ) : (
