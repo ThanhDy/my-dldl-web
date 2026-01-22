@@ -58,9 +58,39 @@ export interface SoulBone {
   };
 }
 
-export interface Skin {
+// --- [MỚI] HỆ THỐNG THẺ BÀI NINH VINH VINH SP+ ---
+
+export type NvvCardType =
+  | "Thông Dụng"
+  | "Cửu Thải Lưu Ly · Tốc"
+  | "Lưu Ly Tâm Nguyên"
+  | "Cửu Thải Lưu Ly · Dụ"
+  | "Cửu Thải Lưu Ly · Diệu";
+
+export interface NvvCard {
+  id: string;
   name: string;
+  type: NvvCardType;
   image: string;
+  shortDescription: string; // Mô tả ngắn hiển thị bên ngoài
+
+  // Chi tiết kỹ năng
+  basicSkill: string; // Kỹ năng cơ bản
+
+  detailedEffect: {
+    condition: string; // Điều kiện kích hoạt chung
+    effect?: string; // TRƯỜNG HỢP 1: Hiệu ứng trực tiếp
+    quest?: {
+      // TRƯỜNG HỢP 2: Nhiệm vụ
+      description: string;
+      buff: string;
+    };
+  };
+
+  upgradeEffect?: {
+    condition: string; // Điều kiện yêu cầu (ví dụ: Hồn lực đạt mức X)
+    effect: string; // Hiệu ứng nâng cấp
+  };
 }
 
 export interface SoulMaster {
@@ -68,10 +98,15 @@ export interface SoulMaster {
   name: string;
   title: string;
   rarity: "SP" | "SSR" | "SP+";
+  isSpPlus?: boolean; // Cờ nhận biết SP+
   type: "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ" | "Phòng Ngự";
   image: string; // Link ảnh
   builds: Build[]; // Danh sách các cách build
   skillDetails: SkillDetail[];
   soulBones: SoulBone[];
-  skins?: Skin[];
+
+  // Dữ liệu riêng cho NVV
+  nvvCardSystem?: {
+    cards: NvvCard[];
+  };
 }
