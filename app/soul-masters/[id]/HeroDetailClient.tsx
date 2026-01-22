@@ -435,7 +435,7 @@ const NvvCardModal = ({
     >
       <div
         // 1. SỬA: max-w-6xl -> max-w-3xl (Modal nhỏ gọn lại)
-        className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-6xl h-[600px] flex md:flex-row overflow-hidden relative shadow-2xl"
+        className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl h-[600px] flex md:flex-row overflow-hidden relative shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -447,10 +447,10 @@ const NvvCardModal = ({
 
         {/* --- CỘT TRÁI: TĂNG KÍCH THƯỚC --- */}
         {/* 2. SỬA: md:w-[45%] -> md:w-[60%] (Chiếm 60% chiều ngang) */}
-        <div className="w-full md:w-[40%] shrink-0 relative bg-slate-950 flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-slate-800">
+        <div className="w-full md:w-[50%] shrink-0 relative bg-slate-950 flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-slate-800">
           {/* Card Avatar (Giữ nguyên size nhỏ 160px) */}
           <div
-            className={`w-full max-w-[160px] rounded-xl overflow-hidden border-2 relative shadow-2xl aspect-[3/4] group ${
+            className={`w-full max-w-[240px] rounded-xl overflow-hidden border-2 relative shadow-2xl aspect-[3/4] group ${
               card.type === "Thông Dụng"
                 ? "border-slate-500 shadow-slate-500/20"
                 : "border-pink-400 shadow-pink-500/20"
@@ -484,7 +484,7 @@ const NvvCardModal = ({
             </div>
 
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-16 flex items-end justify-center">
-              <p className="text-slate-300 text-[30px] italic text-center line-clamp-3 leading-relaxed opacity-90 group-hover:text-white transition-colors">
+              <p className="text-slate-300 text-[10px] italic text-center line-clamp-3 leading-relaxed opacity-90 group-hover:text-white transition-colors">
                 {card.shortDescription}
               </p>
             </div>
@@ -523,7 +523,7 @@ const NvvCardModal = ({
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-3 items-start bg-black/20 rounded-lg ">
+                  <div className="flex gap-3 items-start rounded-lg">
                     <div>
                       <p className="text-xs text-slate-500 uppercase font-bold mb-1">
                         Phần thưởng Thí Luyện
