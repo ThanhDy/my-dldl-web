@@ -588,10 +588,10 @@ const NvvCardSystem = ({ cards }: { cards: NvvCard[] }) => {
   const filters: ("Tất Cả" | NvvCardType)[] = [
     "Tất Cả",
     "Thông Dụng",
-    "Hồn kỹ 1",
-    "Hồn kỹ 2",
-    "Hồn kỹ 3",
-    "Hồn kỹ 4",
+    "Cửu Thải Lưu Ly · Tốc",
+    "Lưu Ly Tâm Nguyên",
+    "Cửu Thải Lưu Ly · Dụ",
+    "Cửu Thải Lưu Ly · Diệu",
   ];
   const [activeFilter, setActiveFilter] = useState<"Tất Cả" | NvvCardType>(
     "Tất Cả",
