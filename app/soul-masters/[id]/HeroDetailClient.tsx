@@ -286,7 +286,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                               <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center overflow-hidden transition-all group-hover:scale-110 ${num === "1" ? "border-green-500 bg-green-950/20" : "border-red-500 bg-red-950/20"}`}>
                                 {skillDetail?.iconUrl ? <div className="relative w-full h-full"><Image src={skillDetail.iconUrl} alt="" fill className="object-cover" sizes="64px" /></div> : <div className="text-xl font-black">{num}</div>}
                               </div>
-                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Vòng {i+1}</span>
+                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Skill {i+1}</span>
                             </div>
                           );
                         })}
