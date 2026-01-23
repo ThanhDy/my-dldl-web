@@ -118,9 +118,8 @@ function SoulBoneModal({ bone, onClose }: { bone: SoulBone | null; onClose: () =
   if (!bone) return null;
 
   const isMutated = !!bone.mutation?.name;
-  const themeColor = isMutated ? "red" : "yellow";
-  const borderColor = themeColor === "red" ? "border-red-600 shadow-red-900/50" : "border-yellow-500 shadow-yellow-500/20";
-  const titleColor = themeColor === "red" ? "text-red-400" : "text-yellow-400";
+  const borderColor = isMutated ? "border-red-600 shadow-red-900/50" : "border-yellow-500 shadow-yellow-500/20";
+  const titleColor = isMutated ? "text-red-400" : "text-yellow-400";
 
   return (
     <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fadeIn cursor-pointer" onClick={onClose}>
@@ -187,6 +186,8 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
 
   const isSpPlus = hero.rarity === "SP" || hero.rarity === "SP+";
   const isAmKhi = hero.type === "Ám Khí";
+  // KHÓA CHẶT ĐIỀU KIỆN VINH VINH
+  const isVinhVinh = hero.name?.toLowerCase().includes("vinh vinh");
   
   const [activeTab, setActiveTab] = useState<string>(isAmKhi ? "stars" : (isSpPlus ? "skills" : "build"));
   const [selectedSkill, setSelectedSkill] = useState<SkillDetail | null>(null);
@@ -250,25 +251,42 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                 <button onClick={() => setActiveTab("bones")} className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones" ? "border-yellow-500 text-yellow-400" : "border-transparent text-slate-500"}`}>Hồn Cốt</button></>
             ) : (
               <><button onClick={() => setActiveTab(isSpPlus ? "skills" : "build")} className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "skills" || activeTab === "build" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500"}`}>{isSpPlus ? "Kỹ Năng" : "Hồn Hoàn"}</button>
-                {hero.nvvCardSystem && <button onClick={() => setActiveTab("nvv_cards")} className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "nvv_cards" ? "border-pink-500 text-pink-400" : "border-transparent text-slate-500"}`}>Thẻ Bài</button>}
+                {/* CHỈ HIỆN THẺ BÀI CHO VINH VINH */}
+                {isVinhVinh && hero.nvvCardSystem && <button onClick={() => setActiveTab("nvv_cards")} className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "nvv_cards" ? "border-pink-500 text-pink-400" : "border-transparent text-slate-500"}`}>Thẻ Bài</button>}
                 <button onClick={() => setActiveTab("bones")} className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones" ? "border-yellow-500 text-yellow-400" : "border-transparent text-slate-500"}`}>Hồn Cốt</button></>
             )}
           </div>
 
           <div className="mt-4">
-            {/* NÂNG SAO ÁM */}
+            {/* NÂNG SAO ÁM KHÍ & HIỆU ỨNG MẶC ĐỊNH */}
             {activeTab === "stars" && isAmKhi && (
-              <div className="space-y-4 animate-fadeIn">
-                {hero.starUpgrades?.map((up: any, i: number) => (
-                  <div key={i} className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800 flex gap-5 items-start">
-                    <div className={`w-12 h-12 shrink-0 rounded-full border-2 flex flex-col items-center justify-center font-bold ${up.isRedStar ? 'border-red-500 text-red-500 bg-red-950/20' : 'border-yellow-500 text-yellow-500 bg-yellow-950/20'}`}>
-                      <span className="text-xl leading-none">{up.star > 5 ? up.star - 5 : up.star}</span><FaStar size={10} />
+              <div className="space-y-6 animate-fadeIn">
+                {/* HIỆU ỨNG MẶC ĐỊNH */}
+                {hero.amKhiNote && (
+                   <div className="bg-red-950/20 border border-red-900/50 p-5 rounded-2xl flex gap-4 items-start shadow-inner">
+                      <div className="p-2 bg-red-600/20 rounded-lg text-red-500 shrink-0 border border-red-600/30">
+                         <FaInfoCircle size={20} />
+                      </div>
+                      <div className="space-y-1">
+                         <h4 className="text-red-400 font-black text-xs uppercase tracking-widest border-b border-red-900/50 pb-1 mb-2">Hiệu ứng mặc định</h4>
+                         <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{hero.amKhiNote}</p>
+                      </div>
+                   </div>
+                )}
+
+                {/* DANH SÁCH NÂNG SAO */}
+                <div className="space-y-4">
+                   {hero.starUpgrades?.map((up: any, i: number) => (
+                    <div key={i} className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800 flex gap-5 items-start hover:border-red-500/30 transition-all duration-300">
+                        <div className={`w-12 h-12 shrink-0 rounded-full border-2 flex flex-col items-center justify-center font-bold ${up.isRedStar ? 'border-red-500 text-red-500 bg-red-950/20 shadow-[0_0_10px_rgba(239,68,68,0.2)]' : 'border-yellow-500 text-yellow-500 bg-yellow-950/20 shadow-[0_0_10px_rgba(234,179,8,0.2)]'}`}>
+                        <span className="text-xl leading-none">{up.star > 5 ? up.star - 5 : up.star}</span><FaStar size={10} />
+                        </div>
+                        <div className="text-slate-300 text-sm leading-relaxed pt-1 whitespace-pre-wrap">{up.description}</div>
                     </div>
-                    <div className="text-slate-300 text-sm leading-relaxed pt-1 whitespace-pre-wrap">{up.description}</div>
-                  </div>
-                ))}
+                    ))}
+                </div>
               </div>
-            )}
+            )} 
 
             {/* BUILD PVE/PVP */}
             {!isAmKhi && (activeTab === "build" || activeTab === "skills") && (
@@ -298,7 +316,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
             )}
 
             {/* THẺ BÀI VINH VINH */}
-            {activeTab === "nvv_cards" && hero.nvvCardSystem && (
+            {activeTab === "nvv_cards" && isVinhVinh && hero.nvvCardSystem && (
               <div className="space-y-6 animate-fadeIn">
                 <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
                   {filters.map((filter) => (
@@ -317,7 +335,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
               </div>
             )}
 
-            {/* KỸ NĂNG CHI TIẾT */}
+            {/* KỸ NĂNG CHI TIẾT (SP+) */}
             {activeTab === "skills" && isSpPlus && !isAmKhi && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fadeIn mt-8 pt-8 border-t border-slate-800">
                 <div className="col-span-full mb-4 flex items-center gap-2"><span className="w-1.5 h-5 bg-pink-500 rounded-full"></span><h2 className="text-lg font-bold text-slate-100 uppercase">Tất cả kỹ năng chi tiết</h2></div>

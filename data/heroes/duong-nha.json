@@ -51,5 +51,9 @@
       "isRedStar": true,
       "description": "Sau khi vào trạng thái Phẫn Tâm Thánh Cường, mỗi lượt của bản thân sẽ nạp đầy đạn và đồng minh hệ Cường/Mẫn Công sẽ được tăng thêm lượng công bằng 100% công ám khí của Đường Nhã."
     }
-  ]
+  ],
+  "nvvCardSystem": {
+    "cards": []
+  },
+  "amKhiNote": "Tăng 30% giới hạn HP ban đầu của Đường Nhã.Mỗi khi Đường Nhã tiêu hao 1 điểm đạn, sẽ nhận 1 tầng [Bão Tâm], giúp toàn đội tăng 20% sát thương cuối. Có thể cộng dồn tối đa 20 tầng.Khi đạt 20 tầng, Đường Nhã sẽ nhận trạng thái [Phẫn Tâm Thành Cuồng] vĩnh viễn, ngay lập tức nạp đầy đạn và tăng sát thương ám khí bằng 100% HP hiện tại của bản thân."
 }

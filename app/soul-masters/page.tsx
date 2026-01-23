@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SoulMaster } from "@/data/types";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaArrowLeft } from "react-icons/fa"; // Import thêm FaArrowLeft
 
 export default function SoulMastersPage() {
   const [heroes, setHeroes] = useState<SoulMaster[]>([]);
@@ -28,6 +28,17 @@ export default function SoulMastersPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 p-6 md:p-10">
       <div className="max-w-7xl mx-auto">
+        
+        <div className="mb-6">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-yellow-500 transition-colors group"
+          >
+            <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> 
+            <span>Quay lại trang chủ</span>
+          </Link>
+        </div>
+
         {/* Header Section */}
         <header className="mb-12 space-y-6">
           <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 uppercase tracking-tighter">

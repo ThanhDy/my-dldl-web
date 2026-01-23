@@ -1,0 +1,59 @@
+{
+  "id": "duong-mon---tieu-vu",
+  "name": "Đường Môn - Tiểu Vũ",
+  "title": "",
+  "rarity": "SSR",
+  "type": "Ám Khí",
+  "image": "/images/duong-mon---tieu-vu/avt.webp",
+  "builds": [
+    {
+      "title": "PvE - 1111"
+    },
+    {
+      "title": "PvP - 2222"
+    }
+  ],
+  "skillDetails": [],
+  "soulBones": [],
+  "starUpgrades": [
+    {
+      "star": 4,
+      "isRedStar": false,
+      "description": "Tăng sát thương cuối cùng lên 120%"
+    },
+    {
+      "star": 5,
+      "isRedStar": false,
+      "description": "Khi 唐門·小舞 hành động lần đầu, nạp đầy đạn"
+    },
+    {
+      "star": 1,
+      "isRedStar": true,
+      "description": "Tăng sát thương cuối cùng lên 160%"
+    },
+    {
+      "star": 2,
+      "isRedStar": true,
+      "description": "Khi 唐門·小舞 sử dụng ám khí trong lượt của mình, tiêu hao đạn giảm 1 điểm\n\nSau khi 唐門·小舞 chủ động sử dụng ám khí trong lượt của mình, sẽ tự động truy kích ám khí cơ quan hoặc thủ pháp (ưu tiên cơ quan), cho đến khi hết đạn và chỉ có thể sử dụng ám khí nhập môn"
+    },
+    {
+      "star": 2,
+      "isRedStar": true,
+      "description": "Tăng sát thương cuối cùng lên 200%"
+    },
+    {
+      "star": 4,
+      "isRedStar": true,
+      "description": "Tăng sát thương cuối cùng lên 300%"
+    },
+    {
+      "star": 5,
+      "isRedStar": true,
+      "description": "Khi bắt đầu lượt, nếu có 6 điểm đạn, sát thương cuối cùng của ám khí trong lượt này tăng 300%"
+    }
+  ],
+  "nvvCardSystem": {
+    "cards": []
+  },
+  "amKhiNote": "唐門 và 小舞 không thể sử dụng ám khí ngoài lượt.Khi sử dụng ám khí trong lượt, sát thương cuối cùng tăng 80%.Sau mỗi lượt của một đồng đội khác, 唐門 và 小舞 nạp 1 viên đạn.Khi bắt đầu lượt của mình, 唐門 và 小舞 nạp thêm 1 viên đạn.Tối đa có thể sở hữu 6 viên đạn"
+}
