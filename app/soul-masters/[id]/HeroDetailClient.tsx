@@ -33,7 +33,7 @@ const YEAR_LABELS: Record<string, string> = {
 
 const YEAR_ORDER = ["y1k", "y10k", "y25k", "y50k", "y100k"];
 
-// --- HELPER RENDER SAO ---
+
 const renderStarBadge = (count: number, colorClass: string) => (
   <span className={`inline-flex items-center gap-0.5 mx-1 ${colorClass}`}>
     <span className="text-xl font-extrabold leading-none">{count}</span>
@@ -41,7 +41,7 @@ const renderStarBadge = (count: number, colorClass: string) => (
   </span>
 );
 
-// --- ĐỊNH DẠNG TEXT MÀU ---
+
 const formatText = (text: string, defaultColorClass: string) => {
   if (!text) return null;
   const parts = text.split(/(\[.*?\|.*?\])/g);

@@ -258,7 +258,7 @@ export default function EditHeroPage() {
             {isAmKhi && (
               <div className="space-y-6 bg-slate-900/50 p-6 rounded-2xl border border-red-500/20 shadow-xl animate-fadeIn">
                 <div className="flex justify-between items-center border-b border-red-500/30 pb-3">
-                  <h2 className="text-xl font-bold text-red-400 uppercase flex items-center gap-2"><FaStar /> Nâng Sao Ám Khí</h2>
+                  <h2 className="text-xl font-bold text-red-400 uppercase flex items-center gap-2"><FaStar /> Nâng Sao </h2>
                   <button type="button" onClick={addStarUpgrade} className="bg-red-600/20 text-red-400 border border-red-600/50 px-4 py-1.5 rounded-md text-xs flex items-center gap-2 hover:bg-red-600 transition shadow-lg"><FaPlus /> Thêm Mốc</button>
                 </div>
                 <div className="space-y-4">
