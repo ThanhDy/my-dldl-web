@@ -1,0 +1,55 @@
+{
+  "id": "duong-mon---duong-tam",
+  "name": "Đường Môn - Đường Tam",
+  "title": "",
+  "rarity": "SSR",
+  "type": "Ám Khí",
+  "image": "/images/duong-mon---duong-tam/avt.webp",
+  "builds": [
+    {
+      "title": "PvE - 1111"
+    },
+    {
+      "title": "PvP - 2222"
+    }
+  ],
+  "skillDetails": [],
+  "soulBones": [],
+  "starUpgrades": [
+    {
+      "star": 4,
+      "isRedStar": false,
+      "description": "Mỗi khi có 1 đồng đội sử dụng kỹ năng ám khí, sát thương của 唐門・唐三 tăng vĩnh viễn 6%, có thể cộng dồn tối đa 18 tầng."
+    },
+    {
+      "star": 5,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 6,
+      "isRedStar": true,
+      "description": "Sát thương vĩnh viễn tăng 8%."
+    },
+    {
+      "star": 7,
+      "isRedStar": true,
+      "description": "Mỗi khi có 3 đồng đội sử dụng kỹ năng ám khí, 唐門・唐三 sẽ lập tức nạp 2 viên đạn. Hiệu ứng này sẽ được đặt lại vào đầu lượt của 唐門・唐三."
+    },
+    {
+      "star": 8,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 9,
+      "isRedStar": true,
+      "description": "Sát thương vĩnh viễn tăng 10%."
+    },
+    {
+      "star": 10,
+      "isRedStar": true,
+      "description": "Sát thương vĩnh viễn tăng 12%."
+    }
+  ]
+}

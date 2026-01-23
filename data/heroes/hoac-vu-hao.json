@@ -16,6 +16,8 @@
   "skillDetails": [
     {
       "id": "hoac-vu-hao-s1-1",
+      "_tempOrder": 1,
+      "_tempBranch": 1,
       "name": "Băng Lưu Tinh",
       "type": "Chủ động",
       "soulRingType": "Hệ Rắn",
@@ -34,6 +36,8 @@
     },
     {
       "id": "hoac-vu-hao-s2-1",
+      "_tempOrder": 2,
+      "_tempBranch": 1,
       "name": "Mệnh Vận Chi Thương",
       "type": "Bị động",
       "soulRingType": "Hệ Rắn",
@@ -45,10 +49,13 @@
         "y50k": "Hiệu quả giảm sát thương cuối cùng sẽ được tăng thêm 40%.",
         "y100k": "Khi trận đấu bắt đầu, toàn bộ đồng đội sẽ nhận được miễn nhiễm sát thương, số lần miễn nhiễm này tương đương với số Thần Vị [Cảm Xúc] mà Hoắc Vũ Hạo đã kích hoạt. Sau khi bị tấn công bởi Hồn Kỹ, số lần miễn nhiễm sẽ bị giảm đi."
       },
+      "note": [],
       "iconUrl": "/images/hoac-vu-hao/hh2-1.webp"
     },
     {
       "id": "hoac-vu-hao-s3-1",
+      "_tempOrder": 3,
+      "_tempBranch": 1,
       "name": "Tinh Thần Xung Kích",
       "type": "Bị động",
       "soulRingType": "Hệ Rắn",
@@ -67,6 +74,8 @@
     },
     {
       "id": "hoac-vu-hao-s4-1",
+      "_tempOrder": 4,
+      "_tempBranch": 1,
       "name": "Thời Không Chi Quang",
       "type": "Chủ động",
       "soulRingType": "Hệ Rắn",
@@ -86,6 +95,8 @@
     },
     {
       "id": "hoac-vu-hao-s1-2",
+      "_tempOrder": 1,
+      "_tempBranch": 2,
       "name": "Thám Trắc Tinh Thần",
       "type": "Chủ động",
       "soulRingType": "Yếu Điểm",
@@ -104,6 +115,8 @@
     },
     {
       "id": "hoac-vu-hao-s2-2",
+      "_tempOrder": 2,
+      "_tempBranch": 2,
       "name": "Tái Lập Tinh Thần",
       "type": "Bị động",
       "soulRingType": "Hệ Nhện",
@@ -115,10 +128,13 @@
         "y50k": "Nếu số lượng Thần Vị Cảm Xúc mà Hoặc Vũ Hạo kích hoạt bằng 7, hiệu quả tăng sát thương cuối cùng sẽ được gấp đôi.",
         "y100k": "Đối với mỗi Thần Vị Cảm Xúc, cứ 1% thuộc tính ban đầu do Hoặc Vũ Hạo cung cấp cho mỗi một kẻ địch của Thần Vị đó, sẽ làm hiệu quả tăng sát thương cuối cùng của toàn bộ kẻ địch cộng dồn thêm 2%, tối đa 40%."
       },
+      "note": [],
       "iconUrl": "/images/hoac-vu-hao/hh2-2.webp"
     },
     {
       "id": "hoac-vu-hao-s3-2",
+      "_tempOrder": 3,
+      "_tempBranch": 2,
       "name": "Linh Hồn Tước Đoạt",
       "type": "Bị động",
       "soulRingType": "Hệ Nhện",
@@ -130,10 +146,13 @@
         "y50k": "Tấn công bổ sung khiến mục tiêu chịu tăng sát thương cuối cùng lên 100%.",
         "y100k": "Tỷ lệ tấn công bổ sung tăng lên 100%."
       },
+      "note": [],
       "iconUrl": "/images/hoac-vu-hao/hh3-2.webp"
     },
     {
       "id": "hoac-vu-hao-s4-2",
+      "_tempOrder": 4,
+      "_tempBranch": 2,
       "name": "Tâm Linh Chia Sẻ",
       "type": "Chủ động",
       "soulRingType": "Hệ Nhện",
@@ -155,6 +174,21 @@
   ],
   "soulBones": [
     {
+      "position": "Đầu",
+      "name": "Lục Giới Băng Linh",
+      "standard": {
+        "base": "Mỗi khi Hoắc Vũ Hạo kích hoạt 1 Thần Vị [Cảm Xúc], toàn phe ta tăng 60% sát thương cuối cùng.",
+        "star4": "Trong chế độ PVP, khi mang kỹ năng [Thời Không Chi Quang] hoặc [Hồn - Tâm Linh Chia Sẻ], nếu Hoắc Vũ Hạo kích hoạt ít nhất 3 loại [Cảm Xúc], khi bắt đầu trận chiến sẽ bỏ qua Miễn Nhiễm Trạng Thái và Ý Chí, ngẫu nhiên thi triển [Linh Thị] lên 3 kẻ địch.",
+        "star6": "Khi kích hoạt hiệu ứng trên, trực tiếp biến mục tiêu thành [Băng Linh], số lượng mục tiêu bằng với số Thần Vị [Cảm Xúc] đã kích hoạt, tối đa 5 mục tiêu."
+      },
+      "upgrade": {
+        "name": "Lục Giới Băng Linh - Nâng Cấp",
+        "star2": "Khi ra trận có Đường Vũ Đồng, Đường Vũ Đồng tăng 100% sát thương cuối từ hiệu ứng.",
+        "star3": "Trước khi kết thúc lượt đầu tiên, bị động [Tái Lập Tình Thần] (hh2-2) sẽ khiến mỗi Thần Vị [Cảm Xúc] đã được kích hoạt làm nhân đôi hiệu quả tăng sát thương cuối.",
+        "star5": "Cứ mỗi [Băng Linh] có mặt bên phe địch, toàn bộ phe ta được tăng 50% sát thương cuối."
+      }
+    },
+    {
       "position": "Thân",
       "name": "Thánh Đồng Cự Giáp",
       "standard": {
@@ -171,37 +205,6 @@
       }
     },
     {
-      "position": "Tay Phải",
-      "name": "Thần Tư Chi Thích",
-      "standard": {
-        "base": "Khi phe ta tấn công kẻ địch đang trong trạng thái [Yếu Điểm], sát thương cuối cùng tăng 50%.",
-        "star4": "Hiệu ứng tăng sát thương cuối cùng từ đòn đánh thường [Linh Hồn Tước Đoạt] có thể cộng dồn, tối đa cộng dồn 5 tầng.",
-        "star6": "Khi Hoắc Vũ Hạo tấn công mục tiêu đang trong trạng thái [Yếu Điểm], hiệu ứng tăng sát thương cuối cùng mà mục tiêu phải nhận sẽ được nhân đôi và áp dụng thêm hiệu ứng này cho toàn bộ đội hình đối phương."
-      },
-      "mutation": {
-        "name": "Thần Tư Chi Thích - Suy Biến",
-        "star1Red": "Khi phe ta tấn công, mỗi khi đánh trúng 1 mục tiêu [Băng Linh], sát thương cuối cùng của đòn tấn công đó tăng 15%, tối đa 60%.",
-        "star4Red": "Mỗi khi lượt của Hoắc Vũ Hạo kết thúc, khiến toàn bộ kẻ địch phải chịu thêm 40% sát thương cuối cùng, tối đa 200%.",
-        "star5Red": "Sát thương của phe ta lên [Băng Linh] tăng 50%, kẻ địch ở trạng thái [Băng Linh] sau khi chết không thể hồi sinh.",
-        "star6Red": "Trong chế độ Đấu Trường, nếu Hoắc Vũ Hạo kích hoạt ít nhất 2 loại Thần Vị [Cảm Xúc], phe địch sẽ không thể kích hoạt hiệu ứng [Tiên Cơ] của Hồn Sư.Nếu kích hoạt ít nhất 3 loại Thần Vị [Cảm Xúc], sẽ không thể kích hoạt hiệu ứng [Tiên Cơ] của Hồn Cốt."
-      }
-    },
-    {
-      "position": "Đầu",
-      "name": "Lục Giới Băng Linh",
-      "standard": {
-        "base": "Mỗi khi Hoắc Vũ Hạo kích hoạt 1 Thần Vị [Cảm Xúc], toàn phe ta tăng 60% sát thương cuối cùng.",
-        "star4": "Trong chế độ PVP, khi mang kỹ năng [Thời Không Chi Quang] hoặc [Hồn - Tâm Linh Chia Sẻ], nếu Hoắc Vũ Hạo kích hoạt ít nhất 3 loại [Cảm Xúc], khi bắt đầu trận chiến sẽ bỏ qua Miễn Nhiễm Trạng Thái và Ý Chí, ngẫu nhiên thi triển [Linh Thị] lên 3 kẻ địch.",
-        "star6": "Khi kích hoạt hiệu ứng trên, trực tiếp biến mục tiêu thành [Băng Linh], số lượng mục tiêu bằng với số Thần Vị [Cảm Xúc] đã kích hoạt, tối đa 5 mục tiêu."
-      },
-      "upgrade": {
-        "name": "Lục Giới Băng Linh - Nâng Cấp",
-        "star2": "Khi ra trận có Đường Vũ Đồng, Đường Vũ Đồng tăng 100% sát thương cuối từ hiệu ứng.",
-        "star3": "Trước khi kết thúc lượt đầu tiên, bị động [Tái Lập Tình Thần] (hh2-2) sẽ khiến mỗi Thần Vị [Cảm Xúc] đã được kích hoạt làm nhân đôi hiệu quả tăng sát thương cuối.",
-        "star5": "Cứ mỗi [Băng Linh] có mặt bên phe địch, toàn bộ phe ta được tăng 50% sát thương cuối."
-      }
-    },
-    {
       "position": "Tay Trái",
       "name": "Linh Mâu Nhập Nhận",
       "standard": {
@@ -215,6 +218,22 @@
         "star4Red": "Với mỗi một loại Thần Vị [Cảm Xúc] được Hoắc Vũ Hạo kích hoạt, sát thương cuối từ Hồn Kỹ của Đường Vũ Đồng tăng 20%.",
         "star5Red": "Sau khi Hoắc Vũ Hạo mở [Tâm Linh Huyền Giới], toàn bộ kẻ địch nhận sát thương cuối tăng 40%, và tăng thêm 10% cho mỗi Thần Vị [Cảm Xúc] được kích hoạt.",
         "star6Red": "Trong chế độ Đấu Trường, nếu thuộc tính của Thần Vị mà Đường Vũ Đồng kế thừa là cao nhất trong toàn trận, thì Hoắc Vũ Hạo sẽ tự động kích hoạt Thần Vị [Cảm Xúc] đó."
+      }
+    },
+    {
+      "position": "Tay Phải",
+      "name": "Thần Tư Chi Thích",
+      "standard": {
+        "base": "Khi phe ta tấn công kẻ địch đang trong trạng thái [Yếu Điểm], sát thương cuối cùng tăng 50%.",
+        "star4": "Hiệu ứng tăng sát thương cuối cùng từ đòn đánh thường [Linh Hồn Tước Đoạt] có thể cộng dồn, tối đa cộng dồn 5 tầng.",
+        "star6": "Khi Hoắc Vũ Hạo tấn công mục tiêu đang trong trạng thái [Yếu Điểm], hiệu ứng tăng sát thương cuối cùng mà mục tiêu phải nhận sẽ được nhân đôi và áp dụng thêm hiệu ứng này cho toàn bộ đội hình đối phương."
+      },
+      "mutation": {
+        "name": "Thần Tư Chi Thích - Suy Biến",
+        "star1Red": "Khi phe ta tấn công, mỗi khi đánh trúng 1 mục tiêu [Băng Linh], sát thương cuối cùng của đòn tấn công đó tăng 15%, tối đa 60%.",
+        "star4Red": "Mỗi khi lượt của Hoắc Vũ Hạo kết thúc, khiến toàn bộ kẻ địch phải chịu thêm 40% sát thương cuối cùng, tối đa 200%.",
+        "star5Red": "Sát thương của phe ta lên [Băng Linh] tăng 50%, kẻ địch ở trạng thái [Băng Linh] sau khi chết không thể hồi sinh.",
+        "star6Red": "Trong chế độ Đấu Trường, nếu Hoắc Vũ Hạo kích hoạt ít nhất 2 loại Thần Vị [Cảm Xúc], phe địch sẽ không thể kích hoạt hiệu ứng [Tiên Cơ] của Hồn Sư.Nếu kích hoạt ít nhất 3 loại Thần Vị [Cảm Xúc], sẽ không thể kích hoạt hiệu ứng [Tiên Cơ] của Hồn Cốt."
       }
     },
     {

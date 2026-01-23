@@ -1,0 +1,55 @@
+{
+  "id": "duong-nha",
+  "name": "Đường Nhã",
+  "title": "",
+  "rarity": "SSR+",
+  "type": "Ám Khí",
+  "image": "/images/duong-nha/avt.webp",
+  "builds": [
+    {
+      "title": "PvE - 1111"
+    },
+    {
+      "title": "PvP - 2222"
+    }
+  ],
+  "skillDetails": [],
+  "soulBones": [],
+  "starUpgrades": [
+    {
+      "star": 4,
+      "isRedStar": false,
+      "description": "Mỗi tầng Thực Tâm tăng 80% sát thương cuối."
+    },
+    {
+      "star": 5,
+      "isRedStar": false,
+      "description": "Khi hồn sư Cường/Mẫn công/Ám khí phe ta bắt đầu lượt, Đường Nhã sẽ tiêu hao 2 điểm đạn được để vĩnh viễn tăng 50% sát thương cuối của họ. Mỗi người chỉ nhận hiệu quả này tối đa 5 lần."
+    },
+    {
+      "star": 6,
+      "isRedStar": true,
+      "description": "Mỗi tầng Thực Tâm tăng 100% sát thương cuối."
+    },
+    {
+      "star": 7,
+      "isRedStar": true,
+      "description": "Khi Đường Nhã nhận được hiệu quả hồi phục hồn lực từ đồng đội, sẽ nạp vào lượng đạn tương ứng."
+    },
+    {
+      "star": 8,
+      "isRedStar": true,
+      "description": "Mỗi tầng Thực Tâm tăng 200% sát thương cuối."
+    },
+    {
+      "star": 9,
+      "isRedStar": true,
+      "description": "Mỗi tầng Thực Tâm tăng 300% sát thương cuối."
+    },
+    {
+      "star": 10,
+      "isRedStar": true,
+      "description": "Sau khi vào trạng thái Phẫn Tâm Thánh Cường, mỗi lượt của bản thân sẽ nạp đầy đạn và đồng minh hệ Cường/Mẫn Công sẽ được tăng thêm lượng công bằng 100% công ám khí của Đường Nhã."
+    }
+  ]
+}

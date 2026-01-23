@@ -93,20 +93,29 @@ export interface NvvCard {
   };
 }
 
+export interface StarUpgrade {
+  star: number;
+  isRedStar: boolean;
+  description: string;
+}
+
 export interface SoulMaster {
   id: string;
   name: string;
   title: string;
-  rarity: "SP" | "SSR" | "SP+";
+  rarity: "SP" | "SSR" | "SSR+" | "SP+";
   isSpPlus?: boolean; // Cờ nhận biết SP+
-  type: "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ" | "Phòng Ngự";
+  type: "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ" | "Phòng Ngự" | "Ám Khí";
   image: string; // Link ảnh
   builds: Build[]; // Danh sách các cách build
   skillDetails: SkillDetail[];
   soulBones: SoulBone[];
+  starUpgrades?: StarUpgrade[];
 
   // Dữ liệu riêng cho NVV
   nvvCardSystem?: {
     cards: NvvCard[];
   };
 }
+
+
