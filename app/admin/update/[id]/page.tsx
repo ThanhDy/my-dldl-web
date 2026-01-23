@@ -7,7 +7,7 @@ import {
   FaInfoCircle, FaBolt, FaArrowUp, FaDna, FaStar 
 } from "react-icons/fa";
 
-// --- CÁC HÀM KHỞI TẠO MẪU (GIỮ NGUYÊN GỐC) ---
+// --- CÁC HÀM KHỞI TẠO MẪU ---
 const getDefaultSkillType = (order: number) => {
   switch (order) {
     case 2: return "Bị động";
