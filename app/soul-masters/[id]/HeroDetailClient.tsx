@@ -258,7 +258,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
           </div>
 
           <div className="mt-4">
-            {/* NÂNG SAO ÁM KHÍ & HIỆU ỨNG MẶC ĐỊNH */}
+            {/* NÂNG SAO & HIỆU ỨNG MẶC ĐỊNH */}
             {activeTab === "stars" && isAmKhi && (
               <div className="space-y-6 animate-fadeIn">
                 {/* HIỆU ỨNG MẶC ĐỊNH */}
