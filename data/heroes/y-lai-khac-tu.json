@@ -1,0 +1,55 @@
+{
+  "id": "y-lai-khac-tu",
+  "name": "Y Lai Khắc Tư",
+  "title": "",
+  "rarity": "SP",
+  "type": "Cường Công",
+  "image": "/images/y-lai-khac-tu/avt.webp",
+  "builds": [
+    {
+      "title": "PvE - 2222"
+    },
+    {
+      "title": "PvP - 2212"
+    }
+  ],
+  "skillDetails": [],
+  "soulBones": [],
+  "starUpgrades": [
+    {
+      "star": 4,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 5,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 6,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 7,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 8,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 9,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 10,
+      "isRedStar": true,
+      "description": ""
+    }
+  ]
+}

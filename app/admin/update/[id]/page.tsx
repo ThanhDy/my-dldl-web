@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { 
   FaSave, FaImage, FaBone, FaPlus, FaTrash, 
-  FaInfoCircle, FaBolt, FaArrowUp, FaDna, FaStar 
+  FaInfoCircle, FaBolt, FaArrowUp, FaDna, FaStar, FaLightbulb 
 } from "react-icons/fa";
 
-// --- CÁC HÀM KHỞI TẠO MẪU ---
+
 const getDefaultSkillType = (order: number) => {
   switch (order) {
     case 2: return "Bị động";
@@ -59,7 +59,8 @@ const INITIAL_HERO = {
   soulBones: INITIAL_SOUL_BONES,
   nvvCardSystem: { cards: [] },
   starUpgrades: [], 
-  amKhiNote: ""
+  amKhiNote: "",
+  thienPhu: [] 
 };
 
 export default function EditHeroPage() {
@@ -81,7 +82,6 @@ export default function EditHeroPage() {
         
         const foundHero = await res.json();
 
-        // Merge Skills 
         const mergedSkills = INITIAL_SKILLS.map((emptySkill, index) => {
           const existingSkill = foundHero.skillDetails?.[index];
           return existingSkill ? { 
@@ -91,7 +91,6 @@ export default function EditHeroPage() {
           } : emptySkill;
         });
 
-        // Merge Bones 
         const mergedBones = INITIAL_SOUL_BONES.map((emptyBone) => {
           const existingBone = foundHero.soulBones?.find((b: any) => b.position === emptyBone.position);
           if (existingBone) {
@@ -116,7 +115,8 @@ export default function EditHeroPage() {
           soulBones: mergedBones,
           nvvCardSystem: foundHero.nvvCardSystem || { cards: [] },
           starUpgrades: foundHero.starUpgrades || [],
-          amKhiNote: foundHero.amKhiNote || ""
+          amKhiNote: foundHero.amKhiNote || "",
+          thienPhu: foundHero.thienPhu || [] 
         });
       } catch (error) {
         setMessage("❌ Lỗi kết nối API!");
@@ -125,7 +125,6 @@ export default function EditHeroPage() {
     fetchHeroData();
   }, [params.id]);
 
-  // --- CÁC HÀM XỬ LÝ NHẬP LIỆU ---
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prev: any) => ({ ...prev, [name]: value }));
@@ -162,7 +161,6 @@ export default function EditHeroPage() {
     setFormData({ ...formData, soulBones: newBones });
   };
 
-  // --- LOGIC THẺ BÀI ---
   const addNvvCard = () => {
     const newCard = { id: `card-${Date.now()}`, name: "", type: "Thông Dụng", basicSkill: "", detailedEffect: { effect: "" } };
     setFormData({ ...formData, nvvCardSystem: { cards: [...(formData.nvvCardSystem?.cards || []), newCard] } });
@@ -179,7 +177,6 @@ export default function EditHeroPage() {
     setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
   };
 
-  // --- LOGIC ÁM KHÍ  ---
   const addStarUpgrade = () => {
     const newStar = { star: 4, isRedStar: false, description: "" };
     setFormData({ ...formData, starUpgrades: [...formData.starUpgrades, newStar] });
@@ -189,6 +186,21 @@ export default function EditHeroPage() {
     const newStars = [...formData.starUpgrades];
     newStars[index][field] = value;
     setFormData({ ...formData, starUpgrades: newStars });
+  };
+
+  const addThienPhu = () => {
+    setFormData({ ...formData, thienPhu: [...formData.thienPhu, { name: "", description: "", label: "0/0" }] });
+  };
+
+  const updateThienPhu = (index: number, field: string, value: any) => {
+    const newThienPhu = [...formData.thienPhu];
+    newThienPhu[index][field] = value;
+    setFormData({ ...formData, thienPhu: newThienPhu });
+  };
+
+  const removeThienPhu = (index: number) => {
+    const newThienPhu = formData.thienPhu.filter((_: any, i: number) => i !== index);
+    setFormData({ ...formData, thienPhu: newThienPhu });
   };
 
   const handleSubmit = async (e: any) => {
@@ -207,10 +219,12 @@ export default function EditHeroPage() {
     } finally { setLoading(false); }
   };
 
-  if (!formData) return <div className="p-10 text-white flex items-center justify-center">Đang tải dữ liệu hồn sư...</div>;
+  if (!formData) return <div className="p-10 text-white flex items-center justify-center font-bold">ĐANG TẢI DỮ LIỆU...</div>;
 
   const isVinhVinh = formData.name?.toLowerCase().includes("vinh vinh");
+  const isTranTam = formData.id === "cuc-han---kiem-dao-tran-tam";
   const isAmKhi = formData.type === "Ám Khí";
+  const isSpecialNoBuild = isVinhVinh || formData.rarity === "SP+";
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 p-6 md:p-8 pb-32 font-sans">
@@ -228,7 +242,6 @@ export default function EditHeroPage() {
         {message && <div className={`p-4 mb-8 rounded-lg font-bold border animate-fadeIn ${message.includes("Lỗi") ? "bg-red-950/30 border-red-500 text-red-400" : "bg-green-950/30 border-green-500 text-green-400"}`}>{message}</div>}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* CỘT TRÁI */}
           <div className="lg:col-span-4 space-y-6">
             <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 sticky top-28 space-y-4 shadow-2xl">
               <h2 className="text-lg font-bold flex items-center gap-2 border-b border-slate-800 pb-2"><FaImage className="text-yellow-500"/> Cơ Bản</h2>
@@ -243,18 +256,39 @@ export default function EditHeroPage() {
               </div>
               <input type="text" name="title" value={formData.title || ""} onChange={handleChange} placeholder="Danh hiệu" className="w-full bg-slate-950 border border-slate-700 rounded p-2.5 text-sm" />
               
-              <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 space-y-3">
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Gợi ý Build</p>
-                <input type="text" value={formData.builds?.[0]?.title || ""} onChange={(e) => updateBuild(0, e.target.value)} placeholder="PvE Build" className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-blue-400 outline-none focus:border-blue-500" />
-                <input type="text" value={formData.builds?.[1]?.title || ""} onChange={(e) => updateBuild(1, e.target.value)} placeholder="PvP Build" className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-red-400 outline-none focus:border-red-500" />
-              </div>
+              {!isSpecialNoBuild && !isAmKhi && (
+                <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 space-y-3">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-blue-400">Gợi ý Build</p>
+                  <input type="text" value={formData.builds?.[0]?.title || ""} onChange={(e) => updateBuild(0, e.target.value)} placeholder="PvE Build" className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-blue-400 outline-none focus:border-blue-500" />
+                  <input type="text" value={formData.builds?.[1]?.title || ""} onChange={(e) => updateBuild(1, e.target.value)} placeholder="PvP Build" className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-red-400 outline-none focus:border-red-500" />
+                </div>
+              )}
             </div>
           </div>
 
-          {/* CỘT PHẢI */}
           <div className="lg:col-span-8 space-y-10">
             
-            {/* PHẦN HỒN SƯ ÁM  */}
+            {isTranTam && (
+              <div className="space-y-6 bg-slate-900/50 p-6 rounded-2xl border border-blue-500/20 shadow-xl animate-fadeIn">
+                <div className="flex justify-between items-center border-b border-blue-500/30 pb-3">
+                  <h2 className="text-xl font-bold text-blue-400 uppercase flex items-center gap-2"><FaLightbulb /> Hệ Thống Thiên Phú</h2>
+                  <button type="button" onClick={addThienPhu} className="bg-blue-600/20 text-blue-400 border border-blue-600/50 px-4 py-1.5 rounded-md text-xs flex items-center gap-2 hover:bg-blue-600 transition shadow-lg"><FaPlus /> Thêm</button>
+                </div>
+                <div className="grid gap-4">
+                  {formData.thienPhu?.map((tp: any, idx: number) => (
+                    <div key={idx} className="bg-slate-900 p-4 rounded-xl border border-slate-800 relative group shadow-lg">
+                       <button type="button" onClick={() => removeThienPhu(idx)} className="absolute top-2 right-2 text-slate-600 hover:text-red-500 transition"><FaTrash /></button>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <input value={tp.name} onChange={(e) => updateThienPhu(idx, "name", e.target.value)} placeholder="Tên thiên phú..." className="bg-slate-950 border border-slate-800 p-2 rounded text-sm font-bold text-blue-300 outline-none focus:border-blue-500" />
+                          <input value={tp.label} onChange={(e) => updateThienPhu(idx, "label", e.target.value)} placeholder="Cấp độ (VD: 0/19)" className="bg-slate-950 border border-slate-800 p-2 rounded text-xs text-slate-500 outline-none" />
+                       </div>
+                       <textarea value={tp.description} onChange={(e) => updateThienPhu(idx, "description", e.target.value)} placeholder="Mô tả hiệu ứng..." className="w-full mt-2 bg-slate-950 border border-slate-800 p-2 rounded text-xs h-16 outline-none" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {isAmKhi && (
               <div className="space-y-6 bg-slate-900/50 p-6 rounded-2xl border border-red-500/20 shadow-xl animate-fadeIn">
                 <div className="flex justify-between items-center border-b border-red-500/30 pb-3">
@@ -286,8 +320,8 @@ export default function EditHeroPage() {
               </div>
             )}
 
-            {/* THẺ BÀI VINH VINH */}
-            {(isVinhVinh || formData.rarity === "SP+") && (
+            {/* PHẦN THẺ BÀI CHỈ HIỆN CHO NINH VINH VINH */}
+            {isVinhVinh && (
               <div className="space-y-4 bg-slate-900/50 p-6 rounded-2xl border border-pink-500/20 shadow-xl animate-fadeIn">
                 <div className="flex justify-between items-center border-b border-pink-500/30 pb-3">
                   <h2 className="text-xl font-bold text-pink-400 uppercase flex items-center gap-2"><FaInfoCircle /> Hệ Thống Thẻ Bài</h2>
@@ -323,7 +357,6 @@ export default function EditHeroPage() {
               </div>
             )}
 
-            {/* HỒN CỐT */}
             <div className="space-y-6">
               <h2 className="text-xl font-bold text-yellow-500 border-b border-slate-800 pb-2 flex items-center gap-2 uppercase tracking-wide"><FaBone /> Hệ Thống Hồn Cốt</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -374,9 +407,8 @@ export default function EditHeroPage() {
               </div>
             </div>
 
-            {/* KỸ NĂNG */}
             <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b border-slate-800 pb-2 uppercase tracking-wide">Chi Tiết Kỹ Năng Hồn Hoàn</h2>
+              <h2 className="text-xl font-bold border-b border-slate-800 pb-2 uppercase tracking-wide text-blue-400">Chi Tiết Kỹ Năng Hồn Hoàn</h2>
               {formData.skillDetails.map((skill: any, idx: number) => (
                 <div key={idx} className="bg-slate-900 rounded-2xl border border-slate-800 p-6 space-y-4 shadow-2xl transition-all hover:border-slate-700">
                   <div className="flex justify-between items-center">

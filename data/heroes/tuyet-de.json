@@ -1,0 +1,55 @@
+{
+  "id": "tuyet-de",
+  "name": "Tuyết Đế",
+  "title": "",
+  "rarity": "SP",
+  "type": "Khống Chế",
+  "image": "/images/tuyet-de/avt.webp",
+  "builds": [
+    {
+      "title": "PvE - 1111"
+    },
+    {
+      "title": "PvP - 2222"
+    }
+  ],
+  "skillDetails": [],
+  "soulBones": [],
+  "starUpgrades": [
+    {
+      "star": 4,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 5,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 6,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 7,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 8,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 9,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 10,
+      "isRedStar": true,
+      "description": ""
+    }
+  ]
+}
