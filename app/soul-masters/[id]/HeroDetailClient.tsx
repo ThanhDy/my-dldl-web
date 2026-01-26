@@ -535,9 +535,9 @@ const NvvCardModal = ({
                     <p className="text-xs text-slate-500 uppercase font-bold mb-1">
                       Nhiệm vụ Thí Luyện
                     </p>
-                    <p className="text-sm text-slate-200 leading-relaxed">
+                    <div className="text-blue-100 border-l-2 border-blue-500 pl-4 py-1 leading-relaxed bg-blue-900/10 rounded-r">
                       {card.detailedEffect.quest?.description}
-                    </p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex gap-3 items-start rounded-lg ">
@@ -545,9 +545,9 @@ const NvvCardModal = ({
                     <p className="text-xs text-slate-500 uppercase font-bold mb-1">
                       Phần thưởng Thí Luyện
                     </p>
-                    <p className="text-sm leading-relaxed">
+                    <div className="text-blue-100 border-l-2 border-blue-500 pl-4 py-1 leading-relaxed bg-blue-900/10 rounded-r">
                       {card.detailedEffect.quest?.buff}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -14,6 +14,7 @@ import {
   FaStar,
   FaLightbulb,
 } from "react-icons/fa";
+import BackToTop from "@/app/components/BackToTop";
 
 // --- CÁC HÀM KHỞI TẠO MẪU ---
 const getDefaultSkillType = (order: number) => {
@@ -180,6 +181,14 @@ export default function EditHeroPage() {
     fetchHeroData();
   }, [params.id]);
 
+  // Tự động ẩn thông báo (Toast effect)
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   // --- CÁC HÀM XỬ LÝ NHẬP LIỆU ---
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -201,6 +210,14 @@ export default function EditHeroPage() {
   const updateSkillYear = (index: number, yearKey: string, value: string) => {
     const newSkills = [...formData.skillDetails];
     newSkills[index].yearEffects[yearKey] = value;
+    setFormData({ ...formData, skillDetails: newSkills });
+  };
+
+  const updateSkillNote = (index: number, textValue: string) => {
+    const newSkills = [...formData.skillDetails];
+    newSkills[index].note = textValue
+      .split("\n")
+      .filter((line) => line.trim() !== "");
     setFormData({ ...formData, skillDetails: newSkills });
   };
 
@@ -228,13 +245,22 @@ export default function EditHeroPage() {
       id: `card-${Date.now()}`,
       name: "",
       type: "Thông Dụng",
+      image: "",
+      shortDescription: "",
       basicSkill: "",
-      detailedEffect: { effect: "" },
+      detailedEffect: {
+        condition: "",
+        effect: "",
+      },
+      upgradeEffect: {
+        condition: "",
+        effect: "",
+      },
     };
     setFormData({
       ...formData,
       nvvCardSystem: {
-        cards: [...(formData.nvvCardSystem?.cards || []), newCard],
+        cards: [newCard, ...(formData.nvvCardSystem?.cards || [])],
       },
     });
   };
@@ -242,6 +268,61 @@ export default function EditHeroPage() {
   const updateNvvCard = (index: number, field: string, value: any) => {
     const newCards = [...formData.nvvCardSystem.cards];
     newCards[index] = { ...newCards[index], [field]: value };
+    setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
+  };
+
+  const updateNvvCardIdAndImage = (index: number, value: string) => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    newCards[index] = {
+      ...newCards[index],
+      id: value,
+      image: `/images/ninh-vinh-vinh-sp/cards/${value}.webp`,
+    };
+    setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
+  };
+
+  const updateNvvCardDetail = (index: number, field: string, value: any) => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    if (!newCards[index].detailedEffect) newCards[index].detailedEffect = {};
+    newCards[index].detailedEffect[field] = value;
+    setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
+  };
+
+  const updateNvvCardQuest = (index: number, field: string, value: any) => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    if (!newCards[index].detailedEffect.quest) {
+      newCards[index].detailedEffect.quest = { description: "", buff: "" };
+    }
+    newCards[index].detailedEffect.quest[field] = value;
+    setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
+  };
+
+  const toggleNvvCardMode = (index: number, mode: "effect" | "quest") => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    if (!newCards[index].detailedEffect)
+      newCards[index].detailedEffect = { condition: "" };
+
+    if (mode === "effect") {
+      newCards[index].detailedEffect.effect =
+        newCards[index].detailedEffect.effect || "";
+      delete newCards[index].detailedEffect.quest;
+    } else {
+      newCards[index].detailedEffect.quest = newCards[index].detailedEffect
+        .quest || {
+        description: "",
+        buff: "",
+      };
+      delete newCards[index].detailedEffect.effect;
+    }
+    setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
+  };
+
+  const updateNvvCardUpgrade = (index: number, field: string, value: any) => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    if (!newCards[index].upgradeEffect) {
+      newCards[index].upgradeEffect = { condition: "", effect: "" };
+    }
+    newCards[index].upgradeEffect[field] = value;
     setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
   };
 
@@ -294,10 +375,27 @@ export default function EditHeroPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      const cleanData = { ...formData };
+
+      // 1. Tự động sinh ID cho skill nếu bị thiếu
+      cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
+        // Nếu skill chưa có ID hoặc ID rỗng, hãy tạo mới theo chuẩn
+        if (!skill.id) {
+          return {
+            ...skill,
+            id: `${cleanData.id}-s${skill._tempOrder}-${skill._tempBranch}`,
+            // Tự động tạo luôn link icon nếu chưa có (Optional)
+            iconUrl:
+              skill.iconUrl ||
+              `/images/${cleanData.id}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
+          };
+        }
+        return skill;
+      });
       const res = await fetch("/api/admin/update-hero", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(cleanData),
       });
       if (!res.ok) throw new Error("Lỗi cập nhật dữ liệu");
       setMessage("✅ Cập nhật thành công!");
@@ -343,7 +441,7 @@ export default function EditHeroPage() {
 
         {message && (
           <div
-            className={`p-4 mb-8 rounded-lg font-bold border animate-fadeIn ${message.includes("Lỗi") ? "bg-red-950/30 border-red-500 text-red-400" : "bg-green-950/30 border-green-500 text-green-400"}`}
+            className={`fixed bottom-5 right-5 z-50 px-6 py-4 rounded-xl font-bold border shadow-2xl backdrop-blur-md animate-fadeIn ${message.includes("Lỗi") ? "bg-red-950/90 border-red-500 text-red-400" : "bg-green-950/90 border-green-500 text-green-400"}`}
           >
             {message}
           </div>
@@ -609,7 +707,7 @@ export default function EditHeroPage() {
                   {formData.nvvCardSystem.cards.map(
                     (card: any, idx: number) => (
                       <div
-                        key={card.id}
+                        key={idx}
                         className="bg-slate-900 p-6 rounded-xl border border-slate-800 relative group shadow-lg hover:border-pink-500/30 transition"
                       >
                         <button
@@ -650,6 +748,41 @@ export default function EditHeroPage() {
                                 Cửu Thải Lưu Ly · Diệu
                               </option>
                             </select>
+                            <div className="w-full bg-slate-950 border border-slate-800 rounded flex items-center px-2 focus-within:border-pink-500 transition-colors">
+                              <span className="text-[10px] text-slate-500 select-none">
+                                .../cards/
+                              </span>
+                              <input
+                                value={
+                                  card.image
+                                    ? card.image
+                                        .split("/")
+                                        .pop()
+                                        ?.replace(".webp", "")
+                                    : ""
+                                }
+                                onChange={(e) =>
+                                  updateNvvCardIdAndImage(idx, e.target.value)
+                                }
+                                placeholder="ID ảnh"
+                                className="flex-1 bg-transparent p-2.5 text-xs text-slate-300 outline-none font-mono"
+                              />
+                              <span className="text-[10px] text-slate-500 select-none">
+                                .webp
+                              </span>
+                            </div>
+                            <textarea
+                              value={card.shortDescription || ""}
+                              onChange={(e) =>
+                                updateNvvCard(
+                                  idx,
+                                  "shortDescription",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Mô tả ngắn..."
+                              className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-xs h-20 outline-none focus:border-pink-500"
+                            />
                           </div>
                           <div className="space-y-4">
                             <textarea
@@ -660,23 +793,124 @@ export default function EditHeroPage() {
                               placeholder="Kỹ năng cơ bản..."
                               className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-xs h-16 outline-none focus:border-pink-500"
                             />
-                            <textarea
-                              value={card.detailedEffect?.effect}
-                              onChange={(e) => {
-                                const newCards = [
-                                  ...formData.nvvCardSystem.cards,
-                                ];
-                                newCards[idx].detailedEffect = {
-                                  effect: e.target.value,
-                                };
-                                setFormData({
-                                  ...formData,
-                                  nvvCardSystem: { cards: newCards },
-                                });
-                              }}
-                              placeholder="Hiệu ứng chi tiết..."
-                              className="w-full bg-slate-950 border border-slate-800 p-2.5 rounded text-xs h-16 outline-none focus:border-blue-500"
-                            />
+
+                            {/* DETAILED EFFECT */}
+                            <div className="bg-slate-950/50 p-3 rounded border border-slate-800 space-y-2">
+                              <label className="text-[10px] font-bold text-slate-500 uppercase">
+                                Hiệu ứng chi tiết
+                              </label>
+                              <input
+                                value={card.detailedEffect?.condition || ""}
+                                onChange={(e) =>
+                                  updateNvvCardDetail(
+                                    idx,
+                                    "condition",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Điều kiện kích hoạt..."
+                                className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs outline-none focus:border-blue-500"
+                              />
+
+                              <div className="flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    toggleNvvCardMode(idx, "effect")
+                                  }
+                                  className={`text-[10px] px-2 py-1 rounded border ${!card.detailedEffect?.quest ? "bg-blue-600 border-blue-500 text-white" : "bg-slate-800 border-slate-700 text-slate-400"}`}
+                                >
+                                  Hiệu ứng
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    toggleNvvCardMode(idx, "quest")
+                                  }
+                                  className={`text-[10px] px-2 py-1 rounded border ${card.detailedEffect?.quest ? "bg-blue-600 border-blue-500 text-white" : "bg-slate-800 border-slate-700 text-slate-400"}`}
+                                >
+                                  Nhiệm vụ
+                                </button>
+                              </div>
+
+                              {!card.detailedEffect?.quest ? (
+                                <textarea
+                                  value={card.detailedEffect?.effect || ""}
+                                  onChange={(e) =>
+                                    updateNvvCardDetail(
+                                      idx,
+                                      "effect",
+                                      e.target.value,
+                                    )
+                                  }
+                                  placeholder="Mô tả hiệu ứng..."
+                                  className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs h-20 outline-none focus:border-blue-500"
+                                />
+                              ) : (
+                                <div className="space-y-2">
+                                  <textarea
+                                    value={
+                                      card.detailedEffect?.quest?.description ||
+                                      ""
+                                    }
+                                    onChange={(e) =>
+                                      updateNvvCardQuest(
+                                        idx,
+                                        "description",
+                                        e.target.value,
+                                      )
+                                    }
+                                    placeholder="Mô tả nhiệm vụ..."
+                                    className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs h-14 outline-none focus:border-blue-500"
+                                  />
+                                  <textarea
+                                    value={
+                                      card.detailedEffect?.quest?.buff || ""
+                                    }
+                                    onChange={(e) =>
+                                      updateNvvCardQuest(
+                                        idx,
+                                        "buff",
+                                        e.target.value,
+                                      )
+                                    }
+                                    placeholder="Buff nhận được..."
+                                    className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs h-14 outline-none focus:border-blue-500"
+                                  />
+                                </div>
+                              )}
+                            </div>
+
+                            {/* UPGRADE EFFECT */}
+                            <div className="bg-slate-950/50 p-3 rounded border border-slate-800 space-y-2">
+                              <label className="text-[10px] font-bold text-slate-500 uppercase">
+                                Hiệu ứng nâng cấp (Optional)
+                              </label>
+                              <input
+                                value={card.upgradeEffect?.condition || ""}
+                                onChange={(e) =>
+                                  updateNvvCardUpgrade(
+                                    idx,
+                                    "condition",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Điều kiện nâng cấp..."
+                                className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs outline-none focus:border-yellow-500"
+                              />
+                              <textarea
+                                value={card.upgradeEffect?.effect || ""}
+                                onChange={(e) =>
+                                  updateNvvCardUpgrade(
+                                    idx,
+                                    "effect",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Hiệu ứng sau nâng cấp..."
+                                className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs h-16 outline-none focus:border-yellow-500"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -931,6 +1165,15 @@ export default function EditHeroPage() {
                     placeholder="Tên kỹ năng"
                     className="w-full bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
                   />
+                  <input
+                    type="text"
+                    value={skill.soulRingType}
+                    onChange={(e) =>
+                      updateSkill(idx, "soulRingType", e.target.value)
+                    }
+                    className="flex-1 bg-transparent border-b border-slate-700 focus:border-slate-400 py-1.5 text-sm text-slate-300 outline-none transition"
+                    placeholder="VD: Khống chế, Hộ thuẫn..."
+                  />
                   <textarea
                     value={skill.description}
                     onChange={(e) =>
@@ -957,12 +1200,23 @@ export default function EditHeroPage() {
                       </div>
                     ))}
                   </div>
+                  <div>
+                    <textarea
+                      defaultValue={
+                        Array.isArray(skill.note) ? skill.note.join("\n") : ""
+                      }
+                      onBlur={(e) => updateSkillNote(idx, e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono h-20 focus:border-slate-500 outline-none"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
+
+      <BackToTop />
     </div>
   );
 }

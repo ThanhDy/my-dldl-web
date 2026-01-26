@@ -123,7 +123,7 @@ export default function SoulMastersPage() {
                   <p className="text-[8px] font-bold text-yellow-500/80 uppercase tracking-[0.2em] mb-0.5 truncate italic">
                     {hero.title}
                   </p>
-                  <h3 className="text-sm font-black text-white group-hover:text-yellow-400 transition-colors truncate tracking-tight uppercase">
+                  <h3 className="text-sm font-black text-white  truncate tracking-tight uppercase">
                     {hero.name}
                   </h3>
                   <div className="mt-1.5 flex gap-1">
