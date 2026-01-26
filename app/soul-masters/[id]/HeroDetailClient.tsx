@@ -34,45 +34,52 @@ const YEAR_LABELS: Record<string, string> = {
 
 const YEAR_ORDER = ["y1k", "y10k", "y25k", "y50k", "y100k"];
 
+// --- THIÊN PHÚ (DÀNH RIÊNG CHO TRẦN TÂM) ---
+interface TalentNode {
+  x: number;
+  y: number;
+  l: string;
+  special?: boolean;
+}
+
+const RED_BRANCH: TalentNode[] = [
+  { x: 8, y: 20, l: "0/19" },
+  { x: 15, y: 10, l: "0/4" },
+  { x: 25, y: 25, l: "0/4" },
+  { x: 35, y: 12, l: "0/4" },
+  { x: 45, y: 28, l: "0/4" },
+  { x: 55, y: 15, l: "0/4" },
+  { x: 65, y: 30, l: "0/4" },
+  { x: 78, y: 25, l: "0/4" },
+  { x: 92, y: 50, l: "0/4", special: true },
+];
+
+const YELLOW_BRANCH: TalentNode[] = [
+  { x: 8, y: 50, l: "0/15" },
+  { x: 18, y: 40, l: "0/4" },
+  { x: 28, y: 55, l: "0/4" },
+  { x: 38, y: 45, l: "0/4" },
+  { x: 48, y: 60, l: "0/4" },
+  { x: 58, y: 50, l: "0/4" },
+  { x: 68, y: 65, l: "0/4" },
+  { x: 78, y: 75, l: "0/4" },
+  { x: 92, y: 50, l: "0/4", special: true },
+];
+
+const BLUE_BRANCH: TalentNode[] = [
+  { x: 8, y: 85, l: "0/11" },
+  { x: 20, y: 75, l: "0/9" },
+  { x: 32, y: 90, l: "0/4" },
+  { x: 44, y: 80, l: "0/4" },
+  { x: 56, y: 92, l: "0/4" },
+];
+
 const renderStarBadge = (count: number, colorClass: string) => (
   <span className={`inline-flex items-center gap-0.5 mx-1 ${colorClass}`}>
     <span className="text-xl font-extrabold leading-none">{count}</span>
     <FaStar size={14} className="mb-0.5" />
   </span>
 );
-
-const formatText = (text: string, defaultColorClass: string) => {
-  if (!text) return null;
-  const parts = text.split(/(\[.*?\|.*?\])/g);
-  return parts.map((part, i) => {
-    if (part.startsWith("[") && part.endsWith("]")) {
-      const [color, label] = part.slice(1, -1).split("|");
-      const colorMap: Record<string, string> = {
-        red: "text-red-500",
-        yellow: "text-yellow-400",
-        blue: "text-blue-400",
-        green: "text-green-400",
-        purple: "text-purple-400",
-        orange: "text-orange-500",
-        cyan: "text-cyan-400",
-        white: "text-white",
-      };
-      return (
-        <span
-          key={i}
-          className={`font-bold ${colorMap[color] || defaultColorClass}`}
-        >
-          {label}
-        </span>
-      );
-    }
-    return (
-      <span key={i} className={defaultColorClass}>
-        {part}
-      </span>
-    );
-  });
-};
 
 // --- KỸ NĂNG ---
 function SkillModal({
@@ -291,8 +298,8 @@ function SoulBoneModal({
 }) {
   if (!bone) return null;
 
-  const isMutated = !!bone.mutation;
-  const isUpgraded = !!bone.upgrade;
+  const isMutated = !!bone.mutation?.name;
+  const isUpgraded = !!bone.upgrade?.name;
   const themeColor = isMutated ? "red" : "yellow";
 
   let displayIcon = bone.iconUrl;
@@ -598,20 +605,41 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
       </div>
     );
 
-  const isSpPlus = hero.rarity === "SP" || hero.rarity === "SP+";
-  const isAmKhi = hero.type === "Ám Khí";
-  // KHÓA CHẶT ĐIỀU KIỆN VINH VINH
-  const isVinhVinh = hero.name?.toLowerCase().includes("vinh vinh");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const [activeTab, setActiveTab] = useState<string>(
-    isAmKhi ? "stars" : isSpPlus ? "skills" : "build",
-  );
+  const [activeTab, setActiveTab] = useState<string>("");
   const [selectedSkill, setSelectedSkill] = useState<SkillDetail | null>(null);
   const [selectedBone, setSelectedBone] = useState<SoulBone | null>(null);
   const [selectedCard, setSelectedCard] = useState<NvvCard | null>(null);
   const [activeFilter, setActiveFilter] = useState<"Tất Cả" | NvvCardType>(
     "Tất Cả",
   );
+
+  const isVinhVinh = hero?.name?.toLowerCase().includes("vinh vinh");
+  const isTranTam = hero?.id === "cuc-han---kiem-dao-tran-tam";
+  const isAmKhi = hero?.type === "Ám Khí";
+  const isRainbowRarity = hero?.rarity === "SP" || hero?.rarity === "SP+";
+  const isSsrPlus = hero?.rarity === "SSR+";
+
+  const hasSkillGrid = isVinhVinh || isTranTam;
+
+  useEffect(() => {
+    if (mounted && hero) {
+      if (isAmKhi) setActiveTab("stars");
+      else if (hasSkillGrid) setActiveTab("skills");
+      else setActiveTab("build");
+    }
+  }, [mounted, hero, isAmKhi, hasSkillGrid]);
+
+  if (!mounted || !hero)
+    return (
+      <div className="p-10 text-white text-center min-h-screen bg-slate-950 font-bold uppercase tracking-widest">
+        ĐANG TẢI...
+      </div>
+    );
 
   const getSkillDetail = (
     heroData: any,
@@ -670,7 +698,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
         <div className="lg:col-span-1 space-y-6">
           <div
             className={`rounded-2xl overflow-hidden relative shadow-2xl aspect-[3/4] w-full ${
-              isSpPlus
+              isRainbowRarity
                 ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 p-[4px]" // Bỏ border-transparent, chỉ dùng padding làm viền
                 : hero.rarity === "SSR+"
                   ? "border-4 border-red-600 shadow-red-600/30" // Thêm border-4 vào đây
@@ -681,11 +709,11 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
               <div className="absolute top-4 left-4 z-10">
                 <span
                   className={`px-3 py-1 rounded font-bold text-sm ${
-                    isSpPlus
-                      ? "bg-gradient-to-b from-pink-400 via-purple-400 to-cyan-400 text-white border border-yellow-200/50"
-                      : hero.rarity === "SSR+"
-                        ? "bg-red-600 text-white border border-red-400"
-                        : "bg-yellow-500 text-black border-yellow-600"
+                    isRainbowRarity
+                      ? "border-transparent bg-gradient-to-tr from-rose-400 via-fuchsia-500 via-indigo-500 to-cyan-400 p-[4px] shadow-fuchsia-500/20"
+                      : isSsrPlus
+                        ? "border-red-600 shadow-red-600/30"
+                        : "border-yellow-500 shadow-yellow-500/20"
                   }`}
                 >
                   {hero.rarity}
@@ -703,7 +731,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                 <p className="text-yellow-400 font-medium text-sm tracking-wider mb-1">
                   {hero.title}
                 </p>
-                <h1 className="text-2xl font-black uppercase tracking-tight">
+                <h1 className="text-2xl font-black uppercase tracking-tight italic">
                   {hero.name}
                 </h1>
                 <div className="flex gap-2 mt-2">
@@ -727,89 +755,56 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                 >
                   Nâng Sao
                 </button>
-                <button
-                  onClick={() => setActiveTab("bones")}
-                  className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones" ? "border-yellow-500 text-yellow-400" : "border-transparent text-slate-500"}`}
-                >
-                  Hồn Cốt
-                </button>
               </>
             ) : (
               <>
-                <button
-                  onClick={() => setActiveTab(isSpPlus ? "skills" : "build")}
-                  className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "skills" || activeTab === "build" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500"}`}
-                >
-                  {isSpPlus ? "Kỹ Năng" : "Hồn Hoàn"}
-                </button>
-                {/* CHỈ HIỆN THẺ BÀI CHO VINH VINH */}
-                {isVinhVinh && hero.nvvCardSystem && (
+                {!hasSkillGrid && (
                   <button
-                    onClick={() => setActiveTab("nvv_cards")}
-                    className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "nvv_cards" ? "border-pink-500 text-pink-400" : "border-transparent text-slate-500"}`}
+                    onClick={() => setActiveTab("build")}
+                    className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "build" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500"}`}
                   >
-                    Thẻ Bài
+                    Hồn Hoàn
                   </button>
                 )}
-                <button
-                  onClick={() => setActiveTab("bones")}
-                  className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones" ? "border-yellow-500 text-yellow-400" : "border-transparent text-slate-500"}`}
-                >
-                  Hồn Cốt
-                </button>
+                {hasSkillGrid && (
+                  <button
+                    onClick={() => setActiveTab("skills")}
+                    className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "skills" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500"}`}
+                  >
+                    Kỹ Năng
+                  </button>
+                )}
               </>
             )}
+            {isTranTam && (
+              <button
+                onClick={() => setActiveTab("thien_phu")}
+                className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "thien_phu" ? "border-cyan-500 text-cyan-400" : "border-transparent text-slate-500"}`}
+              >
+                Thiên Phú
+              </button>
+            )}
+            {isVinhVinh && hero.nvvCardSystem && (
+              <button
+                onClick={() => setActiveTab("nvv_cards")}
+                className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "nvv_cards" ? "border-pink-500 text-pink-400" : "border-transparent text-slate-500"}`}
+              >
+                Thẻ Bài
+              </button>
+            )}
+            <button
+              onClick={() => setActiveTab("bones")}
+              className={`pb-3 px-4 font-bold text-sm transition border-b-2 whitespace-nowrap ${activeTab === "bones" ? "border-yellow-500 text-yellow-400" : "border-transparent text-slate-500"}`}
+            >
+              Hồn Cốt
+            </button>
           </div>
 
           <div className="mt-4">
             {/* NÂNG SAO & HIỆU ỨNG MẶC ĐỊNH */}
-            {activeTab === "stars" && isAmKhi && (
-              <div className="space-y-6 animate-fadeIn">
-                {/* HIỆU ỨNG MẶC ĐỊNH */}
-                {hero.amKhiNote && (
-                  <div className="bg-red-950/20 border border-red-900/50 p-5 rounded-2xl flex gap-4 items-start shadow-inner">
-                    <div className="p-2 bg-red-600/20 rounded-lg text-red-500 shrink-0 border border-red-600/30">
-                      <FaInfoCircle size={20} />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-red-400 font-black text-xs uppercase tracking-widest border-b border-red-900/50 pb-1 mb-2">
-                        Hiệu ứng mặc định
-                      </h4>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
-                        {hero.amKhiNote}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* DANH SÁCH NÂNG SAO */}
-                <div className="space-y-4">
-                  {hero.starUpgrades?.map((up: any, i: number) => (
-                    <div
-                      key={i}
-                      className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800 flex gap-5 items-start hover:border-red-500/30 transition-all duration-300"
-                    >
-                      <div
-                        className={`w-12 h-12 shrink-0 rounded-full border-2 flex flex-col items-center justify-center font-bold ${up.isRedStar ? "border-red-500 text-red-500 bg-red-950/20 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "border-yellow-500 text-yellow-500 bg-yellow-950/20 shadow-[0_0_10px_rgba(234,179,8,0.2)]"}`}
-                      >
-                        <span className="text-xl leading-none">
-                          {up.star > 5 ? up.star - 5 : up.star}
-                        </span>
-                        <FaStar size={10} />
-                      </div>
-                      <div className="text-slate-300 text-sm leading-relaxed pt-1 whitespace-pre-wrap">
-                        {up.description}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* BUILD PVE/PVP */}
-            {!isAmKhi && (activeTab === "build" || activeTab === "skills") && (
-              <div className="space-y-6 animate-fadeIn mb-10">
-                {hero.builds?.map((build: any, index: number) => {
+            {activeTab === "build" && !hasSkillGrid && !isAmKhi && (
+              <div className="space-y-4 animate-fadeIn">
+                {hero.builds?.map((build: any, idx: number) => {
                   const codes = build.title.match(/\d{4}/)?.[0].split("") || [
                     "1",
                     "1",
@@ -818,45 +813,40 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                   ];
                   return (
                     <div
-                      key={index}
-                      className="bg-slate-900/40 rounded-2xl p-6 border border-slate-800 shadow-xl"
+                      key={idx}
+                      className="bg-slate-900/40 rounded-2xl p-6 border border-slate-800/50 shadow-lg"
                     >
-                      <h3 className="text-lg font-bold text-blue-400 mb-6 flex items-center gap-3">
-                        <span className="bg-blue-500/20 px-3 py-1 rounded-lg border border-blue-500/30 font-mono tracking-widest">
-                          {build.title}
-                        </span>
-                      </h3>
-                      <div className="flex justify-around items-center gap-4">
+                      <h4 className="text-[14px] font-black uppercase text-blue-500 tracking-[0.2em] mb-4">
+                        {build.title}
+                      </h4>
+                      <div className="flex gap-4">
                         {codes.map((num: string, i: number) => {
-                          const skillDetail = getSkillDetail(hero, i, num);
+                          const skill = getSkillDetail(hero, i, num);
                           return (
                             <div
                               key={i}
-                              className="flex flex-col items-center gap-3 group cursor-pointer"
-                              onClick={() =>
-                                skillDetail && setSelectedSkill(skillDetail)
-                              }
+                              className="flex flex-col items-center gap-3 cursor-pointer group"
+                              onClick={() => skill && setSelectedSkill(skill)}
                             >
                               <div
-                                className={`w-16 h-16 rounded-full border-2 flex items-center justify-center overflow-hidden transition-all group-hover:scale-110 ${num === "1" ? "border-green-500 bg-green-950/20" : "border-red-500 bg-red-950/20"}`}
+                                className={`w-16 h-16 rounded-full border-2 p-0.5 transition-transform group-hover:scale-110 ${num === "1" ? "border-green-600 bg-green-950/20" : "border-red-600 bg-red-950/20"}`}
                               >
-                                {skillDetail?.iconUrl ? (
-                                  <div className="relative w-full h-full">
+                                {skill?.iconUrl ? (
+                                  <div className="w-full h-full relative rounded-full overflow-hidden">
                                     <Image
-                                      src={skillDetail.iconUrl}
+                                      src={skill.iconUrl}
                                       alt=""
                                       fill
                                       className="object-cover"
-                                      sizes="64px"
                                     />
                                   </div>
                                 ) : (
-                                  <div className="text-xl font-black">
+                                  <span className="text-xs font-bold flex items-center justify-center h-full bg-slate-800 rounded-full">
                                     {num}
-                                  </div>
+                                  </span>
                                 )}
                               </div>
-                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+                              <span className="text-xs font-bold text-slate-500 uppercase">
                                 Skill {i + 1}
                               </span>
                             </div>
@@ -869,21 +859,148 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
               </div>
             )}
 
+            {/* KỸ NĂNG CHI TIẾT */}
+            {activeTab === "skills" && hasSkillGrid && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fadeIn">
+                {hero.skillDetails?.map((skill: any, index: number) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-800 hover:border-blue-500 transition cursor-pointer"
+                    onClick={() => setSelectedSkill(skill)}
+                  >
+                    <div className="w-16 h-16 rounded-full border-2 border-blue-500/30 relative overflow-hidden shadow-md">
+                      {skill.iconUrl ? (
+                        <Image
+                          src={skill.iconUrl}
+                          alt=""
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-slate-800 text-xl font-bold">
+                          {index + 1}
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-[10px] font-bold text-center text-slate-200 truncate w-full px-1">
+                      {skill.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* THIÊN PHÚ TRẦN TÂM */}
+            {activeTab === "thien_phu" && isTranTam && (
+              <div className="relative w-full aspect-[16/9] bg-slate-900/40 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden animate-fadeIn">
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient
+                      id="rainbowGradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop offset="0%" stopColor="#f43f5e" />
+                      <stop offset="50%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="#06b6d4" />
+                    </linearGradient>
+                  </defs>
+                  {[RED_BRANCH, YELLOW_BRANCH, BLUE_BRANCH].map(
+                    (branch, bIdx) =>
+                      branch.map((node, i) => {
+                        if (i === branch.length - 1) return null;
+                        const next = branch[i + 1];
+                        const color = next.special
+                          ? "url(#rainbowGradient)"
+                          : bIdx === 0
+                            ? "#ef4444"
+                            : bIdx === 1
+                              ? "#eab308"
+                              : "#3b82f6";
+                        return (
+                          <line
+                            key={`${bIdx}-${i}`}
+                            x1={node.x}
+                            y1={node.y}
+                            x2={next.x}
+                            y2={next.y}
+                            stroke={color}
+                            strokeWidth={next.special ? "0.8" : "0.4"}
+                            strokeDasharray={next.special ? "none" : "1 1"}
+                            opacity={next.special ? "0.8" : "0.4"}
+                          />
+                        );
+                      }),
+                  )}
+                </svg>
+                {/* Vòng tròn cuối thiên phú */}
+                <div className="absolute top-[50%] left-[92%] -translate-x-1/2 -translate-y-1/2 w-[35%] aspect-square border-2 border-double border-white/5 rounded-full flex items-center justify-center pointer-events-none">
+                  <div className="w-[80%] aspect-square border border-dashed border-white/10 rounded-full animate-[spin_30s_linear_infinite]" />
+                </div>
+                {[RED_BRANCH, YELLOW_BRANCH, BLUE_BRANCH].map((branch, bIdx) =>
+                  branch.map((node, i) => (
+                    <div
+                      key={`${bIdx}-${i}`}
+                      className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+                      style={{ left: `${node.x}%`, top: `${node.y}%` }}
+                    >
+                      <div
+                        className={`w-6 h-6 md:w-7 md:h-7 rounded-full border-2 flex items-center justify-center bg-slate-900 transition-all group-hover:scale-125 ${node.special ? "rainbow-node-circle scale-110 shadow-[0_0_20px_rgba(255,255,255,0.4)]" : ""}`}
+                        style={{
+                          borderColor: node.special
+                            ? "transparent"
+                            : bIdx === 0
+                              ? "#ef4444"
+                              : bIdx === 1
+                                ? "#eab308"
+                                : "#3b82f6",
+                        }}
+                      >
+                        <div
+                          className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${node.special ? "animate-pulse bg-white" : "opacity-40"}`}
+                          style={{
+                            backgroundColor: node.special
+                              ? undefined
+                              : bIdx === 0
+                                ? "#ef4444"
+                                : bIdx === 1
+                                  ? "#eab308"
+                                  : "#3b82f6",
+                          }}
+                        />
+                      </div>
+                      <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[6px] md:text-[8px] font-bold text-slate-500 uppercase whitespace-nowrap">
+                        {node.l}
+                      </div>
+                    </div>
+                  )),
+                )}
+              </div>
+            )}
+
             {/* THẺ BÀI VINH VINH */}
             {activeTab === "nvv_cards" && isVinhVinh && hero.nvvCardSystem && (
               <div className="space-y-6 animate-fadeIn">
-                <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
-                  {filters.map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setActiveFilter(filter)}
-                      className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap border transition-all ${activeFilter === filter ? "bg-slate-700 text-white border-slate-500" : "bg-slate-800 text-slate-400 border-slate-700 hover:text-white"}`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
+                <div className="pb-4 overflow-x-auto custom-scrollbar-visible">
+                  <div className="flex gap-2 min-w-max pr-4">
+                    {filters.map((f) => (
+                      <button
+                        key={f}
+                        onClick={() => setActiveFilter(f)}
+                        className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all ${activeFilter === f ? "bg-pink-600 text-white border-pink-500" : "bg-slate-800 text-slate-400 border-slate-700"}`}
+                      >
+                        {f}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {filteredCards?.map((card: any) => (
                     <div
                       key={card.id}
@@ -915,71 +1032,66 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
             )}
 
             {/* KỸ NĂNG CHI TIẾT (SP+) */}
-            {activeTab === "skills" && isSpPlus && !isAmKhi && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fadeIn mt-8 pt-8 border-t border-slate-800">
-                <div className="col-span-full mb-4 flex items-center gap-2">
-                  <span className="w-1.5 h-5 bg-pink-500 rounded-full"></span>
-                  <h2 className="text-lg font-bold text-slate-100 uppercase">
-                    Tất cả kỹ năng chi tiết
-                  </h2>
-                </div>
-                {hero.skillDetails?.map((skill: any, index: number) => (
+            {activeTab === "bones" && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 animate-fadeIn">
+                {hero.soulBones?.map((bone: any, i: number) => (
                   <div
-                    key={index}
-                    className="flex flex-col items-center gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-800 hover:border-pink-500 transition cursor-pointer"
-                    onClick={() => setSelectedSkill(skill)}
+                    key={i}
+                    onClick={() => setSelectedBone(bone)}
+                    className="bg-slate-900/40 p-4 rounded-xl border border-slate-800 flex items-center gap-4 cursor-pointer hover:border-yellow-600 transition-all group shadow-md"
                   >
-                    <div className="w-16 h-16 rounded-full border-2 border-pink-500/30 relative overflow-hidden shadow-lg shrink-0">
-                      {skill.iconUrl ? (
+                    <div
+                      className={`w-14 h-14 rounded bg-black/40 border flex items-center justify-center shrink-0 ${bone.mutation?.name ? "border-red-600/30" : "border-yellow-600/30"}`}
+                    >
+                      {bone.iconUrl ? (
                         <Image
-                          src={skill.iconUrl}
-                          alt={skill.name}
-                          fill
+                          src={bone.iconUrl}
+                          alt=""
+                          width={56}
+                          height={56}
                           className="object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-800 text-xl font-bold">
-                          {index + 1}
-                        </div>
+                        <FaBone className="text-slate-700 text-xl" />
                       )}
                     </div>
-                    <p className="text-xs font-bold text-center text-slate-200 truncate w-full">
-                      {skill.name}
-                    </p>
+                    <div className="overflow-hidden">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase truncate">
+                        {bone.position}
+                      </p>
+                      <h4
+                        className={`text-xs font-bold truncate transition-colors ${bone.mutation?.name ? "text-red-400 group-hover:text-red-500" : "text-slate-200 group-hover:text-yellow-500"}`}
+                      >
+                        {bone.name}
+                      </h4>
+                    </div>
                   </div>
                 ))}
               </div>
             )}
 
             {/* HỒN CỐT */}
-            {activeTab === "bones" && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 animate-fadeIn">
-                {hero.soulBones?.map((bone: any, index: number) => (
+            {activeTab === "stars" && isAmKhi && (
+              <div className="space-y-4 animate-fadeIn">
+                {hero.amKhiNote && (
+                  <div className="bg-red-950/20 border border-red-900/50 p-4 rounded-xl flex gap-3 text-xs italic text-red-200 shadow-inner">
+                    <FaInfoCircle className="shrink-0 mt-0.5" />{" "}
+                    <p>{hero.amKhiNote}</p>
+                  </div>
+                )}
+                {hero.starUpgrades?.map((up: any, i: number) => (
                   <div
-                    key={index}
-                    onClick={() => setSelectedBone(bone)}
-                    className="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col items-center gap-3 cursor-pointer hover:border-yellow-500 transition group relative"
+                    key={i}
+                    className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex gap-4 items-start shadow-lg hover:border-red-500/30 transition-all"
                   >
-                    <div className="w-16 h-16 rounded-full bg-slate-950 border-2 border-yellow-600 flex items-center justify-center text-2xl text-yellow-600 relative overflow-hidden shrink-0">
-                      {bone.iconUrl ? (
-                        <Image
-                          src={bone.iconUrl}
-                          alt=""
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <FaBone />
-                      )}
+                    <div
+                      className={`px-2 py-1 rounded border font-bold text-xs flex items-center gap-1 shrink-0 ${up.isRedStar ? "border-red-500 text-red-500 bg-red-950/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "border-yellow-500 text-yellow-500 bg-yellow-950/30 shadow-[0_0_10px_rgba(234,179,8,0.2)]"}`}
+                    >
+                      {up.star > 5 ? up.star - 5 : up.star} <FaStar size={8} />
                     </div>
-                    <div className="text-center w-full">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
-                        {bone.position}
-                      </span>
-                      <h4 className="text-sm font-bold text-yellow-100 group-hover:text-yellow-400 transition line-clamp-1">
-                        {bone.name}
-                      </h4>
-                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed pt-0.5 whitespace-pre-wrap">
+                      {up.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -990,6 +1102,35 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
 
       {/* Back to Top Button */}
       <BackToTop />
+
+      <style jsx global>{`
+        .rainbow-node-circle {
+          background: linear-gradient(
+            45deg,
+            #f43f5e,
+            #8b5cf6,
+            #06b6d4
+          ) !important;
+          border-radius: 9999px !important;
+          border: 2px solid rgba(255, 255, 255, 0.8) !important;
+          animation: rainbowRotate 3s linear infinite;
+        }
+        @keyframes rainbowRotate {
+          0% {
+            filter: hue-rotate(0deg);
+          }
+          100% {
+            filter: hue-rotate(360deg);
+          }
+        }
+        .custom-scrollbar-visible::-webkit-scrollbar {
+          height: 6px;
+        }
+        .custom-scrollbar-visible::-webkit-scrollbar-thumb {
+          background: #db2777;
+          border-radius: 10px;
+        }
+      `}</style>
     </div>
   );
 }

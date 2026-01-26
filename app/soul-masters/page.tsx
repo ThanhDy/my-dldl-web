@@ -11,12 +11,17 @@ export default function SoulMastersPage() {
   const [heroes, setHeroes] = useState<SoulMaster[]>([]);
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("Tất Cả");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     fetch("/api/heroes")
       .then((res) => res.json())
-      .then((data) => setHeroes(data));
+      .then((data) => setHeroes(data))
+      .catch((err) => console.error("Lỗi tải dữ liệu:", err));
   }, []);
+
+  if (!mounted) return <div className="min-h-screen bg-[#020617]" />;
 
   const types = [
     "Tất Cả",
@@ -69,7 +74,7 @@ export default function SoulMastersPage() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="bg-slate-900/80 border border-slate-800 rounded-lg py-2 px-3 text-xs font-bold text-slate-400 outline-none cursor-pointer hover:border-slate-700 transition-all"
+              className="bg-slate-900/80 border border-slate-800 rounded-lg py-2 px-3 text-xs font-bold text-slate-400 outline-none cursor-pointer"
             >
               {types.map((t) => (
                 <option key={t} value={t}>
@@ -122,7 +127,7 @@ export default function SoulMastersPage() {
                     {hero.name}
                   </h3>
                   <div className="mt-1.5 flex gap-1">
-                    <span className="text-[8px] border border-white/10 px-1.5 py-0.5 rounded bg-black/40 text-slate-500 uppercase font-black tracking-tighter">
+                    <span className="text-[8px] border border-white/10 px-1.5 py-0.5 rounded bg-black/40 text-slate-500 uppercase font-black">
                       {hero.type}
                     </span>
                   </div>
@@ -144,6 +149,17 @@ export default function SoulMastersPage() {
 
       {/* Back to Top Button */}
       <BackToTop />
+
+      <style jsx global>{`
+        @keyframes sweep {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </div>
   );
 }

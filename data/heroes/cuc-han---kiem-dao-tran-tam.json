@@ -1,0 +1,55 @@
+{
+  "id": "cuc-han---kiem-dao-tran-tam",
+  "name": "Cực Hạn - Kiếm Đạo Trần Tâm",
+  "title": "",
+  "rarity": "SP+",
+  "type": "Cường Công",
+  "image": "/images/cuc-han---kiem-dao-tran-tam/avt.webp",
+  "builds": [
+    {
+      "title": ""
+    },
+    {
+      "title": ""
+    }
+  ],
+  "skillDetails": [],
+  "soulBones": [],
+  "starUpgrades": [
+    {
+      "star": 4,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 5,
+      "isRedStar": false,
+      "description": ""
+    },
+    {
+      "star": 6,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 7,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 8,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 9,
+      "isRedStar": true,
+      "description": ""
+    },
+    {
+      "star": 10,
+      "isRedStar": true,
+      "description": ""
+    }
+  ]
+}
