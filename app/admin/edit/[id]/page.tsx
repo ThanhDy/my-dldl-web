@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
+  FaArrowLeft,
   FaSave,
   FaImage,
   FaBone,
@@ -114,11 +116,12 @@ export default function EditHeroPage() {
       try {
         const heroId = params.id as string;
         if (!heroId) return;
-        const res = await fetch(`/api/heroes/${heroId}`);
+        const res = await fetch(`/api/soul-masters/${heroId}`);
         if (!res.ok)
           return setMessage(`❌ Không tìm thấy dữ liệu cho ID: "${heroId}"`);
 
-        const foundHero = await res.json();
+        const json = await res.json();
+        const foundHero = json.data;
 
         // Merge Skills
         const mergedSkills = INITIAL_SKILLS.map((emptySkill, index) => {
@@ -392,12 +395,14 @@ export default function EditHeroPage() {
         }
         return skill;
       });
-      const res = await fetch("/api/admin/update-hero", {
+      const res = await fetch(`/api/soul-masters/${params.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cleanData),
       });
-      if (!res.ok) throw new Error("Lỗi cập nhật dữ liệu");
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message || "Lỗi cập nhật dữ liệu");
       setMessage("✅ Cập nhật thành công!");
     } catch (err: any) {
       setMessage(`❌ Lỗi: ${err.message}`);
@@ -419,16 +424,21 @@ export default function EditHeroPage() {
   const isSpecialNoBuild = isVinhVinh || formData.rarity === "SP+";
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 p-6 md:p-8 pb-32 font-sans">
+    <div className="min-h-full bg-slate-950 text-slate-200 p-6 md:p-8 pb-32 font-sans">
       <div className="max-w-7xl mx-auto">
         <header className="flex justify-between items-center mb-8 sticky top-0 bg-slate-950/95 backdrop-blur z-20 py-4 border-b border-slate-800">
-          <div>
-            <h1 className="text-2xl font-bold text-blue-400 uppercase tracking-tight">
-              CHỈNH SỬA: {formData.name}
-            </h1>
-            <p className="text-xs text-slate-500 font-mono mt-1 tracking-widest uppercase">
-              ID: {formData.id}
-            </p>
+          <div className="flex items-center gap-4">
+            <Link href="/admin" className="text-slate-400 hover:text-white transition">
+              <FaArrowLeft size={20} />
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold text-blue-400 uppercase tracking-tight">
+                CHỈNH SỬA: {formData.name}
+              </h1>
+              <p className="text-xs text-slate-500 font-mono mt-1 tracking-widest uppercase">
+                ID: {formData.id}
+              </p>
+            </div>
           </div>
           <button
             onClick={handleSubmit}
@@ -471,6 +481,7 @@ export default function EditHeroPage() {
                   <option value="SP">SP</option>
                   <option value="SP+">SP+</option>
                   <option value="SSR+">SSR+</option>
+                  <option value="SSR">SSR</option>
                 </select>
                 <select
                   name="type"
@@ -480,6 +491,9 @@ export default function EditHeroPage() {
                 >
                   <option value="Cường Công">Cường Công</option>
                   <option value="Phụ Trợ">Phụ Trợ</option>
+                  <option value="Mẫn Công">Mẫn Công</option>
+                  <option value="Phòng Ngự">Phòng Ngự</option>
+                  <option value="Khống Chế">Khống Chế</option>
                   <option value="Ám Khí">Ám Khí</option>
                 </select>
               </div>
@@ -1159,21 +1173,23 @@ export default function EditHeroPage() {
                       {skill.type}
                     </span>
                   </div>
-                  <input
-                    value={skill.name}
-                    onChange={(e) => updateSkill(idx, "name", e.target.value)}
-                    placeholder="Tên kỹ năng"
-                    className="w-full bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
-                  />
-                  <input
-                    type="text"
-                    value={skill.soulRingType}
-                    onChange={(e) =>
-                      updateSkill(idx, "soulRingType", e.target.value)
-                    }
-                    className="flex-1 bg-transparent border-b border-slate-700 focus:border-slate-400 py-1.5 text-sm text-slate-300 outline-none transition"
-                    placeholder="VD: Khống chế, Hộ thuẫn..."
-                  />
+                  <div className="flex gap-4 items-end">
+                    <input
+                      value={skill.name}
+                      onChange={(e) => updateSkill(idx, "name", e.target.value)}
+                      placeholder="Tên kỹ năng"
+                      className="flex-1 bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
+                    />
+                    <input
+                      type="text"
+                      value={skill.soulRingType}
+                      onChange={(e) =>
+                        updateSkill(idx, "soulRingType", e.target.value)
+                      }
+                      className="w-1/3 bg-transparent border-b border-slate-700 focus:border-slate-400 py-2 text-sm text-slate-300 outline-none transition"
+                      placeholder="Loại (VD: Khống chế)"
+                    />
+                  </div>
                   <textarea
                     value={skill.description}
                     onChange={(e) =>

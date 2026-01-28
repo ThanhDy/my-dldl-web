@@ -5,7 +5,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 // Build Schema
 const BuildSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String, default: "" },
   },
   { _id: false },
 );
@@ -25,15 +25,15 @@ const SkillYearEffectSchema = new Schema(
 // Skill Detail Schema
 const SkillDetailSchema = new Schema(
   {
-    id: { type: String, required: true }, // {heroId}-s1-1
-    name: { type: String, required: true },
+    id: { type: String }, // {heroId}-s1-1
+    name: { type: String, default: "" },
     type: {
       type: String,
       enum: ["Chủ động", "Bị động", "Công thường"],
-      required: true,
+      default: "",
     },
-    soulRingType: { type: String, required: true }, // Ma Nhện / Giáp Thuẫn...
-    description: { type: String, required: true },
+    soulRingType: { type: String, default: "" }, // Ma Nhện / Giáp Thuẫn...
+    description: { type: String, default: "" },
     yearEffects: { type: SkillYearEffectSchema, default: {} },
     note: [String],
     iconUrl: String,
@@ -49,7 +49,7 @@ const SoulBoneSchema = new Schema(
       enum: ["Đầu", "Thân", "Tay Trái", "Tay Phải", "Chân Trái", "Chân Phải"],
       required: true,
     },
-    name: { type: String, required: true },
+    name: { type: String, default: "" },
     iconUrl: String,
     // Cốt thường
     standard: {
@@ -133,7 +133,7 @@ const SoulMasterSchema = new Schema(
     id: { type: String, required: true, unique: true },
 
     name: { type: String, required: true }, // Tên hiển thị
-    title: { type: String, required: true }, // Danh hiệu
+    title: { type: String }, // Danh hiệu
 
     rarity: {
       type: String,
@@ -156,7 +156,7 @@ const SoulMasterSchema = new Schema(
       required: true,
     },
 
-    image: { type: String, required: true }, // Ảnh đại diện lớn
+    image: { type: String }, // Ảnh đại diện lớn
 
     // Arrays of Sub-Schemas
     builds: [BuildSchema],
