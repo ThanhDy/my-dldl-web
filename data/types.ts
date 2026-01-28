@@ -13,7 +13,7 @@ export interface SkillYearEffect {
 export interface SkillDetail {
   id: string; // Quy ước: {heroId}-s{thứ_tự_skill}-{hệ_skill (1 hoặc 2)}
   name: string; // Tên kỹ năng (Phần 1)
-  type: "Chủ động" | "Bị động"; // Loại (Phần 1)
+  type: "Chủ động" | "Bị động" | "Công thường"; // Loại (Phần 1)
   soulRingType: string;
   description: string; // Mô tả chính (Phần 2)
   yearEffects: SkillYearEffect; // Các mốc kích hoạt (Phần 3)
@@ -105,7 +105,13 @@ export interface SoulMaster {
   title: string;
   rarity: "SP" | "SSR" | "SSR+" | "SP+";
   isSpPlus?: boolean; // Cờ nhận biết SP+
-  type: "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ" | "Phòng Ngự" | "Ám Khí";
+  type:
+    | "Cường Công"
+    | "Mẫn Công"
+    | "Khống Chế"
+    | "Phụ Trợ"
+    | "Phòng Ngự"
+    | "Ám Khí";
   image: string; // Link ảnh
   builds: Build[]; // Danh sách các cách build
   skillDetails: SkillDetail[];
@@ -117,5 +123,3 @@ export interface SoulMaster {
     cards: NvvCard[];
   };
 }
-
-

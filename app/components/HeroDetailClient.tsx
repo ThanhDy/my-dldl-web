@@ -4,13 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import {
-  SoulMaster,
-  SkillDetail,
-  SoulBone,
-  NvvCard,
-  NvvCardType,
-} from "@/data/types";
+import { SkillDetail, SoulBone, NvvCard, NvvCardType } from "@/data/types";
 import {
   FaArrowLeft,
   FaTimes,

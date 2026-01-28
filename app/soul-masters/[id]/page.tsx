@@ -1,24 +1,53 @@
-import { getHeroById } from "@/lib/hero-data";
-import HeroDetailClient from "./HeroDetailClient";
+export const revalidate = 60; // Web sẽ kiểm tra dữ liệu mới mỗi 60 giây
+export const dynamicParams = true;
+
+import dbConnect from "@/lib/mongodb";
+import SoulMaster from "@/models/SoulMaster";
+import HeroDetailClient from "@/app/components/HeroDetailClient"; // Component Client chúng ta đã sửa nãy giờ
 import { notFound } from "next/navigation";
 
-// Đây là Server Component (Không có "use client")
-export default async function HeroPage({
+async function getHeroById(id: string) {
+  await dbConnect();
+
+  // Dùng decodeURIComponent để xử lý trường hợp ID có ký tự đặc biệt hoặc khoảng trắng
+  const decodedId = decodeURIComponent(id);
+
+  console.log("Đang tìm tướng với ID:", decodedId); // LOG KIỂM TRA
+
+  const hero = await SoulMaster.findOne({ id: decodedId }).lean();
+
+  if (!hero) {
+    console.log("-> KHÔNG TÌM THẤY TRONG DB");
+    return null;
+  }
+
+  return JSON.parse(JSON.stringify(hero));
+}
+
+export async function generateStaticParams() {
+  await dbConnect();
+  // Chỉ lấy trường 'id' để tiết kiệm query
+  const heroes = await SoulMaster.find({}, { id: 1 }).lean();
+
+  return heroes.map((hero: any) => ({
+    id: hero.id,
+  }));
+}
+
+// Cập nhật kiểu dữ liệu cho props params
+export default async function HeroDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>; // Next.js 15: params là Promise
 }) {
-  // 1. Lấy ID (Next.js 15)
+  // BẮT BUỘC: Phải await params trước khi dùng
   const { id } = await params;
 
-  // 2. Đọc dữ liệu trực tiếp từ file (Nhanh hơn gọi API qua HTTP)
   const hero = await getHeroById(id);
 
-  // 3. Nếu không có thì trả về trang 404
   if (!hero) {
     return notFound();
   }
 
-  // 4. Truyền dữ liệu xuống Client Component để hiển thị
   return <HeroDetailClient hero={hero} />;
 }
