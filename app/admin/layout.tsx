@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation"; // Thêm useRouter
 import { FaUsers, FaBoxOpen, FaSignOutAlt } from "react-icons/fa";
 
 export default function AdminLayout({
@@ -11,7 +11,18 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname(); // Lấy đường dẫn hiện tại để active menu
+  const router = useRouter();
 
+  // Hàm xử lý đăng xuất
+  const handleLogout = async () => {
+    await fetch("/api/auth", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "logout" }),
+    });
+    router.push("/login"); // Đá về trang login
+    router.refresh();
+  };
   return (
     <div className="flex h-screen bg-slate-950 text-slate-200 font-sans overflow-hidden">
       {/* --- SIDE NAV CỐ ĐỊNH (BÊN TRÁI) --- */}
@@ -41,6 +52,16 @@ export default function AdminLayout({
             <FaBoxOpen className="text-lg" /> Vật Phẩm (Demo)
           </button>
         </nav>
+
+        <div className="p-4 border-t border-slate-800">
+          {/* NÚT ĐĂNG XUẤT */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-400 transition-colors text-sm font-bold"
+          >
+            <FaSignOutAlt /> Đăng Xuất
+          </button>
+        </div>
 
         <div className="p-4 border-t border-slate-800">
           <Link
