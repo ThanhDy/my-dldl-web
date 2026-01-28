@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // Đây là Server Component (Mặc định, không có "use client")
 import dbConnect from "@/lib/mongodb";
 import SoulMaster from "@/models/SoulMaster";
