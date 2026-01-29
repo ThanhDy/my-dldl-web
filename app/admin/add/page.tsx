@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   FaArrowLeft,
@@ -107,8 +107,23 @@ export default function AddHeroPage() {
   const [formData, setFormData] = useState<any>(INITIAL_HERO);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const [hasBranch2, setHasBranch2] = useState(true);
   const isAmKhi = formData.type === "Ám Khí";
+
+  useEffect(() => {
+    if (formData.rarity === "SP+") {
+      setHasBranch2(false);
+    } else {
+      setHasBranch2(true);
+    }
+  }, [formData.rarity]);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleNameBlur = () => {
     if (!formData.name) return;
@@ -207,6 +222,27 @@ export default function AddHeroPage() {
     setLoading(true);
     setMessage("");
     try {
+      const cleanData = { ...formData };
+
+      // --- LOGIC QUAN TRỌNG: CẮT BỎ NHÁNH 2 NẾU TẮT ---
+      if (!hasBranch2) {
+        cleanData.skillDetails = cleanData.skillDetails.slice(0, 4);
+      }
+
+      // Đảm bảo ID được sinh ra nếu chưa có
+      cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
+        if (!skill.id && cleanData.id) {
+          return {
+            ...skill,
+            id: `${cleanData.id}-s${skill._tempOrder}-${skill._tempBranch}`,
+            iconUrl:
+              skill.iconUrl ||
+              `/images/${cleanData.id}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
+          };
+        }
+        return skill;
+      });
+
       const res = await fetch("/api/soul-masters", {
         // Đổi đường dẫn về API chính
         method: "POST",
@@ -392,68 +428,89 @@ export default function AddHeroPage() {
               </div>
             ) : (
               <div className="space-y-6 animate-fadeIn">
-                <h2 className="text-xl font-bold text-slate-200 border-b border-slate-800 pb-2 uppercase">
-                  Chi Tiết Kỹ Năng
-                </h2>
-                {formData.skillDetails.map((skill: any, idx: number) => (
-                  <div
-                    key={idx}
-                    className="bg-slate-900 rounded-xl border border-slate-800 p-6 space-y-4"
-                  >
-                    <div className="flex justify-between">
-                      <span className="text-blue-400 font-bold uppercase">
-                        Skill {skill._tempOrder} (Nhánh {skill._tempBranch})
-                      </span>
-                    </div>
-                    <div className="flex gap-4 items-end">
+                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                  <h2 className="text-xl font-bold text-slate-200 uppercase">
+                    Chi Tiết Kỹ Năng
+                  </h2>
+
+                  {/* NÚT TOGGLE NHÁNH 2 (MỚI) */}
+                  <label className="flex items-center gap-3 cursor-pointer bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg hover:border-blue-500 transition">
+                    <span className="text-xs font-bold text-slate-400 uppercase">
+                      Nhánh 2
+                    </span>
+                    <div className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="text"
-                        value={skill.name}
-                        onChange={(e) =>
-                          updateSkill(idx, "name", e.target.value)
-                        }
-                        placeholder="Tên kỹ năng..."
-                        className="flex-1 bg-transparent border-b border-slate-700 py-1 font-bold outline-none"
+                        type="checkbox"
+                        checked={hasBranch2}
+                        onChange={(e) => setHasBranch2(e.target.checked)}
+                        className="sr-only peer"
                       />
-                      <input
-                        type="text"
-                        value={skill.soulRingType}
+                      <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                    </div>
+                  </label>
+                </div>
+                {formData.skillDetails.map((skill: any, idx: number) => {
+                  if (!hasBranch2 && idx >= 4) return null;
+                  return (
+                    <div
+                      key={idx}
+                      className="bg-slate-900 rounded-xl border border-slate-800 p-6 space-y-4"
+                    >
+                      <div className="flex justify-between">
+                        <span className="text-blue-400 font-bold uppercase">
+                          Skill {skill._tempOrder} (Nhánh {skill._tempBranch})
+                        </span>
+                      </div>
+                      <div className="flex gap-4 items-end">
+                        <input
+                          type="text"
+                          value={skill.name}
+                          onChange={(e) =>
+                            updateSkill(idx, "name", e.target.value)
+                          }
+                          placeholder="Tên kỹ năng..."
+                          className="flex-1 bg-transparent border-b border-slate-700 py-1 font-bold outline-none"
+                        />
+                        <input
+                          type="text"
+                          value={skill.soulRingType}
+                          onChange={(e) =>
+                            updateSkill(idx, "soulRingType", e.target.value)
+                          }
+                          placeholder="Loại (VD: Khống chế)"
+                          className="w-1/3 bg-transparent border-b border-slate-700 py-1 text-sm text-slate-400 outline-none"
+                        />
+                      </div>
+                      <textarea
+                        value={skill.description}
                         onChange={(e) =>
-                          updateSkill(idx, "soulRingType", e.target.value)
+                          updateSkill(idx, "description", e.target.value)
                         }
-                        placeholder="Loại (VD: Khống chế)"
-                        className="w-1/3 bg-transparent border-b border-slate-700 py-1 text-sm text-slate-400 outline-none"
+                        className="w-full bg-slate-950 border border-slate-700 rounded p-3 text-sm h-20 outline-none"
+                        placeholder="Mô tả..."
                       />
+                      <div className="grid gap-2">
+                        {Object.keys(skill.yearEffects).map((y) => (
+                          <div
+                            key={y}
+                            className="flex items-center gap-3 text-xs"
+                          >
+                            <span className="w-12 text-slate-500 text-right">
+                              {y.replace("y", "")}
+                            </span>
+                            <input
+                              value={skill.yearEffects[y]}
+                              onChange={(e) =>
+                                updateSkillYear(idx, y, e.target.value)
+                              }
+                              className="flex-1 bg-slate-900 border border-slate-700 rounded p-1.5 outline-none"
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <textarea
-                      value={skill.description}
-                      onChange={(e) =>
-                        updateSkill(idx, "description", e.target.value)
-                      }
-                      className="w-full bg-slate-950 border border-slate-700 rounded p-3 text-sm h-20 outline-none"
-                      placeholder="Mô tả..."
-                    />
-                    <div className="grid gap-2">
-                      {Object.keys(skill.yearEffects).map((y) => (
-                        <div
-                          key={y}
-                          className="flex items-center gap-3 text-xs"
-                        >
-                          <span className="w-12 text-slate-500 text-right">
-                            {y.replace("y", "")}
-                          </span>
-                          <input
-                            value={skill.yearEffects[y]}
-                            onChange={(e) =>
-                              updateSkillYear(idx, y, e.target.value)
-                            }
-                            className="flex-1 bg-slate-900 border border-slate-700 rounded p-1.5 outline-none"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 
