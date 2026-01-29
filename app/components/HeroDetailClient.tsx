@@ -398,6 +398,26 @@ function SoulBoneModal({
                   </span>
                 </div>
               )}
+              {bone.mutation.star4Red && (
+                <div className="mt-1">
+                  <span className="text-red-500 font-bold">
+                    {renderStarBadge(4, "text-red-500")}:
+                  </span>{" "}
+                  <span className="text-slate-300 text-sm">
+                    {bone.mutation.star4Red}
+                  </span>
+                </div>
+              )}
+              {bone.mutation.star5Red && (
+                <div className="mt-1">
+                  <span className="text-red-500 font-bold">
+                    {renderStarBadge(5, "text-red-500")}:
+                  </span>{" "}
+                  <span className="text-slate-300 text-sm">
+                    {bone.mutation.star5Red}
+                  </span>
+                </div>
+              )}
               {bone.mutation.star6Red && (
                 <div className="mt-2">
                   <span className="text-red-500 font-bold">
