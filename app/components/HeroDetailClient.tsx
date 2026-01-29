@@ -1048,39 +1048,41 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
             {/* KỸ NĂNG CHI TIẾT (SP+) */}
             {activeTab === "bones" && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 animate-fadeIn">
-                {hero.soulBones?.map((bone: any, i: number) => (
-                  <div
-                    key={i}
-                    onClick={() => setSelectedBone(bone)}
-                    className="bg-slate-900/40 p-4 rounded-xl border border-slate-800 flex items-center gap-4 cursor-pointer hover:border-yellow-600 transition-all group shadow-md"
-                  >
+                {hero.soulBones
+                  ?.filter((bone: any) => bone.name && bone.name.trim() !== "")
+                  ?.map((bone: any, i: number) => (
                     <div
-                      className={`w-14 h-14 rounded bg-black/40 border flex items-center justify-center shrink-0 ${bone.mutation?.name ? "border-red-600/30" : "border-yellow-600/30"}`}
+                      key={i}
+                      onClick={() => setSelectedBone(bone)}
+                      className="bg-slate-900/40 p-4 rounded-xl border border-slate-800 flex items-center gap-4 cursor-pointer hover:border-yellow-600 transition-all group shadow-md"
                     >
-                      {bone.iconUrl ? (
-                        <Image
-                          src={bone.iconUrl}
-                          alt=""
-                          width={56}
-                          height={56}
-                          className="object-cover"
-                        />
-                      ) : (
-                        <FaBone className="text-slate-700 text-xl" />
-                      )}
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase truncate">
-                        {bone.position}
-                      </p>
-                      <h4
-                        className={`text-xs font-bold truncate transition-colors ${bone.mutation?.name ? "text-red-400 group-hover:text-red-500" : "text-slate-200 group-hover:text-yellow-500"}`}
+                      <div
+                        className={`w-14 h-14 rounded bg-black/40 border flex items-center justify-center shrink-0 ${bone.mutation?.name ? "border-red-600/30" : "border-yellow-600/30"}`}
                       >
-                        {bone.name}
-                      </h4>
+                        {bone.iconUrl ? (
+                          <Image
+                            src={bone.iconUrl}
+                            alt=""
+                            width={56}
+                            height={56}
+                            className="object-cover"
+                          />
+                        ) : (
+                          <FaBone className="text-slate-700 text-xl" />
+                        )}
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase truncate">
+                          {bone.position}
+                        </p>
+                        <h4
+                          className={`text-xs font-bold truncate transition-colors ${bone.mutation?.name ? "text-red-400 group-hover:text-red-500" : "text-slate-200 group-hover:text-yellow-500"}`}
+                        >
+                          {bone.name}
+                        </h4>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
 
@@ -1099,11 +1101,11 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                     className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex gap-4 items-start shadow-lg hover:border-red-500/30 transition-all"
                   >
                     <div
-                      className={`px-2 py-1 rounded border font-bold text-xs flex items-center gap-1 shrink-0 ${up.isRedStar ? "border-red-500 text-red-500 bg-red-950/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "border-yellow-500 text-yellow-500 bg-yellow-950/30 shadow-[0_0_10px_rgba(234,179,8,0.2)]"}`}
+                      className={`px-2 py-1 rounded border font-bold text-[14px] flex items-center gap-1 shrink-0 ${up.isRedStar ? "border-red-500 text-red-500 bg-red-950/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "border-yellow-500 text-yellow-500 bg-yellow-950/30 shadow-[0_0_10px_rgba(234,179,8,0.2)]"}`}
                     >
                       {up.star > 5 ? up.star - 5 : up.star} <FaStar size={8} />
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed pt-0.5 whitespace-pre-wrap">
+                    <p className="text-[14px] text-slate-300 leading-relaxed pt-0.5 whitespace-pre-wrap">
                       {up.description}
                     </p>
                   </div>
