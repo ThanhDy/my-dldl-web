@@ -687,6 +687,21 @@ export default function AddHeroPage() {
                           </div>
                         ))}
                       </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                          Ghi chú (Mỗi dòng 1 ý)
+                        </label>
+                        <textarea
+                          defaultValue={
+                            Array.isArray(skill.note)
+                              ? skill.note.join("\n")
+                              : ""
+                          }
+                          onBlur={(e) => updateSkillNote(idx, e.target.value)}
+                          className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono h-20 focus:border-slate-500 outline-none"
+                          placeholder="Nhập ghi chú..."
+                        />
+                      </div>
                     </div>
                   );
                 })}
