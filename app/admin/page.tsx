@@ -46,6 +46,14 @@ export default function AdminListPage() {
     e.stopPropagation();
     if (!confirm("Bạn có chắc chắn muốn xóa Hồn sư này?")) return;
     try {
+      // 1. Xóa folder ảnh trên Cloudinary trước
+      await fetch("/api/cloudinary/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ folder: `soul-masters/${id}` }),
+      });
+
+      // 2. Sau đó xóa dữ liệu trong DB
       await fetch(`/api/soul-masters/${id}`, { method: "DELETE" });
       fetchHeroes(); // Load lại danh sách sau khi xóa
     } catch (error) {

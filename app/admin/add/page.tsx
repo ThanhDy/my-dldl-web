@@ -2,15 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  FaArrowLeft,
-  FaSave,
-  FaImage,
-  FaBone,
-  FaArrowUp,
-  FaDna,
-  FaStar,
-} from "react-icons/fa";
+import Image from "next/image";
+import { FaArrowLeft, FaSave, FaImage, FaBone, FaStar } from "react-icons/fa";
 
 const getDefaultSkillType = (order: number) => {
   switch (order) {
@@ -73,6 +66,7 @@ const createEmptySoulBone = (position: string) => ({
   },
   upgrade: { name: "", star2: "", star3: "", star5: "" },
   _extraType: "none",
+  iconUrl: "",
 });
 
 const INITIAL_SOUL_BONES = SOUL_BONE_POSITIONS.map((pos) =>
@@ -104,6 +98,11 @@ const INITIAL_HERO = {
 };
 
 export default function AddHeroPage() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [skillFiles, setSkillFiles] = useState<{ [key: number]: File }>({});
+  const [boneFiles, setBoneFiles] = useState<{ [key: number]: File }>({});
+
   const [formData, setFormData] = useState<any>(INITIAL_HERO);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -137,11 +136,17 @@ export default function AddHeroPage() {
     setFormData((prev: any) => ({
       ...prev,
       id: slug,
-      image: `/images/${slug}/avt.webp`,
-      skillDetails: prev.skillDetails.map((s: any) => ({
+      image:
+        previewUrl || prev.image?.startsWith("http")
+          ? prev.image
+          : `/images/${slug}/avt.webp`,
+      skillDetails: prev.skillDetails.map((s: any, idx: number) => ({
         ...s,
         id: `${slug}-s${s._tempOrder}-${s._tempBranch}`,
-        iconUrl: `/images/${slug}/hh${s._tempOrder}-${s._tempBranch}.webp`,
+        iconUrl:
+          skillFiles[idx] || s.iconUrl?.startsWith("http")
+            ? s.iconUrl
+            : `/images/${slug}/hh${s._tempOrder}-${s._tempBranch}.webp`,
       })),
     }));
   };
@@ -217,14 +222,120 @@ export default function AddHeroPage() {
     setFormData({ ...formData, soulBones: newBones });
   };
 
+  // 2. HÀM CHỌN ẢNH (CHỈ PREVIEW, KHÔNG UPLOAD)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Lưu file vào state để dành đó
+    setSelectedFile(file);
+
+    // Tạo link ảo để xem trước ngay lập tức
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+
+    // Xóa dữ liệu ảnh cũ trong form (nếu có) để ưu tiên file mới
+    setFormData((prev: any) => ({ ...prev, image: "" }));
+  };
+
+  const handleSkillFileChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSkillFiles((prev) => ({ ...prev, [index]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    const newSkills = [...formData.skillDetails];
+    newSkills[index].iconUrl = objectUrl;
+    setFormData({ ...formData, skillDetails: newSkills });
+  };
+
+  const handleBoneFileChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBoneFiles((prev) => ({ ...prev, [index]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    const newBones = [...formData.soulBones];
+    newBones[index].iconUrl = objectUrl;
+    setFormData({ ...formData, soulBones: newBones });
+  };
+
+  // 3. HÀM UPLOAD THỰC SỰ (SẼ GỌI KHI BẤM LƯU)
+  const uploadToCloudinary = async (file: File, folderName: string) => {
+    const dataForm = new FormData();
+    dataForm.append("file", file);
+    dataForm.append("upload_preset", "soul_master_upload"); // <-- Thay Preset của bạn
+
+    if (folderName) {
+      dataForm.append("folder", `soul-masters/${folderName}`);
+      // Ví dụ kết quả: soul-masters/duong-tam-sp/anh.jpg
+    }
+
+    const cloudName = "dom5kcwri"; // <-- Thay Cloud Name của bạn
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      { method: "POST", body: dataForm },
+    );
+    const data = await res.json();
+    return data.secure_url; // Trả về link ảnh thật
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
     try {
-      const cleanData = { ...formData };
+      let finalImageUrl = formData.image; // Mặc định dùng link cũ (nếu nhập tay)
+      if (selectedFile) {
+        try {
+          const folderName = formData.id || "hon-su-khac";
 
-      // --- LOGIC QUAN TRỌNG: CẮT BỎ NHÁNH 2 NẾU TẮT ---
+          finalImageUrl = await uploadToCloudinary(selectedFile, folderName);
+        } catch (uploadError) {
+          throw new Error("Lỗi khi upload ảnh lên Cloudinary!");
+        }
+      }
+
+      // Upload Skills
+      const uploadedSkills = await Promise.all(
+        formData.skillDetails.map(async (skill: any, index: number) => {
+          if (skillFiles[index]) {
+            const url = await uploadToCloudinary(
+              skillFiles[index],
+              formData.id || "skills",
+            );
+            return { ...skill, iconUrl: url };
+          }
+          return skill;
+        }),
+      );
+
+      // Upload Bones
+      const uploadedBones = await Promise.all(
+        formData.soulBones.map(async (bone: any, index: number) => {
+          if (boneFiles[index]) {
+            const url = await uploadToCloudinary(
+              boneFiles[index],
+              formData.id || "bones",
+            );
+            return { ...bone, iconUrl: url };
+          }
+          return bone;
+        }),
+      );
+
+      const cleanData = {
+        ...formData,
+        image: finalImageUrl,
+        skillDetails: uploadedSkills,
+        soulBones: uploadedBones,
+      };
+
       if (!hasBranch2) {
         cleanData.skillDetails = cleanData.skillDetails.slice(0, 4);
       }
@@ -244,15 +355,17 @@ export default function AddHeroPage() {
       });
 
       const res = await fetch("/api/soul-masters", {
-        // Đổi đường dẫn về API chính
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(cleanData),
       });
-      const result = await res.json(); // Lấy message lỗi từ server nếu có
 
+      const result = await res.json(); // Lấy message lỗi từ server nếu có
       if (!res.ok) throw new Error(result.message || "Lỗi lưu dữ liệu");
+
       setMessage("✅ Thêm tướng thành công!");
+
+      setSelectedFile(null);
     } catch (err: any) {
       setMessage(`❌ Lỗi: ${err.message}`);
     } finally {
@@ -302,6 +415,48 @@ export default function AddHeroPage() {
                 <h2 className="text-lg font-bold text-slate-100">
                   Thông Tin Cơ Bản
                 </h2>
+              </div>
+
+              {/* --- KHU VỰC UPLOAD ẢNH MỚI --- */}
+              <div className="space-y-3">
+                <label className="block text-xs font-bold text-slate-500 uppercase">
+                  Hình ảnh
+                </label>
+                <div className="flex items-center gap-4">
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shrink-0">
+                    {/* Ưu tiên hiện Preview từ file, nếu không có thì hiện từ formData */}
+                    {previewUrl || formData.image ? (
+                      <Image
+                        src={previewUrl || formData.image}
+                        alt="Preview"
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-600">
+                        <FaImage size={24} />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 space-y-2">
+                    {/* Input chọn file */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer"
+                    />
+
+                    {/* Thông báo khi đang lưu */}
+                    {loading && selectedFile && (
+                      <p className="text-[10px] text-yellow-500 animate-pulse font-bold">
+                        ⏳ Đang upload ảnh và lưu dữ liệu...
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -460,6 +615,30 @@ export default function AddHeroPage() {
                         <span className="text-blue-400 font-bold uppercase">
                           Skill {skill._tempOrder} (Nhánh {skill._tempBranch})
                         </span>
+                        <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                          {skill.iconUrl ? (
+                            <Image
+                              src={skill.iconUrl}
+                              alt="icon"
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-600">
+                              <FaImage size={12} />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                            <FaImage size={12} className="text-white" />
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => handleSkillFileChange(idx, e)}
+                            />
+                          </label>
+                        </div>
                       </div>
                       <div className="flex gap-4 items-end">
                         <input
@@ -531,6 +710,30 @@ export default function AddHeroPage() {
                       <span className="bg-blue-900/30 text-blue-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase">
                         {bone.position}
                       </span>
+                      <div className="relative w-8 h-8 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                        {bone.iconUrl ? (
+                          <Image
+                            src={bone.iconUrl}
+                            alt="icon"
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-600">
+                            <FaImage size={10} />
+                          </div>
+                        )}
+                        <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                          <FaImage size={10} className="text-white" />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleBoneFileChange(idx, e)}
+                          />
+                        </label>
+                      </div>
                       <select
                         value={bone._extraType}
                         onChange={(e) =>

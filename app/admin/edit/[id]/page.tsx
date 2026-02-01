@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import {
   FaArrowLeft,
@@ -80,6 +81,7 @@ const createEmptySoulBone = (position: string) => ({
   },
   upgrade: { name: "", star2: "", star3: "", star5: "" },
   _extraType: "none",
+  iconUrl: "",
 });
 
 const INITIAL_SOUL_BONES = SOUL_BONE_POSITIONS.map((pos) =>
@@ -109,6 +111,16 @@ export default function EditHeroPage() {
   const [formData, setFormData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [skillFiles, setSkillFiles] = useState<{ [key: number]: File }>({});
+  const [skillPreviews, setSkillPreviews] = useState<{ [key: number]: string }>(
+    {},
+  );
+  const [boneFiles, setBoneFiles] = useState<{ [key: number]: File }>({});
+  const [bonePreviews, setBonePreviews] = useState<{ [key: number]: string }>(
+    {},
+  );
 
   // --- LOGIC LOAD DỮ LIỆU & MERGE ---
   useEffect(() => {
@@ -383,11 +395,130 @@ export default function EditHeroPage() {
     setFormData({ ...formData, thienPhu: newThienPhu });
   };
 
+  const handleSkillFileChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSkillFiles((prev) => ({ ...prev, [index]: file }));
+    setSkillPreviews((prev) => ({
+      ...prev,
+      [index]: URL.createObjectURL(file),
+    }));
+  };
+
+  const handleBoneFileChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBoneFiles((prev) => ({ ...prev, [index]: file }));
+    setBonePreviews((prev) => ({
+      ...prev,
+      [index]: URL.createObjectURL(file),
+    }));
+  };
+
+  // 2. HÀM CHỌN ẢNH (CHỈ PREVIEW, KHÔNG UPLOAD)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+  };
+
+  // 3. HÀM UPLOAD THỰC SỰ (SẼ GỌI KHI BẤM LƯU)
+  const uploadToCloudinary = async (file: File, folderName: string) => {
+    const dataForm = new FormData();
+    dataForm.append("file", file);
+    dataForm.append("upload_preset", "soul_master_upload");
+
+    if (folderName) {
+      dataForm.append("folder", `soul-masters/${folderName}`);
+    } // app/api/cloudinary/delete/route.ts
+
+    const cloudName = "dom5kcwri";
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      { method: "POST", body: dataForm },
+    );
+    const data = await res.json();
+    return data.secure_url;
+  };
+
+  // 4. HÀM XÓA ẢNH CŨ (MỚI)
+  const deleteCloudinaryImage = async (imageUrl: string) => {
+    if (!imageUrl || !imageUrl.includes("cloudinary.com")) return;
+
+    // Regex lấy public_id: khớp đoạn sau /upload/ (có thể có v1234/) đến trước dấu chấm đuôi file
+    const regex = /\/upload\/(?:v\d+\/)?(.+)\.[a-zA-Z]+$/;
+    const match = imageUrl.match(regex);
+    if (match && match[1]) {
+      await fetch("/api/cloudinary/delete", {
+        method: "POST",
+        body: JSON.stringify({ public_id: match[1] }),
+      });
+    }
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const cleanData = { ...formData };
+      let finalImageUrl = formData.image;
+      if (selectedFile) {
+        try {
+          const folderName = formData.id || "hon-su-khac";
+          // 1. Upload ảnh mới
+          const newUrl = await uploadToCloudinary(selectedFile, folderName);
+
+          // 2. Nếu upload thành công -> Xóa ảnh cũ (nếu có)
+          if (newUrl) {
+            await deleteCloudinaryImage(formData.image);
+            finalImageUrl = newUrl;
+          }
+        } catch (uploadError) {
+          throw new Error("Lỗi khi upload ảnh lên Cloudinary!");
+        }
+      }
+
+      // Upload Skills
+      const uploadedSkills = await Promise.all(
+        formData.skillDetails.map(async (skill: any, index: number) => {
+          if (skillFiles[index]) {
+            if (skill.iconUrl) await deleteCloudinaryImage(skill.iconUrl);
+            const folderName = formData.id || "skills";
+            const url = await uploadToCloudinary(skillFiles[index], folderName);
+            return { ...skill, iconUrl: url };
+          }
+          return skill;
+        }),
+      );
+
+      // Upload Bones
+      const uploadedBones = await Promise.all(
+        formData.soulBones.map(async (bone: any, index: number) => {
+          if (boneFiles[index]) {
+            if (bone.iconUrl) await deleteCloudinaryImage(bone.iconUrl);
+            const folderName = formData.id || "bones";
+            const url = await uploadToCloudinary(boneFiles[index], folderName);
+            return { ...bone, iconUrl: url };
+          }
+          return bone;
+        }),
+      );
+
+      const cleanData = {
+        ...formData,
+        image: finalImageUrl,
+        skillDetails: uploadedSkills,
+        soulBones: uploadedBones,
+      };
 
       // 1. Tự động sinh ID cho skill nếu bị thiếu
       cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
@@ -480,6 +611,54 @@ export default function EditHeroPage() {
               <h2 className="text-lg font-bold flex items-center gap-2 border-b border-slate-800 pb-2">
                 <FaImage className="text-yellow-500" /> Cơ Bản
               </h2>
+
+              {/* --- KHU VỰC UPLOAD ẢNH --- */}
+              <div className="space-y-3">
+                <label className="block text-xs font-bold text-slate-500 uppercase">
+                  Hình ảnh đại diện
+                </label>
+
+                <div className="flex items-center gap-4">
+                  {/* 1. Khung hiển thị ảnh Preview */}
+                  <div className="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-slate-700 bg-slate-900 shrink-0">
+                    {previewUrl || formData.image ? (
+                      <Image
+                        src={previewUrl || formData.image}
+                        alt={formData.name || "Preview"}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-600">
+                        <FaImage size={30} />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 2. Các ô nhập liệu */}
+                  <div className="flex-1 space-y-2">
+                    <label className="block w-full cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                      <div className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded-lg inline-flex items-center gap-2 transition">
+                        <FaImage /> Chọn ảnh mới
+                      </div>
+                    </label>
+
+                    {loading && selectedFile && (
+                      <p className="text-[10px] text-yellow-500 animate-pulse font-bold">
+                        ⏳ Đang upload ảnh và lưu dữ liệu...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <input
                 type="text"
                 name="name"
@@ -965,6 +1144,30 @@ export default function EditHeroPage() {
                       <span className="bg-blue-900/30 text-blue-400 px-3 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">
                         {bone.position}
                       </span>
+                      <div className="relative w-8 h-8 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                        {bonePreviews[idx] || bone.iconUrl ? (
+                          <Image
+                            src={bonePreviews[idx] || bone.iconUrl}
+                            alt="icon"
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-600">
+                            <FaImage size={10} />
+                          </div>
+                        )}
+                        <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                          <FaImage size={10} className="text-white" />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleBoneFileChange(idx, e)}
+                          />
+                        </label>
+                      </div>
                       <select
                         value={bone._extraType}
                         onChange={(e) =>
@@ -1206,6 +1409,30 @@ export default function EditHeroPage() {
                       <span className="text-[10px] font-bold text-blue-500 bg-blue-900/20 px-2 py-0.5 rounded uppercase">
                         {skill.type}
                       </span>
+                      <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group ml-auto mr-4">
+                        {skillPreviews[idx] || skill.iconUrl ? (
+                          <Image
+                            src={skillPreviews[idx] || skill.iconUrl}
+                            alt="icon"
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-600">
+                            <FaImage size={12} />
+                          </div>
+                        )}
+                        <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                          <FaImage size={12} className="text-white" />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleSkillFileChange(idx, e)}
+                          />
+                        </label>
+                      </div>
                     </div>
                     <div className="flex gap-4 items-end">
                       <input
