@@ -3,7 +3,16 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaArrowLeft, FaSave, FaImage, FaBone, FaStar } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaSave,
+  FaImage,
+  FaBone,
+  FaStar,
+  FaChevronDown,
+  FaDna,
+  FaArrowUp,
+} from "react-icons/fa";
 
 const getDefaultSkillType = (order: number) => {
   switch (order) {
@@ -95,6 +104,72 @@ const INITIAL_HERO = {
   skillDetails: INITIAL_SKILLS,
   soulBones: INITIAL_SOUL_BONES,
   starUpgrades: AM_KHI_STAR_CONFIG,
+};
+
+// --- COMPONENT ACCORDION SECTION ---
+const Section = ({
+  title,
+  icon,
+  color = "slate",
+  children,
+  action,
+  defaultOpen = true,
+}: {
+  title: string;
+  icon?: React.ReactNode;
+  color?: "blue" | "red" | "pink" | "yellow" | "slate";
+  children: React.ReactNode;
+  action?: React.ReactNode;
+  defaultOpen?: boolean;
+}) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  const styles = {
+    blue: {
+      container: "bg-slate-900/50 border-blue-500/20",
+      header: "border-blue-500/30 text-blue-400",
+    },
+    red: {
+      container: "bg-slate-900/50 border-red-500/20",
+      header: "border-red-500/30 text-red-400",
+    },
+    pink: {
+      container: "bg-slate-900/50 border-pink-500/20",
+      header: "border-pink-500/30 text-pink-400",
+    },
+    yellow: {
+      container: "bg-slate-900/50 border-yellow-500/20",
+      header: "border-yellow-500/30 text-yellow-500",
+    },
+    slate: {
+      container: "bg-slate-900/20 border-slate-800",
+      header: "border-slate-800 text-slate-200",
+    },
+  };
+
+  const currentStyle = styles[color];
+
+  return (
+    <div
+      className={`rounded-2xl border shadow-xl overflow-hidden transition-all duration-300 ${currentStyle.container}`}
+    >
+      <div
+        className={`flex justify-between items-center p-4 cursor-pointer bg-slate-900/80 hover:bg-slate-900 transition border-b ${isOpen ? currentStyle.header : "border-transparent"}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h2 className="text-xl font-bold uppercase flex items-center gap-2">
+          {icon} {title}
+        </h2>
+        <div className="flex items-center gap-3">
+          {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
+          <FaChevronDown
+            className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""} text-slate-400`}
+          />
+        </div>
+      </div>
+      {isOpen && <div className="p-6 space-y-6 animate-fadeIn">{children}</div>}
+    </div>
+  );
 };
 
 export default function AddHeroPage() {
@@ -373,6 +448,91 @@ export default function AddHeroPage() {
     }
   };
 
+  const renderSkillCard = (skill: any, idx: number) => (
+    <div
+      key={idx}
+      className="bg-slate-900 rounded-2xl border border-slate-800 p-6 space-y-4 shadow-2xl transition-all hover:border-slate-700"
+    >
+      <div className="flex justify-between items-center">
+        <span className="text-[10px] font-black text-slate-500 uppercase italic tracking-widest">
+          Skill {skill._tempOrder}
+        </span>
+        <span className="text-[10px] font-bold text-blue-500 bg-blue-900/20 px-2 py-0.5 rounded uppercase">
+          {skill.type}
+        </span>
+        <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group ml-auto mr-4">
+          {skill.iconUrl ? (
+            <Image
+              src={skill.iconUrl}
+              alt="icon"
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-slate-600">
+              <FaImage size={12} />
+            </div>
+          )}
+          <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+            <FaImage size={12} className="text-white" />
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleSkillFileChange(idx, e)}
+            />
+          </label>
+        </div>
+      </div>
+      <div className="flex gap-4 items-end">
+        <input
+          value={skill.name}
+          onChange={(e) => updateSkill(idx, "name", e.target.value)}
+          placeholder="Tên kỹ năng"
+          className="flex-1 bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
+        />
+        <input
+          type="text"
+          value={skill.soulRingType}
+          onChange={(e) => updateSkill(idx, "soulRingType", e.target.value)}
+          className="w-1/3 bg-transparent border-b border-slate-700 focus:border-slate-400 py-2 text-sm text-slate-300 outline-none transition"
+          placeholder="Loại (VD: Khống chế)"
+        />
+      </div>
+      <textarea
+        value={skill.description}
+        onChange={(e) => updateSkill(idx, "description", e.target.value)}
+        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm h-28 outline-none focus:border-slate-600 transition text-slate-300"
+        placeholder="Mô tả chi tiết kỹ năng..."
+      />
+      <div className="grid gap-3 bg-slate-950/50 p-5 rounded-2xl border border-slate-900/50">
+        {["y1k", "y10k", "y25k", "y50k", "y100k"].map((y) => (
+          <div key={y} className="flex items-center gap-4">
+            <span
+              className={`w-5 text-[10px] font-black uppercase text-left ${y === "y100k" ? "text-red-500" : "text-slate-600"}`}
+            >
+              {y.replace("y", "")}
+            </span>
+            <textarea
+              value={skill.yearEffects?.[y] || ""}
+              onChange={(e) => updateSkillYear(idx, y, e.target.value)}
+              className="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-300 outline-none focus:border-blue-500 transition"
+            />
+          </div>
+        ))}
+      </div>
+      <div>
+        <textarea
+          defaultValue={Array.isArray(skill.note) ? skill.note.join("\n") : ""}
+          onBlur={(e) => updateSkillNote(idx, e.target.value)}
+          className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono h-20 focus:border-slate-500 outline-none"
+          placeholder="Ghi chú (Mỗi dòng 1 ý)"
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-full bg-slate-950 text-slate-200 p-6 md:p-8 pb-32 font-sans selection:bg-yellow-500/30">
       <div className="max-w-7xl mx-auto">
@@ -550,13 +710,11 @@ export default function AddHeroPage() {
 
           <div className="lg:col-span-8 space-y-8">
             {isAmKhi ? (
-              <div className="space-y-6 animate-fadeIn">
-                <div className="flex items-center gap-3 border-b border-slate-800 pb-2">
-                  <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span>
-                  <h2 className="text-xl font-bold text-slate-200 uppercase">
-                    Mốc Sức Mạnh Nâng Sao
-                  </h2>
-                </div>
+              <Section
+                title="Mốc Sức Mạnh Nâng Sao"
+                icon={<FaStar />}
+                color="red"
+              >
                 <div className="grid gap-4">
                   {formData.starUpgrades.map((up: any, idx: number) => (
                     <div
@@ -580,18 +738,15 @@ export default function AddHeroPage() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </Section>
             ) : (
-              <div className="space-y-6 animate-fadeIn">
-                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                  <h2 className="text-xl font-bold text-slate-200 uppercase">
-                    Chi Tiết Kỹ Năng
-                  </h2>
-
-                  {/* NÚT TOGGLE NHÁNH 2 (MỚI) */}
+              <Section
+                title="Chi Tiết Kỹ Năng Hồn Hoàn"
+                color="slate"
+                action={
                   <label className="flex items-center gap-3 cursor-pointer bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg hover:border-blue-500 transition">
                     <span className="text-xs font-bold text-slate-400 uppercase">
-                      Nhánh 2
+                      Kích hoạt Nhánh 2
                     </span>
                     <div className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -603,126 +758,47 @@ export default function AddHeroPage() {
                       <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                     </div>
                   </label>
-                </div>
-                {formData.skillDetails.map((skill: any, idx: number) => {
-                  if (!hasBranch2 && idx >= 4) return null;
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-slate-900 rounded-xl border border-slate-800 p-6 space-y-4"
-                    >
-                      <div className="flex justify-between">
-                        <span className="text-blue-400 font-bold uppercase">
-                          Skill {skill._tempOrder} (Nhánh {skill._tempBranch})
-                        </span>
-                        <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
-                          {skill.iconUrl ? (
-                            <Image
-                              src={skill.iconUrl}
-                              alt="icon"
-                              fill
-                              className="object-cover"
-                              unoptimized
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-slate-600">
-                              <FaImage size={12} />
-                            </div>
-                          )}
-                          <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
-                            <FaImage size={12} className="text-white" />
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={(e) => handleSkillFileChange(idx, e)}
-                            />
-                          </label>
-                        </div>
-                      </div>
-                      <div className="flex gap-4 items-end">
-                        <input
-                          type="text"
-                          value={skill.name}
-                          onChange={(e) =>
-                            updateSkill(idx, "name", e.target.value)
-                          }
-                          placeholder="Tên kỹ năng..."
-                          className="flex-1 bg-transparent border-b border-slate-700 py-1 font-bold outline-none"
-                        />
-                        <input
-                          type="text"
-                          value={skill.soulRingType}
-                          onChange={(e) =>
-                            updateSkill(idx, "soulRingType", e.target.value)
-                          }
-                          placeholder="Loại (VD: Khống chế)"
-                          className="w-1/3 bg-transparent border-b border-slate-700 py-1 text-sm text-slate-400 outline-none"
-                        />
-                      </div>
-                      <textarea
-                        value={skill.description}
-                        onChange={(e) =>
-                          updateSkill(idx, "description", e.target.value)
-                        }
-                        className="w-full bg-slate-950 border border-slate-700 rounded p-3 text-sm h-20 outline-none"
-                        placeholder="Mô tả..."
-                      />
-                      <div className="grid gap-2">
-                        {Object.keys(skill.yearEffects).map((y) => (
-                          <div
-                            key={y}
-                            className="flex items-center gap-3 text-xs"
-                          >
-                            <span className="w-12 text-slate-500 text-right">
-                              {y.replace("y", "")}
-                            </span>
-                            <input
-                              value={skill.yearEffects[y]}
-                              onChange={(e) =>
-                                updateSkillYear(idx, y, e.target.value)
-                              }
-                              className="flex-1 bg-slate-900 border border-slate-700 rounded p-1.5 outline-none"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                          Ghi chú (Mỗi dòng 1 ý)
-                        </label>
-                        <textarea
-                          defaultValue={
-                            Array.isArray(skill.note)
-                              ? skill.note.join("\n")
-                              : ""
-                          }
-                          onBlur={(e) => updateSkillNote(idx, e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono h-20 focus:border-slate-500 outline-none"
-                          placeholder="Nhập ghi chú..."
-                        />
-                      </div>
+                }
+              >
+                <div
+                  className={`grid gap-8 ${hasBranch2 ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"}`}
+                >
+                  {/* Cột Nhánh 1 */}
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-bold text-blue-400 border-b border-blue-500/30 pb-2 mb-4">
+                      NHÁNH 1
+                    </h3>
+                    {formData.skillDetails.map((skill: any, idx: number) => {
+                      if (idx >= 4) return null;
+                      return renderSkillCard(skill, idx);
+                    })}
+                  </div>
+
+                  {/* Cột Nhánh 2 */}
+                  {hasBranch2 && (
+                    <div className="space-y-6">
+                      <h3 className="text-xl font-bold text-purple-400 border-b border-purple-500/30 pb-2 mb-4">
+                        NHÁNH 2
+                      </h3>
+                      {formData.skillDetails.map((skill: any, idx: number) => {
+                        if (idx < 4) return null;
+                        return renderSkillCard(skill, idx);
+                      })}
                     </div>
-                  );
-                })}
-              </div>
+                  )}
+                </div>
+              </Section>
             )}
 
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 border-b border-slate-800 pb-2">
-                <span className="w-1.5 h-6 bg-blue-500 rounded-full"></span>
-                <h2 className="text-xl font-bold text-slate-200 flex items-center gap-2">
-                  <FaBone /> Hồn Cốt (6 Vị Trí)
-                </h2>
-              </div>
+            <Section title="Hệ Thống Hồn Cốt" color="yellow">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {formData.soulBones.map((bone: any, idx: number) => (
                   <div
                     key={idx}
-                    className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3 shadow-md"
+                    className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4 shadow-xl transition-all hover:border-slate-700"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="bg-blue-900/30 text-blue-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase">
+                      <span className="bg-blue-900/30 text-blue-400 px-3 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">
                         {bone.position}
                       </span>
                       <div className="relative w-8 h-8 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
@@ -754,7 +830,7 @@ export default function AddHeroPage() {
                         onChange={(e) =>
                           updateSoulBone(idx, "_extraType", e.target.value)
                         }
-                        className="text-[10px] bg-slate-800 text-slate-400 rounded px-1 outline-none"
+                        className="text-[10px] bg-slate-800 text-slate-300 p-1.5 rounded outline-none cursor-pointer font-bold border border-slate-700"
                       >
                         <option value="none">Mở rộng: Không</option>
                         <option value="mutation">Suy Biến</option>
@@ -768,7 +844,7 @@ export default function AddHeroPage() {
                         updateSoulBone(idx, "name", e.target.value)
                       }
                       placeholder="Tên cốt..."
-                      className="w-full bg-transparent border-b border-slate-700 text-sm font-bold outline-none"
+                      className="w-full bg-transparent border-b border-slate-800 text-base font-bold text-slate-100 outline-none focus:border-blue-500 transition"
                     />
 
                     <textarea
@@ -776,42 +852,45 @@ export default function AddHeroPage() {
                       onChange={(e) =>
                         updateSoulBoneStandard(idx, "base", e.target.value)
                       }
-                      placeholder="Cơ bản..."
-                      className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-[10px] h-14 outline-none"
+                      placeholder="Hiệu quả cơ bản..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm min-h-[80px] outline-none focus:border-yellow-500 transition resize-y"
                     />
 
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
+                    <div className="grid grid-cols-1 gap-2">
+                      <textarea
                         value={bone.standard.star4}
                         onChange={(e) =>
                           updateSoulBoneStandard(idx, "star4", e.target.value)
                         }
                         placeholder="4 Sao Vàng..."
-                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-[10px] outline-none"
+                        className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-yellow-500 outline-none focus:border-yellow-600 min-h-[60px] resize-y"
                       />
-                      <input
+                      <textarea
                         value={bone.standard.star6}
                         onChange={(e) =>
                           updateSoulBoneStandard(idx, "star6", e.target.value)
                         }
                         placeholder="6 Sao Vàng..."
-                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-[10px] outline-none"
+                        className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-yellow-600 outline-none focus:border-yellow-700 min-h-[60px] resize-y"
                       />
                     </div>
 
                     {/* SUY BIẾN */}
                     {bone._extraType === "mutation" && (
-                      <div className="mt-2 pt-2 border-t border-red-900/30 space-y-2 bg-red-950/10 p-2 rounded">
+                      <div className="space-y-2.5 pt-3 border-t border-red-900/30 bg-red-950/10 p-2.5 rounded-lg animate-fadeIn">
+                        <div className="flex items-center gap-1 text-[10px] text-red-400 font-black mb-1">
+                          <FaDna /> SUY BIẾN
+                        </div>
                         <input
                           value={bone.mutation.name}
                           onChange={(e) =>
                             updateSoulBoneMutation(idx, "name", e.target.value)
                           }
-                          placeholder="Tên Suy Biến..."
-                          className="w-full bg-slate-950 border border-red-900/50 rounded p-1.5 text-[10px] text-red-200 outline-none"
+                          placeholder="Tên Hồn Cốt Suy Biến..."
+                          className="w-full bg-slate-950 border border-red-900/30 rounded p-2 text-sm text-red-200 outline-none focus:border-red-500"
                         />
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
+                        <div className="grid grid-cols-1 gap-2">
+                          <textarea
                             value={bone.mutation.star1Red}
                             onChange={(e) =>
                               updateSoulBoneMutation(
@@ -821,9 +900,9 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="1 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
-                          <input
+                          <textarea
                             value={bone.mutation.star4Red}
                             onChange={(e) =>
                               updateSoulBoneMutation(
@@ -833,9 +912,9 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="4 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
-                          <input
+                          <textarea
                             value={bone.mutation.star5Red}
                             onChange={(e) =>
                               updateSoulBoneMutation(
@@ -845,9 +924,9 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="5 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
-                          <input
+                          <textarea
                             value={bone.mutation.star6Red}
                             onChange={(e) =>
                               updateSoulBoneMutation(
@@ -857,7 +936,7 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="6 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
                         </div>
                       </div>
@@ -865,17 +944,20 @@ export default function AddHeroPage() {
 
                     {/* NÂNG CẤP */}
                     {bone._extraType === "upgrade" && (
-                      <div className="mt-2 pt-2 border-t border-yellow-900/30 space-y-2 bg-yellow-950/10 p-2 rounded">
+                      <div className="space-y-2.5 pt-3 border-t border-yellow-900/30 bg-yellow-950/10 p-2.5 rounded-lg animate-fadeIn">
+                        <div className="flex items-center gap-1 text-[10px] text-yellow-400 font-black mb-1">
+                          <FaArrowUp /> NÂNG CẤP
+                        </div>
                         <input
                           value={bone.upgrade.name}
                           onChange={(e) =>
                             updateSoulBoneUpgrade(idx, "name", e.target.value)
                           }
-                          placeholder="Tên Nâng Cấp..."
-                          className="w-full bg-slate-950 border border-yellow-900/50 rounded p-1.5 text-[10px] text-yellow-200 outline-none"
+                          placeholder="Tên sau Nâng Cấp..."
+                          className="w-full bg-slate-950 border border-yellow-900/30 rounded p-2 text-sm text-yellow-200 outline-none focus:border-yellow-500"
                         />
-                        <div className="grid grid-cols-3 gap-1">
-                          <input
+                        <div className="grid grid-cols-1 gap-2">
+                          <textarea
                             value={bone.upgrade.star2}
                             onChange={(e) =>
                               updateSoulBoneUpgrade(
@@ -885,9 +967,9 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="2 Sao..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
-                          <input
+                          <textarea
                             value={bone.upgrade.star3}
                             onChange={(e) =>
                               updateSoulBoneUpgrade(
@@ -897,9 +979,9 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="3 Sao..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
-                          <input
+                          <textarea
                             value={bone.upgrade.star5}
                             onChange={(e) =>
                               updateSoulBoneUpgrade(
@@ -909,7 +991,7 @@ export default function AddHeroPage() {
                               )
                             }
                             placeholder="5 Sao..."
-                            className="w-full bg-slate-950 border border-slate-800 rounded p-1 text-[9px] outline-none"
+                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
                         </div>
                       </div>
@@ -917,7 +999,7 @@ export default function AddHeroPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Section>
           </div>
         </div>
       </div>
