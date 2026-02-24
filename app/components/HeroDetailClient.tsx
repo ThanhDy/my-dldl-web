@@ -380,7 +380,7 @@ function SoulBoneModal({
               </div>
             )}
           </div>
-          {isMutated && bone.mutation ? (
+          {isMutated && bone.mutation && (
             <div className="bg-red-900/10 p-4 rounded-lg border border-red-900/30 animate-fadeIn">
               <h3 className="text-red-500 font-bold uppercase mb-2 flex items-center gap-2 text-xs">
                 <FaDna /> Hiệu quả Suy Biến
@@ -429,7 +429,8 @@ function SoulBoneModal({
                 </div>
               )}
             </div>
-          ) : (
+          )}
+          {isUpgraded && bone.upgrade && (
             <div className="space-y-4">
               {/* ... (Giữ nguyên logic non-mutated) ... */}
               <div className="flex items-center gap-2 border-b border-yellow-500/30 pb-2">

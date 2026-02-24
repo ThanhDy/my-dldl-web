@@ -8,10 +8,8 @@ import {
   FaArrowLeft,
   FaSave,
   FaImage,
-  FaBone,
   FaPlus,
   FaTrash,
-  FaInfoCircle,
   FaArrowUp,
   FaDna,
   FaStar,
@@ -188,6 +186,10 @@ export default function EditHeroPage() {
   const [bonePreviews, setBonePreviews] = useState<{ [key: number]: string }>(
     {},
   );
+  const [cardFiles, setCardFiles] = useState<{ [key: number]: File }>({});
+  const [cardPreviews, setCardPreviews] = useState<{ [key: number]: string }>(
+    {},
+  );
 
   // --- LOGIC LOAD DỮ LIỆU & MERGE ---
   useEffect(() => {
@@ -362,16 +364,6 @@ export default function EditHeroPage() {
     setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
   };
 
-  const updateNvvCardIdAndImage = (index: number, value: string) => {
-    const newCards = [...formData.nvvCardSystem.cards];
-    newCards[index] = {
-      ...newCards[index],
-      id: value,
-      image: `/images/ninh-vinh-vinh-sp/cards/${value}.webp`,
-    };
-    setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
-  };
-
   const updateNvvCardDetail = (index: number, field: string, value: any) => {
     const newCards = [...formData.nvvCardSystem.cards];
     if (!newCards[index].detailedEffect) newCards[index].detailedEffect = {};
@@ -483,6 +475,19 @@ export default function EditHeroPage() {
     if (!file) return;
     setBoneFiles((prev) => ({ ...prev, [index]: file }));
     setBonePreviews((prev) => ({
+      ...prev,
+      [index]: URL.createObjectURL(file),
+    }));
+  };
+
+  const handleCardFileChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCardFiles((prev) => ({ ...prev, [index]: file }));
+    setCardPreviews((prev) => ({
       ...prev,
       [index]: URL.createObjectURL(file),
     }));
@@ -664,11 +669,33 @@ export default function EditHeroPage() {
         }),
       );
 
+      // Upload Cards
+      let uploadedCards = formData.nvvCardSystem?.cards || [];
+      if (formData.nvvCardSystem?.cards) {
+        uploadedCards = await Promise.all(
+          formData.nvvCardSystem.cards.map(async (card: any, index: number) => {
+            if (cardFiles[index]) {
+              if (card.image && card.image.includes("cloudinary")) {
+                await deleteCloudinaryImage(card.image);
+              }
+              const folderName = `${formData.id || "cards"}/cards`;
+              const url = await uploadToCloudinary(
+                cardFiles[index],
+                folderName,
+              );
+              return { ...card, image: url };
+            }
+            return card;
+          }),
+        );
+      }
+
       const cleanData = {
         ...formData,
         image: finalImageUrl,
         skillDetails: uploadedSkills,
         soulBones: uploadedBones,
+        nvvCardSystem: { ...formData.nvvCardSystem, cards: uploadedCards },
       };
 
       // 1. Tự động sinh ID cho skill nếu bị thiếu
@@ -1110,28 +1137,48 @@ export default function EditHeroPage() {
                                 Cửu Thải Lưu Ly · Diệu
                               </option>
                             </select>
-                            <div className="w-full bg-slate-950 border border-slate-800 rounded flex items-center px-2 focus-within:border-pink-500 transition-colors">
-                              <span className="text-[10px] text-slate-500 select-none">
-                                .../cards/
-                              </span>
-                              <input
-                                value={
-                                  card.image
-                                    ? card.image
-                                        .split("/")
-                                        .pop()
-                                        ?.replace(".webp", "")
-                                    : ""
-                                }
-                                onChange={(e) =>
-                                  updateNvvCardIdAndImage(idx, e.target.value)
-                                }
-                                placeholder="ID ảnh"
-                                className="flex-1 bg-transparent p-2.5 text-xs text-slate-300 outline-none font-mono"
-                              />
-                              <span className="text-[10px] text-slate-500 select-none">
-                                .webp
-                              </span>
+                            <div className="flex items-center gap-4">
+                              <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                                {cardPreviews[idx] || card.image ? (
+                                  <Image
+                                    src={cardPreviews[idx] || card.image}
+                                    alt="card"
+                                    fill
+                                    className="object-cover"
+                                    unoptimized
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-slate-600">
+                                    <FaImage size={24} />
+                                  </div>
+                                )}
+                                <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                                  <FaImage size={20} className="text-white" />
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) =>
+                                      handleCardFileChange(idx, e)
+                                    }
+                                  />
+                                </label>
+                              </div>
+                              <div className="flex-1 space-y-2">
+                                <input
+                                  value={card.id}
+                                  onChange={(e) =>
+                                    updateNvvCard(idx, "id", e.target.value)
+                                  }
+                                  placeholder="ID thẻ bài (tùy chọn)..."
+                                  className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-xs text-slate-400 outline-none focus:border-pink-500"
+                                />
+                                <p className="text-[10px] text-slate-500 italic">
+                                  {cardFiles[idx]
+                                    ? "Đã chọn ảnh mới (sẽ upload khi Lưu)"
+                                    : "Chạm vào ảnh để thay đổi"}
+                                </p>
+                              </div>
                             </div>
                             <textarea
                               value={card.shortDescription || ""}
