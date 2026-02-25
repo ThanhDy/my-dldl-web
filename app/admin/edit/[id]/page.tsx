@@ -1099,13 +1099,13 @@ export default function EditHeroPage() {
                         key={idx}
                         className="bg-slate-900 p-6 rounded-xl border border-slate-800 relative group shadow-lg hover:border-pink-500/30 transition"
                       >
-                        <button
+                        {/* <button
                           type="button"
                           onClick={() => removeNvvCard(idx)}
                           className="absolute top-4 right-4 text-slate-600 hover:text-red-500 transition-colors"
                         >
                           <FaTrash />
-                        </button>
+                        </button> */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
                           <div className="space-y-4">
                             <input

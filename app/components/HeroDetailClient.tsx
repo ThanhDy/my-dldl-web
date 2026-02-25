@@ -584,7 +584,7 @@ const NvvCardModal = ({
               </div>
             )}
           </div>
-          {card.upgradeEffect && (
+          {card.upgradeEffect && card.upgradeEffect.condition && (
             <div className="bg-gradient-to-br from-purple-900/10 to-slate-800/50 p-5 rounded-xl border border-purple-500/30 hover:border-purple-500/50 transition-colors">
               <h4 className="text-purple-400 font-bold text-sm uppercase flex items-center gap-2 mb-3 border-b border-purple-500/10 pb-2">
                 Hiệu Ứng Nâng Cấp
@@ -592,7 +592,7 @@ const NvvCardModal = ({
               <div className="text-sm space-y-3">
                 <div>
                   <p className="text-slate-400 italic bg-black/20 px-3 py-1.5 rounded inline-block border border-slate-700">
-                    {card.detailedEffect.condition}
+                    {card.upgradeEffect.condition}
                   </p>
                 </div>
                 <div>
