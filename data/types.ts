@@ -87,10 +87,10 @@ export interface NvvCard {
     };
   };
 
-  upgradeEffect?: {
-    condition: string; // Điều kiện yêu cầu (ví dụ: Hồn lực đạt mức X)
-    effect: string; // Hiệu ứng nâng cấp
-  };
+  upgradeEffects?: {
+    condition: string;
+    effect: string;
+  }[];
 }
 
 export interface StarUpgrade {

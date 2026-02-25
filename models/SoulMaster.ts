@@ -117,10 +117,12 @@ const NvvCardSchema = new Schema(
         buff: String,
       },
     },
-    upgradeEffect: {
-      condition: String,
-      effect: String,
-    },
+    upgradeEffects: [
+      {
+        condition: String,
+        effect: String,
+      },
+    ],
   },
   { _id: false },
 );

@@ -342,13 +342,10 @@ export default function EditHeroPage() {
       shortDescription: "",
       basicSkill: "",
       detailedEffect: {
-        condition: "",
+        condition: "Yêu cầu Thần lực cơ bản: 1000",
         effect: "",
       },
-      upgradeEffect: {
-        condition: "",
-        effect: "",
-      },
+      upgradeEffects: [],
     };
     setFormData({
       ...formData,
@@ -383,7 +380,9 @@ export default function EditHeroPage() {
   const toggleNvvCardMode = (index: number, mode: "effect" | "quest") => {
     const newCards = [...formData.nvvCardSystem.cards];
     if (!newCards[index].detailedEffect)
-      newCards[index].detailedEffect = { condition: "" };
+      newCards[index].detailedEffect = {
+        condition: "Yêu cầu Thần lực cơ bản: 1000",
+      };
 
     if (mode === "effect") {
       newCards[index].detailedEffect.effect =
@@ -400,12 +399,45 @@ export default function EditHeroPage() {
     setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
   };
 
-  const updateNvvCardUpgrade = (index: number, field: string, value: any) => {
+  const addNvvCardUpgradeEffect = (cardIndex: number) => {
     const newCards = [...formData.nvvCardSystem.cards];
-    if (!newCards[index].upgradeEffect) {
-      newCards[index].upgradeEffect = { condition: "", effect: "" };
+    const currentEffects = newCards[cardIndex].upgradeEffects || [];
+    newCards[cardIndex].upgradeEffects = [
+      ...currentEffects,
+      { condition: "", effect: "" },
+    ];
+    setFormData({
+      ...formData,
+      nvvCardSystem: { cards: newCards },
+    });
+  };
+
+  const removeNvvCardUpgradeEffect = (
+    cardIndex: number,
+    effectIndex: number,
+  ) => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    if (newCards[cardIndex].upgradeEffects) {
+      newCards[cardIndex].upgradeEffects = newCards[
+        cardIndex
+      ].upgradeEffects.filter((_: any, i: number) => i !== effectIndex);
+      setFormData({
+        ...formData,
+        nvvCardSystem: { cards: newCards },
+      });
     }
-    newCards[index].upgradeEffect[field] = value;
+  };
+
+  const updateNvvCardUpgradeEffect = (
+    cardIndex: number,
+    effectIndex: number,
+    field: string,
+    value: any,
+  ) => {
+    const newCards = [...formData.nvvCardSystem.cards];
+    const newEffects = [...(newCards[cardIndex].upgradeEffects || [])];
+    newEffects[effectIndex] = { ...newEffects[effectIndex], [field]: value };
+    newCards[cardIndex].upgradeEffects = newEffects;
     setFormData({ ...formData, nvvCardSystem: { cards: newCards } });
   };
 
@@ -1290,35 +1322,79 @@ export default function EditHeroPage() {
                               )}
                             </div>
 
-                            {/* UPGRADE EFFECT */}
-                            <div className="bg-slate-950/50 p-3 rounded border border-slate-800 space-y-2">
-                              <label className="text-[10px] font-bold text-slate-500 uppercase">
-                                Hiệu ứng nâng cấp (Optional)
-                              </label>
-                              <input
-                                value={card.upgradeEffect?.condition || ""}
-                                onChange={(e) =>
-                                  updateNvvCardUpgrade(
-                                    idx,
-                                    "condition",
-                                    e.target.value,
-                                  )
-                                }
-                                placeholder="Điều kiện nâng cấp..."
-                                className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs outline-none focus:border-yellow-500"
-                              />
-                              <textarea
-                                value={card.upgradeEffect?.effect || ""}
-                                onChange={(e) =>
-                                  updateNvvCardUpgrade(
-                                    idx,
-                                    "effect",
-                                    e.target.value,
-                                  )
-                                }
-                                placeholder="Hiệu ứng sau nâng cấp..."
-                                className="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs h-16 outline-none focus:border-yellow-500"
-                              />
+                            {/* UPGRADE EFFECTS ARRAY */}
+                            <div className="bg-slate-950/50 p-3 rounded border border-slate-800">
+                              <div className="flex justify-between items-center mb-2">
+                                <h4 className="text-xs font-bold text-slate-400 uppercase">
+                                  Hiệu ứng nâng cấp
+                                </h4>
+                                <button
+                                  type="button"
+                                  onClick={() => addNvvCardUpgradeEffect(idx)}
+                                  className="text-[10px] bg-green-600 hover:bg-green-500 text-white px-2 py-1 rounded flex items-center gap-1"
+                                >
+                                  <FaPlus size={8} /> Thêm
+                                </button>
+                              </div>
+
+                              <div className="space-y-3">
+                                {card.upgradeEffects?.map(
+                                  (effect: any, effectIdx: number) => (
+                                    <div
+                                      key={effectIdx}
+                                      className="flex gap-2 items-start bg-slate-900 p-2 rounded border border-slate-700 relative group"
+                                    >
+                                      <div className="flex-1 space-y-2">
+                                        <input
+                                          type="text"
+                                          value={effect.condition}
+                                          onChange={(e) =>
+                                            updateNvvCardUpgradeEffect(
+                                              idx,
+                                              effectIdx,
+                                              "condition",
+                                              e.target.value,
+                                            )
+                                          }
+                                          placeholder="Điều kiện nâng cấp..."
+                                          className="w-full bg-transparent border-b border-slate-700 text-xs text-yellow-500 font-bold outline-none focus:border-yellow-500"
+                                        />
+                                        <textarea
+                                          value={effect.effect}
+                                          onChange={(e) =>
+                                            updateNvvCardUpgradeEffect(
+                                              idx,
+                                              effectIdx,
+                                              "effect",
+                                              e.target.value,
+                                            )
+                                          }
+                                          placeholder="Mô tả hiệu ứng..."
+                                          className="w-full bg-transparent text-xs text-slate-300 outline-none h-10"
+                                        />
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          removeNvvCardUpgradeEffect(
+                                            idx,
+                                            effectIdx,
+                                          )
+                                        }
+                                        className="text-red-500 hover:text-red-400 p-1"
+                                      >
+                                        <FaTrash size={10} />
+                                      </button>
+                                    </div>
+                                  ),
+                                )}
+                                {(!card.upgradeEffects ||
+                                  card.upgradeEffects.length === 0) && (
+                                  <p className="text-[10px] text-slate-600 italic text-center">
+                                    Chưa có hiệu ứng nâng cấp
+                                  </p>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>

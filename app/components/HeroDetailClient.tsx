@@ -584,25 +584,32 @@ const NvvCardModal = ({
               </div>
             )}
           </div>
-          {card.upgradeEffect && card.upgradeEffect.condition && (
+          {card.upgradeEffects && card.upgradeEffects.length > 0 && (
             <div className="bg-gradient-to-br from-purple-900/10 to-slate-800/50 p-5 rounded-xl border border-purple-500/30 hover:border-purple-500/50 transition-colors">
               <h4 className="text-purple-400 font-bold text-sm uppercase flex items-center gap-2 mb-3 border-b border-purple-500/10 pb-2">
                 Hiệu Ứng Nâng Cấp
               </h4>
-              <div className="text-sm space-y-3">
-                <div>
-                  <p className="text-slate-400 italic bg-black/20 px-3 py-1.5 rounded inline-block border border-slate-700">
-                    {card.upgradeEffect.condition}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-slate-500 font-bold uppercase mb-1">
-                    Hiệu quả mới
-                  </p>
-                  <div className="text-blue-100 border-l-2 border-blue-500 pl-4 py-1 leading-relaxed bg-blue-900/10 rounded-r">
-                    {card.upgradeEffect.effect}
+              <div className="space-y-6">
+                {card.upgradeEffects.map((upgrade, idx) => (
+                  <div
+                    key={idx}
+                    className={`text-sm space-y-3 ${idx !== 0 ? "pt-4 border-t border-purple-500/10" : ""}`}
+                  >
+                    <div>
+                      <p className="text-slate-400 italic bg-black/20 px-3 py-1.5 rounded inline-block border border-slate-700">
+                        {upgrade.condition}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-bold uppercase mb-1">
+                        Hiệu quả mới
+                      </p>
+                      <div className="text-blue-100 border-l-2 border-blue-500 pl-4 py-1 leading-relaxed bg-blue-900/10 rounded-r">
+                        {upgrade.effect}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           )}
