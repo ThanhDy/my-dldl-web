@@ -123,3 +123,24 @@ export interface SoulMaster {
     cards: NvvCard[];
   };
 }
+
+//==========================================================================
+
+export interface starEffect {
+  star: number;
+  description: string;
+  condition: number;
+}
+
+export interface SourceSoulHeart {
+  id: string;
+  name: string;
+  character: string; // Tên nhân vật
+  rarity: string; // Độ hiếm (SP, SSR, SP+)
+  type: string;
+  avatar: string; // Link ảnh đại diện
+  basicStat: string; // Chỉ số cơ bản
+  basicSkill: string; // Kỹ năng cơ bản
+  isExtend?: boolean;
+  starEffects: starEffect[];
+}

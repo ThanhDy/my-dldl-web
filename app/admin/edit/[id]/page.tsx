@@ -545,7 +545,7 @@ export default function EditHeroPage() {
       dataForm.append("folder", `soul-masters/${folderName}`);
     } // app/api/cloudinary/delete/route.ts
 
-    const cloudName = "dom5kcwri";
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,

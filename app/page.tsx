@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { GiMagicPortal } from "react-icons/gi";
 import BackToTop from "@/app/components/BackToTop";
+import { color } from "framer-motion";
 
 const features = [
   {
@@ -22,34 +23,32 @@ const features = [
     active: true,
   },
   {
-    title: "Ám Khí",
-    icon: <FaSkull size={24} />,
-    href: "/hidden-weapons",
-    active: false,
-  },
-  {
-    title: "Thần Khí",
-    icon: <FaGem size={24} />,
-    href: "/divine-weapons",
-    active: false,
-  },
-  {
-    title: "Hồn Hoàn Riêng",
-    icon: <FaMagic size={24} />,
-    href: "/god-rings",
-    active: false,
-  },
-  {
-    title: "Hồn Linh",
-    icon: <FaGhost size={24} />,
-    href: "/soul-spirits",
-    active: false,
-  },
-  {
-    title: "Hồn Hoàn Thông Dụng",
-    icon: <GiMagicPortal size={24} />,
-    href: "/general-rings",
-    active: false,
+    title: "Nguyên Hồn Tâm",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.0"
+        width="24"
+        height="24"
+        viewBox="0 0 55.000000 49.000000"
+        preserveAspectRatio="xMidYMid meet"
+        className="scale-150"
+      >
+        <g
+          transform="translate(0.000000,49.000000) scale(0.100000,-0.100000)"
+          fill="currentColor"
+          stroke="none"
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M0 0 h550 v490 h-550 z M0 245 l0 -245 275 0 275 0 0 245 0 245 -135 0 c-83 0 -135 -4 -135 -10 0 -6 9 -19 20 -30 l20 -20 -21 -21 c-14 -14 -18 -27 -13 -42 8 -28 43 -67 69 -77 14 -6 15 -9 4 -9 -20 -1 -65 -49 -74 -81 l-8 -25 -11 27 c-14 33 -45 68 -71 79 -14 5 -15 8 -4 8 19 1 65 49 73 78 5 15 1 28 -13 42 -21 21 -21 21 -1 41 11 11 20 25 20 30 0 6 -52 10 -135 10 l-135 0 0 -245z m418 119 c28 -32 29 -78 1 -123 l-21 -35 24 15 c12 9 33 35 46 59 21 43 22 43 22 14 0 -16 -9 -46 -19 -67 -20 -40 -20 -42 10 -27 10 6 19 7 19 2 0 -19 -51 -54 -96 -66 -43 -11 -52 -18 -77 -62 l-28 -49 4 58 c3 51 2 56 -11 43 -13 -13 -17 -12 -33 7 -17 21 -17 20 -13 -43 l5 -65 -28 49 c-25 44 -34 51 -77 62 -32 8 -61 24 -80 45 -29 30 -27 32 18 13 11 -4 10 3 -5 32 -10 21 -19 52 -19 69 0 30 1 30 19 -11 18 -39 53 -74 75 -74 5 0 0 10 -12 22 -41 45 -37 124 9 148 26 14 75 12 88 -3 8 -11 5 -13 -19 -9 -36 5 -80 -35 -80 -74 0 -26 22 -51 102 -119 l36 -31 34 31 c19 16 46 40 61 52 68 57 28 161 -53 140 -26 -7 -15 12 14 23 29 12 57 3 84 -26z"
+          />
+        </g>
+      </svg>
+    ),
+    href: "/nguyen-hon-tam",
+    active: true,
   },
 ];
 

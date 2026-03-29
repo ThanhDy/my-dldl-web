@@ -350,7 +350,7 @@ export default function AddHeroPage() {
       // Ví dụ kết quả: soul-masters/duong-tam-sp/anh.jpg
     }
 
-    const cloudName = "dom5kcwri"; // <-- Thay Cloud Name của bạn
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME; // <-- Thay Cloud Name của bạn
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,

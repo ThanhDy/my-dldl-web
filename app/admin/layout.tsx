@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"; // Thêm useRouter
-import { FaUsers, FaBoxOpen, FaSignOutAlt } from "react-icons/fa";
+import { FaUsers, FaBoxOpen, FaSignOutAlt, FaStar } from "react-icons/fa";
 
 export default function AdminLayout({
   children,
@@ -48,9 +48,16 @@ export default function AdminLayout({
             <FaUsers className="text-lg" /> Quản Lý Hồn Sư
           </Link>
 
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-bold text-sm text-slate-400 hover:bg-slate-800 hover:text-white">
-            <FaBoxOpen className="text-lg" /> Vật Phẩm (Demo)
-          </button>
+          <Link
+            href="/admin/nguyen-hon-tam"
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-bold text-sm ${
+              pathname.startsWith("/admin/nguyen-hon-tam")
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                : "text-slate-400 hover:bg-slate-800 hover:text-white"
+            }`}
+          >
+            <FaStar className="text-lg" /> Nguyên Hồn Tâm
+          </Link>
         </nav>
 
         <div className="p-4 border-t border-slate-800">
