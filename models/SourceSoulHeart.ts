@@ -27,7 +27,8 @@ const sourceSoulHeartSchema = new Schema<ISourceSoulHeart>(
     toJSON: {
       virtuals: true,
       transform(doc, ret) {
-        ret.id = ret._id;
+        ret.id = ret._id.toString();
+
         delete ret._id;
         delete ret.__v;
       },
