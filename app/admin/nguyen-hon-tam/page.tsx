@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { FaPlus, FaSearch, FaFilter } from "react-icons/fa";
 import { SourceSoulHeart } from "@/data/types";
 import AdminSourceSoulHeartModal from "./AdminSourceSoulHeartModal";
+import { Input } from "@/app/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const rarities = ["Tất cả", "SP", "SSR+", "SSR"];
 const types = [
@@ -128,54 +131,54 @@ export default function AdminSourceSoulHeartPage() {
           {/* 1. Ô Tìm Kiếm */}
           <div className="relative group flex-1 sm:flex-none">
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400" />
-            <input
+            <Input
               type="text"
               placeholder="Tìm tên, nhân vật..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full sm:w-60 bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 outline-none focus:border-blue-500 transition-all"
+              className="w-full sm:w-60 bg-slate-900 border-slate-800 pl-9 pr-4 py-2 text-sm focus-visible:ring-blue-500 text-slate-200"
             />
           </div>
 
           {/* 2. Lọc Phẩm Chất */}
           <div className="relative flex-1 sm:flex-none">
-            <select
-              value={selectedRarity}
-              onChange={(e) => setSelectedRarity(e.target.value)}
-              className="w-full sm:w-32 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 outline-none focus:border-blue-500 cursor-pointer appearance-none"
-            >
-              {rarities.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-            <FaFilter className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none" />
+            <Select value={selectedRarity} onValueChange={(val) => val && setSelectedRarity(val)}>
+              <SelectTrigger className="w-full sm:w-[130px] bg-slate-900 border-slate-800 text-sm text-slate-300 focus:ring-blue-500">
+                <SelectValue placeholder="Phẩm chất" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-slate-800 text-slate-300">
+                {rarities.map((r) => (
+                  <SelectItem key={r} value={r} className="focus:bg-slate-800 focus:text-white cursor-pointer">
+                    {r}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* 3. Lọc Hệ */}
           <div className="relative flex-1 sm:flex-none">
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="w-full sm:w-44 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 outline-none focus:border-blue-500 cursor-pointer appearance-none"
-            >
-              {types.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-            <FaFilter className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none" />
+            <Select value={selectedType} onValueChange={(val) => val && setSelectedType(val)}>
+              <SelectTrigger className="w-full sm:w-[180px] bg-slate-900 border-slate-800 text-sm text-slate-300 focus:ring-blue-500">
+                <SelectValue placeholder="Hệ" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-slate-800 text-slate-300">
+                {types.map((t) => (
+                  <SelectItem key={t} value={t} className="focus:bg-slate-800 focus:text-white cursor-pointer">
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Nút THÊM MỚI */}
-          <button
+          <Button
             onClick={handleAddNew}
-            className="bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded-lg font-bold flex items-center justify-center gap-2 text-sm shadow-lg shadow-green-900/20 transition-transform active:scale-95"
+            className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-bold flex items-center justify-center gap-2 text-sm shadow-lg shadow-green-900/20 transition-transform active:scale-95 h-9 sm:h-auto"
           >
             <FaPlus /> Thêm
-          </button>
+          </Button>
         </div>
       </header>
 

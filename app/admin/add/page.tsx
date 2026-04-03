@@ -13,6 +13,7 @@ import {
   FaDna,
   FaArrowUp,
 } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
 
 const getDefaultSkillType = (order: number) => {
   switch (order) {
@@ -343,36 +344,54 @@ export default function AddHeroPage() {
   const uploadToCloudinary = async (file: File, folderName: string) => {
     const dataForm = new FormData();
     dataForm.append("file", file);
-    dataForm.append("upload_preset", "soul_master_upload"); // <-- Thay Preset của bạn
 
+    // Gửi tên folder muốn tạo lên API nội bộ
     if (folderName) {
       dataForm.append("folder", `soul-masters/${folderName}`);
-      // Ví dụ kết quả: soul-masters/duong-tam-sp/anh.jpg
     }
 
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME; // <-- Thay Cloud Name của bạn
+    // Gọi API nội bộ thay vì gọi trực tiếp Cloudinary từ client
+    const res = await fetch("/api/cloudinary/upload", {
+      method: "POST",
+      body: dataForm,
+    });
 
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      { method: "POST", body: dataForm },
-    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Lỗi khi upload ảnh lên server!");
+    }
+
     const data = await res.json();
-    return data.secure_url; // Trả về link ảnh thật
+    return data.secure_url; // Trả về link ảnh thật từ Cloudinary
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+    // 1. Đảm bảo ID được sinh ra trước khi upload (Tránh trường hợp chưa Blur ô tên)
+    let currentId = formData.id;
+    if (!currentId && formData.name) {
+      currentId = formData.name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
+
+      // Cập nhật cả vào formData để các bước sau dùng đúng ID này
+      setFormData((prev: any) => ({ ...prev, id: currentId }));
+    }
+
     try {
-      let finalImageUrl = formData.image; // Mặc định dùng link cũ (nếu nhập tay)
+      let finalImageUrl = formData.image;
       if (selectedFile) {
         try {
-          const folderName = formData.id || "hon-su-khac";
-
+          const folderName = currentId || "hon-su-khac";
           finalImageUrl = await uploadToCloudinary(selectedFile, folderName);
-        } catch (uploadError) {
-          throw new Error("Lỗi khi upload ảnh lên Cloudinary!");
+        } catch (uploadError: any) {
+          throw new Error(`Cloudinary Error: ${uploadError.message}`);
         }
       }
 
@@ -382,7 +401,7 @@ export default function AddHeroPage() {
           if (skillFiles[index]) {
             const url = await uploadToCloudinary(
               skillFiles[index],
-              formData.id || "skills",
+              currentId || "skills",
             );
             return { ...skill, iconUrl: url };
           }
@@ -396,7 +415,7 @@ export default function AddHeroPage() {
           if (boneFiles[index]) {
             const url = await uploadToCloudinary(
               boneFiles[index],
-              formData.id || "bones",
+              currentId || "bones",
             );
             return { ...bone, iconUrl: url };
           }
@@ -417,13 +436,13 @@ export default function AddHeroPage() {
 
       // Đảm bảo ID được sinh ra nếu chưa có
       cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
-        if (!skill.id && cleanData.id) {
+        if (!skill.id && currentId) {
           return {
             ...skill,
-            id: `${cleanData.id}-s${skill._tempOrder}-${skill._tempBranch}`,
+            id: `${currentId}-s${skill._tempOrder}-${skill._tempBranch}`,
             iconUrl:
               skill.iconUrl ||
-              `/images/${cleanData.id}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
+              `/images/${currentId}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
           };
         }
         return skill;
@@ -550,13 +569,13 @@ export default function AddHeroPage() {
               </h1>
             </div>
           </div>
-          <button
+          <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 font-bold shadow-lg transition active:scale-95"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 font-bold shadow-lg shadow-green-900/20 transition-all active:scale-95 h-10"
           >
             <FaSave /> {loading ? "Đang xử lý..." : "Lưu Dữ Liệu"}
-          </button>
+          </Button>
         </header>
 
         {message && (

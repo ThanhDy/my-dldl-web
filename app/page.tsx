@@ -14,6 +14,8 @@ import {
 import { GiMagicPortal } from "react-icons/gi";
 import BackToTop from "@/app/components/BackToTop";
 import { color } from "framer-motion";
+import { NeonCard } from "@/app/components/ui/neon-card";
+import { Card } from "@/app/components/ui/card";
 
 const features = [
   {
@@ -73,32 +75,30 @@ export default function Home() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl w-full px-4 mb-10">
         {features.map((feature, index) =>
           feature.active ? (
-            <Link key={index} href={feature.href} className="group relative">
-              <div className="absolute -inset-0.5 bg-blue-600/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-300" />
-              <div className="relative bg-slate-900/90 border border-slate-700 p-4 rounded-xl hover:border-blue-500/50 transition-all flex flex-col items-center text-center gap-2 backdrop-blur-sm overflow-hidden h-full">
+            <Link key={index} href={feature.href} className="w-full">
+              <NeonCard glowColor="bg-blue-600/30" hoverBorderColor="hover:border-blue-500/80" className="p-4 items-center text-center gap-2 border-slate-700/50">
                 <div className="text-blue-400 group-hover:scale-110 transition-transform duration-300">
                   {feature.icon}
                 </div>
-                <h3 className="text-[10px] font-bold tracking-widest uppercase group-hover:text-blue-200 transition-colors">
+                <h3 className="text-[10px] font-bold tracking-widest uppercase text-slate-100 group-hover:text-white transition-colors">
                   {feature.title}
                 </h3>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[sweep_1.5s_infinite]" />
-              </div>
+              </NeonCard>
             </Link>
           ) : (
-            <div
+            <Card
               key={index}
-              className="relative bg-slate-900/40 border border-slate-800/50 p-4 rounded-xl flex flex-col items-center text-center gap-2 opacity-60"
+              className="relative bg-slate-900/40 border-slate-800/50 p-4 rounded-xl flex flex-col items-center text-center gap-2 opacity-60"
             >
               <div className="absolute -top-1 -right-1 bg-red-600 shadow-[0_0_12px_rgba(220,38,38,0.8)] text-[8px] px-2 py-0.5 rounded-full text-white font-black uppercase tracking-tighter border border-red-400 z-10">
                 Sắp ra mắt
               </div>
 
               <div className="text-slate-600 grayscale">{feature.icon}</div>
-              <h3 className="text-[10px] font-bold uppercase text-slate-500 italic">
+              <h3 className="text-[10px] font-bold uppercase text-slate-300 italic">
                 {feature.title}
               </h3>
-            </div>
+            </Card>
           ),
         )}
       </div>

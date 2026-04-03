@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { SoulMaster } from "@/data/types"; // Đảm bảo bạn đã có file types này
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
-// Nếu bạn chưa có component BackToTop, hãy comment dòng này lại hoặc xóa đi
 import BackToTop from "@/app/components/BackToTop";
+import { NeonCard } from "@/app/components/ui/neon-card";
+import { Input } from "@/app/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 
 export default function SoulMasterList({
   initialData,
@@ -57,38 +59,45 @@ export default function SoulMasterList({
           {/* Search & Filter Bar */}
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <div className="relative">
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-[10px]" />
-              <input
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]" />
+              <Input
                 type="text"
                 placeholder="Tìm tên..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full sm:w-56 bg-slate-900/80 border border-slate-800 rounded-lg py-2 pl-9 pr-4 text-xs outline-none focus:border-yellow-500/50 transition-all"
+                className="w-full sm:w-56 bg-slate-900/80 border-slate-800 py-2 pl-9 pr-4 text-xs focus-visible:ring-yellow-500/50"
               />
             </div>
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="bg-slate-900/80 border border-slate-800 rounded-lg py-2 px-3 text-xs font-bold text-slate-400 outline-none cursor-pointer"
-            >
-              {types.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
+            <Select value={selectedType} onValueChange={(val) => val && setSelectedType(val)}>
+              <SelectTrigger className="w-[140px] bg-slate-900/80 border-slate-800 text-xs font-bold text-slate-400 focus:ring-yellow-500/50">
+                <SelectValue placeholder="Phân Loại" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-slate-800 text-slate-300">
+                {types.map((t) => (
+                  <SelectItem key={t} value={t} className="text-xs cursor-pointer focus:bg-slate-800 focus:text-white">
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
         {/* Grid Danh Sách Tướng */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {filteredHeroes.map((hero) => (
-            <Link
-              href={`/soul-masters/${hero.id}`}
-              key={hero.id}
-              className="group bg-slate-900/40 rounded-xl overflow-hidden border border-slate-800/50 hover:border-yellow-500/50 transition-all shadow-2xl flex flex-col"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden">
+          {filteredHeroes.map((hero) => {
+            const isSP = hero.rarity.includes("SP");
+            const isSSR_Plus = hero.rarity.includes("SSR+");
+            const isSSR = hero.rarity === "SSR";
+            return (
+            <Link href={`/soul-masters/${hero.id}`} key={hero.id} className="w-full group">
+              <NeonCard
+                glowColor={isSSR_Plus ? "bg-red-600/30" : isSP ? "bg-fuchsia-500/40" : isSSR ? "bg-yellow-500/20" : "bg-slate-700/20"}
+                hoverBorderColor={isSSR_Plus ? "hover:border-red-500/80" : isSP ? "hover:border-fuchsia-500/80" : "hover:border-yellow-500/80"}
+                className="p-0 border-slate-800/50 rounded-xl overflow-hidden shadow-2xl flex flex-col"
+                withSweep={false}
+              >
+                <div className="relative aspect-[4/5] flex flex-col w-full h-full">
                 <div className="absolute top-2 left-2 z-10">
                   <span
                     className={`px-2 py-0.5 rounded-md font-black text-[9px] uppercase shadow-lg border ${
@@ -129,8 +138,10 @@ export default function SoulMasterList({
                   </div>
                 </div>
               </div>
+              </NeonCard>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
 

@@ -17,6 +17,7 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 import BackToTop from "@/app/components/BackToTop";
+import { Button } from "@/components/ui/button";
 
 // --- CÁC HÀM KHỞI TẠO MẪU ---
 const getDefaultSkillType = (order: number) => {
@@ -539,20 +540,24 @@ export default function EditHeroPage() {
   const uploadToCloudinary = async (file: File, folderName: string) => {
     const dataForm = new FormData();
     dataForm.append("file", file);
-    dataForm.append("upload_preset", "soul_master_upload");
 
     if (folderName) {
       dataForm.append("folder", `soul-masters/${folderName}`);
-    } // app/api/cloudinary/delete/route.ts
+    }
 
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    // Gọi API nội bộ thay vì gọi trực tiếp Cloudinary từ client
+    const res = await fetch("/api/cloudinary/upload", {
+      method: "POST",
+      body: dataForm,
+    });
 
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      { method: "POST", body: dataForm },
-    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Lỗi khi upload ảnh lên server!");
+    }
+
     const data = await res.json();
-    return data.secure_url;
+    return data.secure_url; // Trả về link ảnh thật từ Cloudinary
   };
 
   // 4. HÀM XÓA ẢNH CŨ (MỚI)
@@ -797,13 +802,13 @@ export default function EditHeroPage() {
               </p>
             </div>
           </div>
-          <button
+          <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition active:scale-95 shadow-lg shadow-blue-900/20"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition active:scale-95 shadow-lg shadow-blue-900/20 h-10"
           >
             <FaSave /> {loading ? "Đang lưu..." : "Lưu Thay Đổi"}
-          </button>
+          </Button>
         </header>
 
         {message && (
