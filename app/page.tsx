@@ -3,29 +3,34 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  FaUser,
-  FaSkull,
-  FaGem,
-  FaGhost,
-  FaMagic,
-  FaDiscord,
-  FaComments,
-} from "react-icons/fa";
-import { GiMagicPortal } from "react-icons/gi";
+  Users,
+  Sparkles,
+  Zap,
+  MessageSquare,
+  Shield,
+  LayoutGrid,
+  ChevronRight,
+  Monitor,
+  Flame,
+  Database
+} from "lucide-react";
 import BackToTop from "@/app/components/BackToTop";
-import { color } from "framer-motion";
 import { NeonCard } from "@/app/components/ui/neon-card";
 import { Card } from "@/app/components/ui/card";
+import { motion } from "framer-motion";
 
 const features = [
   {
     title: "Hồn Sư",
-    icon: <FaUser size={24} />,
+    description: "Tra cứu thông tin, kỹ năng và build của tất cả hồn sư",
+    icon: <Users size={28} />,
     href: "/soul-masters",
     active: true,
+    color: "blue"
   },
   {
     title: "Nguyên Hồn Tâm",
+    description: "Thông tin chỉ số và hiệu ứng kích hoạt của Nguyên Hồn Tâm",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +56,16 @@ const features = [
     ),
     href: "/nguyen-hon-tam",
     active: true,
+    color: "purple"
   },
+  {
+    title: "Hệ thống đốt cốt",
+    description: "Sắp ra mắt hệ thống hồn cốt đặc biệt",
+    icon: <Flame size={28} />,
+    href: "#",
+    active: false,
+    color: "slate"
+  }
 ];
 
 export default function Home() {
@@ -61,80 +75,128 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <div className="min-h-screen bg-black" />;
+  if (!mounted) return <div className="min-h-screen bg-[#020617]" />;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-950 to-black text-white p-6 flex flex-col items-center">
-      <div className="text-center mb-10">
-        <h1 className="text-4xl md:text-5xl font-black mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 drop-shadow-[0_0_10px_rgba(96,165,250,0.3)] uppercase tracking-tighter">
-          Đấu La Đại Lục Wiki
-        </h1>
-        <div className="h-0.5 w-16 bg-blue-500 mx-auto rounded-full shadow-[0_0_8px_#3b82f6]" />
-      </div>
+    <div className="min-h-screen bg-[#020617] text-white overflow-hidden relative selection:bg-blue-500/30">
+      {/* Cyberpunk Background Elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#1e293b_0%,#020617_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none z-10 opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl w-full px-4 mb-10">
-        {features.map((feature, index) =>
-          feature.active ? (
-            <Link key={index} href={feature.href} className="w-full">
-              <NeonCard glowColor="bg-blue-600/30" hoverBorderColor="hover:border-blue-500/80" className="p-4 items-center text-center gap-2 border-slate-700/50">
-                <div className="text-blue-400 group-hover:scale-110 transition-transform duration-300">
-                  {feature.icon}
-                </div>
-                <h3 className="text-[10px] font-bold tracking-widest uppercase text-slate-100 group-hover:text-white transition-colors">
-                  {feature.title}
-                </h3>
-              </NeonCard>
-            </Link>
-          ) : (
-            <Card
+      {/* Hero Section */}
+      <main className="relative z-20 max-w-7xl mx-auto px-6 py-20 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16 space-y-4"
+        >
+          
+          <h1 className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter leading-none">
+            <span className="block text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">ĐẤU LA</span>
+            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 drop-shadow-[0_0_20px_rgba(99,102,241,0.5)] pb-10">ĐẠI LỤC WIKI</span>
+          </h1>
+          
+          <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base font-medium leading-relaxed">
+            Hệ thống tra cứu cơ sở dữ liệu hồn sư, nguyên hồn tâm và các phụ kiện cao cấp bậc nhất dành cho các hồn sư thế hệ mới.
+          </p>
+        </motion.div>
+
+        {/* Feature Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
+          {features.map((feature, index) => (
+            <motion.div
               key={index}
-              className="relative bg-slate-900/40 border-slate-800/50 p-4 rounded-xl flex flex-col items-center text-center gap-2 opacity-60"
+              initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
             >
-              <div className="absolute -top-1 -right-1 bg-red-600 shadow-[0_0_12px_rgba(220,38,38,0.8)] text-[8px] px-2 py-0.5 rounded-full text-white font-black uppercase tracking-tighter border border-red-400 z-10">
-                Sắp ra mắt
-              </div>
-
-              <div className="text-slate-600 grayscale">{feature.icon}</div>
-              <h3 className="text-[10px] font-bold uppercase text-slate-300 italic">
-                {feature.title}
-              </h3>
-            </Card>
-          ),
-        )}
-      </div>
-
-      <div className="flex flex-col items-center gap-4 mt-auto">
-        <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold tracking-[0.2em]">
-          <FaComments className="text-blue-500/50" />
-          <span>Thảo luận tại</span>
+              {feature.active ? (
+                <Link href={feature.href} className="group block h-full">
+                  <NeonCard 
+                    glowColor={feature.color === 'blue' ? 'bg-blue-600/20' : 'bg-purple-600/20'} 
+                    hoverBorderColor={feature.color === 'blue' ? 'hover:border-blue-500/50' : 'hover:border-purple-500/50'}
+                    className="p-8 h-full flex flex-col items-start gap-4 border-white/5 transition-all duration-500 group-hover:bg-white/[0.02]"
+                  >
+                    <div className={`${feature.color === 'blue' ? 'text-blue-400' : 'text-purple-400'} p-3 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
+                      {feature.icon}
+                    </div>
+                    <div className="space-y-2 text-left">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-xl font-black uppercase tracking-tight text-white group-hover:text-blue-400 transition-colors">
+                          {feature.title}
+                        </h3>
+                        <ChevronRight className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-blue-400" size={18} />
+                      </div>
+                      <p className="text-slate-500 text-xs font-medium leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </NeonCard>
+                </Link>
+              ) : (
+                <Card className="p-8 h-full flex flex-col items-start gap-4 border-white/5 bg-white/[0.01] opacity-40 grayscale relative overflow-hidden group">
+                  <div className="absolute top-4 right-4 bg-slate-800 text-[8px] px-2 py-1 rounded-md text-slate-400 font-black uppercase tracking-widest border border-white/5">
+                    Sắp ra mắt
+                  </div>
+                  <div className="text-slate-600 p-3 bg-white/5 rounded-2xl">
+                    {feature.icon}
+                  </div>
+                  <div className="space-y-2 text-left">
+                     <h3 className="text-xl font-black uppercase tracking-tight text-slate-400">
+                      {feature.title}
+                    </h3>
+                    <p className="text-slate-600 text-xs font-medium leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                </Card>
+              )}
+            </motion.div>
+          ))}
         </div>
 
-        <a
-          href="https://discord.gg/a4E7Uqzg"
-          target="_blank"
-          className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full hover:border-indigo-500 hover:bg-indigo-500/20 transition-all group shadow-[0_0_15px_rgba(88,101,242,0.1)]"
+        {/* Footer Info */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="mt-24 flex flex-col items-center gap-6"
         >
-          <FaDiscord
-            className="text-[#5865F2] group-hover:scale-110 transition-transform duration-300"
-            size={18}
-          />
-          <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 group-hover:text-white transition-colors">
-            Đấu La Đại Lục - Nơi Giao Lưu Giữa Các Hồn Sư
-          </span>
-        </a>
-      </div>
+          <div className="h-px w-24 bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+          
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">Cộng đồng & Phản hồi</span>
+            <a
+              href="https://discord.gg/ffKXutbE"
+              target="_blank"
+              className="group flex items-center gap-4 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all duration-500"
+            >
+              <div className="p-2 bg-[#5865F2]/10 rounded-xl group-hover:scale-110 transition-transform">
+                <MessageSquare className="text-[#5865F2]" size={20} />
+              </div>
+              <div className="text-left">
+                <p className="text-[11px] font-black text-white uppercase tracking-wider">Tham gia Discord</p>
+                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-tight">Cộng đồng Đấu La Đại Lục</p>
+              </div>
+              <ChevronRight className="text-slate-600 group-hover:text-white transition-colors" size={16} />
+            </a>
+          </div>
+        </motion.div>
+      </main>
 
-      {/* Back to Top Button */}
+
       <BackToTop />
-
       <style jsx global>{`
-        @keyframes sweep {
-          0% {
-            transform: translateX(-100%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #334155;
+          border-radius: 10px;
         }
       `}</style>
     </div>
