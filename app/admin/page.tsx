@@ -264,7 +264,7 @@ export default function AdminListPage() {
                         </Button>
                         
                         <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
+                          <DropdownMenuTrigger>
                             <Button variant="ghost" size="icon" className="h-8 w-8 md:h-9 md:w-9 rounded-xl text-slate-600 hover:text-white hover:bg-white/5">
                               <MoreVertical size={16} />
                             </Button>
