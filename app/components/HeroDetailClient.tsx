@@ -642,7 +642,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
 
   const isVinhVinh = hero?.name?.toLowerCase().includes("vinh vinh");
   const isTranTam = hero?.id === "cuc-han---kiem-dao-tran-tam";
-  const isHVHPlus = hero?.id === "than-vuong---hoac-vu-hao";
+  // const isHVHPlus = hero?.id === "than-vuong---hoac-vu-hao";
   const isAmKhi = hero?.type === "Ám Khí";
   const isRainbowRarity = hero?.rarity === "SP" || hero?.rarity === "SP+";
   const isSsrPlus = hero?.rarity === "SSR+";

@@ -109,6 +109,28 @@ export default function AdminSourceSoulHeartModal({
     }
   };
 
+  // Hàm upload ảnh lên Cloudinary qua API Proxy của server
+  const uploadToCloudinary = async (file: File, folderName: string) => {
+    const dataForm = new FormData();
+    dataForm.append("file", file);
+    if (folderName) {
+      dataForm.append("folder", folderName);
+    }
+
+    const res = await fetch("/api/cloudinary/upload", {
+      method: "POST",
+      body: dataForm,
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Lỗi khi upload ảnh lên server!");
+    }
+
+    const data = await res.json();
+    return data.secure_url;
+  };
+
   // Xử lý Lưu dữ liệu (Bao gồm Upload Ảnh và Lưu Mongo)
   const handleSaveClick = async () => {
     setIsSaving(true);
@@ -117,33 +139,17 @@ export default function AdminSourceSoulHeartModal({
 
       // 1. Upload ảnh lên Cloudinary nếu có file mới
       if (imageFile) {
-        const uploadData = new FormData();
-        uploadData.append("file", imageFile);
-        uploadData.append("upload_preset", "soul_master_upload");
-        uploadData.append("folder", "nguyen-hon-tam");
-
-        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-
-        const cloudRes = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          {
-            method: "POST",
-            body: uploadData,
-          },
-        );
-
-        const cloudData = await cloudRes.json();
-        if (cloudData.secure_url) {
-          // Nếu tải ảnh mới lên thành công, xóa ảnh cũ (nếu có)
-          if (formData.avatar) {
-            await deleteCloudinaryImage(formData.avatar);
+        try {
+          const newUrl = await uploadToCloudinary(imageFile, "nguyen-hon-tam");
+          if (newUrl) {
+            // Nếu tải ảnh mới lên thành công, xóa ảnh cũ (nếu có)
+            if (formData.avatar) {
+              await deleteCloudinaryImage(formData.avatar);
+            }
+            finalAvatarUrl = newUrl;
           }
-          finalAvatarUrl = cloudData.secure_url;
-        } else {
-          console.error("Cloudinary Error:", cloudData);
-          throw new Error(
-            cloudData.error?.message || "Lỗi khi upload ảnh lên Cloudinary",
-          );
+        } catch (uploadError: any) {
+          throw new Error(`Cloudinary Error: ${uploadError.message}`);
         }
       }
 
