@@ -60,11 +60,11 @@ const features = [
   },
   {
     title: "Hệ thống đốt cốt",
-    description: "Sắp ra mắt hệ thống hồn cốt đặc biệt",
+    description: "Thông tin chi tiết và tính năng của hệ thống hồn cốt đặc biệt",
     icon: <Flame size={28} />,
-    href: "#",
-    active: false,
-    color: "slate"
+    href: "/dot-cot",
+    active: true,
+    color: "orange"
   }
 ];
 

@@ -11,7 +11,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Menu,
-  X
+  X,
+  Flame
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -51,6 +52,12 @@ export default function AdminLayout({
       href: "/admin/nguyen-hon-tam",
       icon: Sparkles,
       pattern: /^\/admin\/nguyen-hon-tam/,
+    },
+    {
+      name: "Hệ Thống Đốt Cốt",
+      href: "/admin/dot-cot",
+      icon: Flame,
+      pattern: /^\/admin\/dot-cot/,
     },
   ];
 

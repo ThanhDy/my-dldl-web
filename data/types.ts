@@ -144,3 +144,15 @@ export interface SourceSoulHeart {
   isExtend?: boolean;
   starEffects: starEffect[];
 }
+
+export interface BoneBurningLevel {
+  level: number;
+  levelName: string; // "Cấp 1" ... "Tiến hóa"
+  description: string;
+}
+
+export interface BoneBurning {
+  id: string;
+  type: string; // "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ/Phòng Ngự"
+  levels: BoneBurningLevel[];
+}
