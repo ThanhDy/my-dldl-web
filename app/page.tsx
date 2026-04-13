@@ -156,33 +156,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Footer Info */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-24 flex flex-col items-center gap-6"
-        >
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
-          
-          <div className="flex flex-col items-center gap-4">
-            <span className="text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">Cộng đồng & Phản hồi</span>
-            <a
-              href="https://discord.gg/ffKXutbE"
-              target="_blank"
-              className="group flex items-center gap-4 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all duration-500"
-            >
-              <div className="p-2 bg-[#5865F2]/10 rounded-xl group-hover:scale-110 transition-transform">
-                <MessageSquare className="text-[#5865F2]" size={20} />
-              </div>
-              <div className="text-left">
-                <p className="text-[11px] font-black text-white uppercase tracking-wider">Tham gia Discord</p>
-                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-tight">Cộng đồng Đấu La Đại Lục</p>
-              </div>
-              <ChevronRight className="text-slate-600 group-hover:text-white transition-colors" size={16} />
-            </a>
-          </div>
-        </motion.div>
       </main>
 
 

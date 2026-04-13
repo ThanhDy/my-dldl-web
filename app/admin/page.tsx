@@ -122,6 +122,7 @@ export default function AdminListPage() {
           <div className="relative group min-w-[200px] flex-1 xl:min-w-[300px]">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={16} />
             <Input
+              id="admin-search-input"
               type="text"
               placeholder="Tìm theo tên hoặc ID..."
               value={searchTerm}
@@ -131,7 +132,7 @@ export default function AdminListPage() {
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <Select value={filterRarity} onValueChange={(val) => val && setFilterRarity(val)}>
+            <Select id="admin-rarity-filter" value={filterRarity} onValueChange={(val) => val && setFilterRarity(val)}>
               <SelectTrigger className="flex-1 sm:w-[130px] bg-slate-900/40 backdrop-blur-md border-white/5 py-5 md:py-6 rounded-2xl text-xs md:text-sm text-slate-300 focus:ring-indigo-500/50">
                 <div className="flex items-center gap-2">
                   <Filter size={14} className="opacity-40" />
@@ -264,11 +265,11 @@ export default function AdminListPage() {
                         </Button>
                         
                         <DropdownMenu>
-                          <DropdownMenuTrigger>
+                          <DropdownMenuTrigger render={
                             <Button variant="ghost" size="icon" className="h-8 w-8 md:h-9 md:w-9 rounded-xl text-slate-600 hover:text-white hover:bg-white/5">
                               <MoreVertical size={16} />
                             </Button>
-                          </DropdownMenuTrigger>
+                          } />
                           <DropdownMenuContent align="end" className="bg-slate-900/95 backdrop-blur-xl border-white/10 text-slate-200 p-2 rounded-2xl shadow-2xl">
                             <DropdownMenuItem 
                               onClick={() => router.push(`/admin/edit/${hero.id}`)} 
