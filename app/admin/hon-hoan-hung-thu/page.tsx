@@ -54,7 +54,25 @@ export default function AdminHungThuSoulRing() {
         setData(result.data);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Lỗi:", error);
+      alert("Đã có lỗi xảy ra");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleManualRevalidate = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/revalidate?path=/hon-hoan-hung-thu");
+      const result = await res.json();
+      if (result.revalidated) {
+        alert("Đã làm mới bộ nhớ đệm trang người dùng!");
+      } else {
+        alert("Lỗi khi làm mới: " + result.message);
+      }
+    } catch (error) {
+      alert("Lỗi kết nối server");
     } finally {
       setLoading(false);
     }
@@ -212,6 +230,14 @@ export default function AdminHungThuSoulRing() {
         </div>
 
         <div className="flex items-center gap-3 w-full xl:w-auto">
+             <button
+                onClick={handleManualRevalidate}
+                disabled={loading}
+                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl transition-all border border-slate-700 text-sm"
+              >
+                <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+                Làm mới Cache User
+              </button>
              <Button 
               onClick={() => handleOpenModal()} 
               className="w-full xl:w-auto bg-orange-600 hover:bg-orange-500 text-white px-8 py-6 rounded-2xl font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg shadow-orange-900/30 transition-all active:scale-95 group"
