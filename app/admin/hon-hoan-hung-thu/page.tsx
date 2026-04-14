@@ -77,7 +77,7 @@ export default function AdminHungThuSoulRing() {
         basicEffect: "",
         yearEffects: [{ year: "", effect: "" }],
         componentIds: [],
-        suitableWithId: null
+        suitableWithId: undefined
       });
       setPreviewUrl("");
     }
@@ -497,7 +497,7 @@ export default function AdminHungThuSoulRing() {
                        <select 
                         className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-slate-300 outline-none"
                         value={editingItem.suitableWithId || ""}
-                        onChange={(e) => setEditingItem({ ...editingItem, suitableWithId: e.target.value })}
+                        onChange={(e) => setEditingItem({ ...editingItem, suitableWithId: e.target.value || undefined })}
                       >
                         <option value="">Không có</option>
                         {data.filter(d => d.type === "Regular" && d.id !== editingItem.id).map(r => (
