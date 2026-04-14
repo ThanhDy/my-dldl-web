@@ -37,6 +37,34 @@ const SYSTEM_COLORS: Record<string, string> = {
   "Phụ Trợ/Phòng Ngự": "from-emerald-500 to-teal-600"
 };
 
+// Hàm hỗ trợ định dạng chuỗi theo cú pháp [màu|nội dung]
+const formatText = (text: string) => {
+  if (!text) return null;
+  const parts = text.split(/(\[[^\]|]+\|[^\]]+\])/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("[") && part.endsWith("]")) {
+      const [color, label] = part.slice(1, -1).split("|");
+      const colorMap: Record<string, string> = {
+        red: "text-rose-500",
+        yellow: "text-amber-400",
+        blue: "text-blue-400",
+        green: "text-emerald-400",
+        purple: "text-purple-400",
+        orange: "text-orange-500",
+        cyan: "text-cyan-400",
+        gray: "text-slate-500",
+        white: "text-white",
+      };
+      return (
+        <span key={index} className={`font-black ${colorMap[color] || "text-slate-200"}`}>
+          {label}
+        </span>
+      );
+    }
+    return <React.Fragment key={index}>{part}</React.Fragment>;
+  });
+};
+
 interface HungThuSoulRingClientProps {
   initialData: HungThuSoulRing[];
 }
@@ -282,7 +310,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                          </div>
                          <div className="bg-white/[0.03] border border-white/5 rounded-3xl p-5 md:p-6 text-sm md:text-base font-medium text-slate-200 leading-relaxed ">
-                            "{selectedRing.basicEffect}"
+                            {formatText(selectedRing.basicEffect)}
                          </div>
                       </div>
 
@@ -296,7 +324,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                                  </h5>
                               </div>
                               <p className="text-slate-300 text-base leading-relaxed font-medium">
-                                 {eff.effect}
+                                 {formatText(eff.effect)}
                               </p>
                            </div>
                          ))}
