@@ -65,6 +65,8 @@ const formatText = (text: string) => {
   });
 };
 
+const DEFAULT_IMAGE = "https://res.cloudinary.com/dom5kcwri/image/upload/v1713080000/hung-thu-soul-rings/placeholder.png";
+
 interface HungThuSoulRingClientProps {
   initialData: HungThuSoulRing[];
 }
@@ -227,7 +229,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                     >
                       <div className="flex items-center gap-4">
                         <div className={`relative w-14 h-14 rounded-2xl overflow-hidden border border-white/10 ${selectedRingId === item.id ? "ring-2 ring-orange-500/40" : ""}`}>
-                          <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" unoptimized />
+                          <Image src={item.image || DEFAULT_IMAGE} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" unoptimized />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className={`font-black text-sm capitalize tracking-tighter truncate ${selectedRingId === item.id ? "text-orange-400" : "text-white"}`}>{item.name}</h4>
@@ -278,7 +280,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                       <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
                          <div className="relative w-28 h-28 shrink-0">
                             <div className="relative w-full h-full rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
-                               <Image src={selectedRing.image} alt={selectedRing.name} fill className="object-cover" unoptimized />
+                               <Image src={selectedRing.image || DEFAULT_IMAGE} alt={selectedRing.name} fill className="object-cover" unoptimized />
                             </div>
                          </div>
                          <div className="space-y-4">
@@ -310,7 +312,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                          </div>
                          <div className="bg-white/[0.03] border border-white/5 rounded-3xl p-5 md:p-6 text-sm md:text-base font-medium text-slate-200 leading-relaxed ">
-                            {formatText(selectedRing.basicEffect)}
+                            {selectedRing.basicEffect ? formatText(selectedRing.basicEffect) : <span className="text-slate-500 italic">(Đang cập nhật nội dung hiệu ứng...)</span>}
                          </div>
                       </div>
 
@@ -324,7 +326,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                                  </h5>
                               </div>
                               <p className="text-slate-300 text-base leading-relaxed font-medium">
-                                 {formatText(eff.effect)}
+                                 {eff.effect ? formatText(eff.effect) : <span className="text-slate-600 italic">(Thông tin mốc này đang được cập nhật...)</span>}
                               </p>
                            </div>
                          ))}

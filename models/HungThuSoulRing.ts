@@ -2,25 +2,25 @@ import mongoose, { Schema, Model } from "mongoose";
 import { HungThuSoulRing as IHungThuSoulRing } from "@/data/types";
 
 const hungThuYearEffectSchema = new Schema({
-  year: { type: String, required: true },
-  effect: { type: String, required: true },
+  year: { type: String, default: "" },
+  effect: { type: String, default: "" },
 });
 
 const hungThuSoulRingSchema = new Schema<IHungThuSoulRing>(
   {
     name: { type: String, required: true },
-    image: { type: String, required: true },
+    image: { type: String, default: "" },
     systems: { 
       type: [String], 
-      required: true, 
+      default: [],
       enum: ["Cường Công", "Mẫn Công", "Khống Chế", "Phụ Trợ/Phòng Ngự"] 
     },
     type: { 
       type: String, 
-      required: true, 
+      default: "Regular", 
       enum: ["Regular", "Combined"] 
     },
-    basicEffect: { type: String, required: true },
+    basicEffect: { type: String, default: "" },
     yearEffects: [hungThuYearEffectSchema],
     // References
     componentIds: [{ type: Schema.Types.ObjectId, ref: "HungThuSoulRing" }],

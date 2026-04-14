@@ -113,8 +113,8 @@ export default function AdminHungThuSoulRing() {
   };
 
   const handleSave = async () => {
-    if (!editingItem?.name || !editingItem?.image || !editingItem?.basicEffect) {
-      alert("Vui lòng nhập đầy đủ thông tin cơ bản!");
+    if (!editingItem?.name) {
+      alert("Vui lòng nhập tên hồn hoàn!");
       return;
     }
 
