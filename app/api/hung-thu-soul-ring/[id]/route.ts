@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/mongodb";
 import HungThuSoulRing from "@/models/HungThuSoulRing";
 
@@ -10,6 +11,10 @@ export async function DELETE(
     await dbConnect();
     const { id } = await params;
     await HungThuSoulRing.findByIdAndDelete(id);
+    
+    // Trigger revalidation for user page
+    revalidatePath("/hon-hoan-hung-thu");
+    
     return NextResponse.json({ success: true, message: "Deleted successfully" });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

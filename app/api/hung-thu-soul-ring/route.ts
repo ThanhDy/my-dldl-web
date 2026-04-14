@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/mongodb";
 import HungThuSoulRing from "@/models/HungThuSoulRing";
 
@@ -33,11 +34,19 @@ export async function POST(req: Request) {
           runValidators: true // Đảm bảo validation enum cho systems array vẫn hoạt động
         });
         console.log("Update success:", updated?.id);
+        
+        // Trigger revalidation for user page
+        revalidatePath("/hon-hoan-hung-thu");
+        
         return NextResponse.json({ success: true, data: updated });
     } else {
         // Create
         const newItem = await HungThuSoulRing.create(body);
         console.log("Create success:", newItem.id);
+        
+        // Trigger revalidation for user page
+        revalidatePath("/hon-hoan-hung-thu");
+        
         return NextResponse.json({ success: true, data: newItem });
     }
   } catch (error: any) {
