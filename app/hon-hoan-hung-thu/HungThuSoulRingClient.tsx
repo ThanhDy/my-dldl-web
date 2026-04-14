@@ -332,7 +332,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                                          <div className={`text-xs font-black uppercase transition-colors ${
                                            r.type === "Combined" ? "text-purple-400 group-hover:text-purple-300" : "text-white group-hover:text-orange-400"
                                          }`}>{r.name}</div>
-                                         <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">{r.system}</div>
+                                         <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">{r.systems?.join(" / ")}</div>
                                       </div>
                                    </button>
 
