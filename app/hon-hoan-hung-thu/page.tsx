@@ -14,8 +14,11 @@ async function HungThuContent() {
     .sort({ system: 1, name: 1 })
     .lean();
   
-  // Serialize dữ liệu cho Client Component
-  const data = JSON.parse(JSON.stringify(items)) as IHungThuSoulRing[];
+  // Serialize dữ liệu cho Client Component và đảm bảo có trường id từ _id
+  const data = JSON.parse(JSON.stringify(items)).map((item: any) => ({
+    ...item,
+    id: item._id.toString()
+  })) as IHungThuSoulRing[];
 
   return <HungThuSoulRingClient initialData={data} />;
 }

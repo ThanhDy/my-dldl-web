@@ -62,6 +62,17 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
     return initialData.find(r => r.id === selectedRingId);
   }, [initialData, selectedRingId]);
 
+  // Tự động chọn hồn hoàn đầu tiên khi load hoặc khi đổi bộ lọc
+  React.useEffect(() => {
+    if (filteredData.length > 0) {
+      if (!selectedRingId || !filteredData.find(r => r.id === selectedRingId)) {
+        setSelectedRingId(filteredData[0].id);
+      }
+    } else {
+      setSelectedRingId(null);
+    }
+  }, [filteredData, selectedRingId]);
+
   // Tìm các hồn hoàn liên quan
   const relatedRings = useMemo(() => {
     if (!selectedRing) return [];
