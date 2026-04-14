@@ -1,23 +1,30 @@
-import React from "react";
+import React, { Suspense } from "react";
 import dbConnect from "@/lib/mongodb";
 import HungThuSoulRing from "@/models/HungThuSoulRing";
 import HungThuSoulRingClient from "./HungThuSoulRingClient";
+import HungThuSkeleton from "./HungThuSkeleton";
 import { HungThuSoulRing as IHungThuSoulRing } from "@/data/types";
 
 export const revalidate = 3600; // Cache for 1 hour
 
-async function getHungThuData(): Promise<IHungThuSoulRing[]> {
+async function HungThuContent() {
   await dbConnect();
-  // Fetch and sort by system and name
-  const items = await HungThuSoulRing.find({}).sort({ system: 1, name: 1 });
-  return JSON.parse(JSON.stringify(items));
+  // Sử dụng .lean() để tăng tốc độ và chuyển đổi sang JSON chuẩn
+  const items = await HungThuSoulRing.find({})
+    .sort({ system: 1, name: 1 })
+    .lean();
+  
+  // Serialize dữ liệu cho Client Component
+  const data = JSON.parse(JSON.stringify(items)) as IHungThuSoulRing[];
+
+  return <HungThuSoulRingClient initialData={data} />;
 }
 
-export default async function HonHoanHungThuPage() {
-  const data = await getHungThuData();
-
+export default function HonHoanHungThuPage() {
   return (
-    <HungThuSoulRingClient initialData={data} />
+    <Suspense fallback={<HungThuSkeleton />}>
+      <HungThuContent />
+    </Suspense>
   );
 }
 

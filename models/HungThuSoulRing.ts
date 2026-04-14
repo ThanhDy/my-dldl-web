@@ -45,6 +45,12 @@ const hungThuSoulRingSchema = new Schema<IHungThuSoulRing>(
   }
 );
 
+// Add indexes for performance
+hungThuSoulRingSchema.index({ name: 1 });
+hungThuSoulRingSchema.index({ systems: 1 });
+hungThuSoulRingSchema.index({ type: 1 });
+hungThuSoulRingSchema.index({ createdAt: -1 });
+
 // Force re-registration in development to pick up schema changes
 if (process.env.NODE_ENV === "development") {
   delete mongoose.models.HungThuSoulRing;
