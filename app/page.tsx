@@ -65,6 +65,14 @@ const features = [
     href: "/dot-cot",
     active: true,
     color: "orange"
+  },
+  {
+    title: "Hồn Hoàn Hung Thú",
+    description: "Thông tin các loại hồn hoàn hung thú và thuộc tính kết hợp",
+    icon: <Database size={28} />,
+    href: "/hon-hoan-hung-thu",
+    active: true,
+    color: "red"
   }
 ];
 

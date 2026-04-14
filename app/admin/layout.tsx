@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Menu,
   X,
-  Flame
+  Flame,
+  Database
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -58,6 +59,12 @@ export default function AdminLayout({
       href: "/admin/dot-cot",
       icon: Flame,
       pattern: /^\/admin\/dot-cot/,
+    },
+    {
+      name: "Hồn Hoàn Hung Thú",
+      href: "/admin/hon-hoan-hung-thu",
+      icon: Database,
+      pattern: /^\/admin\/hon-hoan-hung-thu/,
     },
   ];
 

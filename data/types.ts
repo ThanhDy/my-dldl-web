@@ -156,3 +156,28 @@ export interface BoneBurning {
   type: string; // "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ/Phòng Ngự"
   levels: BoneBurningLevel[];
 }
+
+// --- [MỚI] HỆ THỐNG HỒN HOÀN HUNG THÚ ---
+
+export type HungThuSystem = "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ/Phòng Ngự";
+export type HungThuType = "Regular" | "Combined";
+
+export interface HungThuYearEffect {
+  year: string;
+  effect: string;
+}
+
+export interface HungThuSoulRing {
+  id: string;
+  name: string;
+  image: string;
+  systems: HungThuSystem[];
+  type: HungThuType;
+  basicEffect: string;
+  yearEffects: HungThuYearEffect[];
+  // References
+  componentIds?: string[]; // IDs of the 2 regular rings (for Combined)
+  suitableWithId?: string; // ID of the other regular ring (for Regular)
+  createdAt?: string;
+  updatedAt?: string;
+}
