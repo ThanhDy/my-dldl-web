@@ -112,12 +112,43 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
       return initialData.filter(r => selectedRing.componentIds?.includes(r.id));
     } else {
       // Tìm hồn hoàn kết hợp cùng HOẶC hồn hoàn kết quả (Combined) từ việc phối hợp
-      return initialData.filter(r => 
+      const rings = initialData.filter(r => 
         r.id === selectedRing.suitableWithId || 
         (r.type === "Combined" && r.componentIds?.includes(selectedRing.id))
       );
+      // Sort so Regular component appears before the Combined result
+      return rings.sort((a, b) => {
+        if (a.type === "Regular" && b.type === "Combined") return -1;
+        if (a.type === "Combined" && b.type === "Regular") return 1;
+        return 0;
+      });
     }
   }, [initialData, selectedRing]);
+
+  const handleSelectRelatedRing = (id: string) => {
+    const ring = initialData.find(r => r.id === id);
+    if (!ring) return;
+
+    setSearchQuery("");
+
+    if (activeType !== "All" && activeType !== ring.type) {
+      setActiveType("All");
+    }
+
+    if (ring.systems && ring.systems.length > 0) {
+      const targetSystemUI = SYSTEMS_UI.find(sys => {
+        if (sys === "Cường/Mẫn") {
+          return ring.systems.some(s => s === "Cường Công" || s === "Mẫn Công");
+        }
+        return ring.systems.includes(sys as any);
+      });
+      if (targetSystemUI && targetSystemUI !== activeSystem) {
+        setActiveSystem(targetSystemUI);
+      }
+    }
+    
+    setSelectedRingId(id);
+  };
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-orange-500/30 relative">
@@ -311,7 +342,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                             <span className="text-xs font-black uppercase tracking-wider text-orange-500/60">Hiệu ứng cơ bản</span>
                             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                          </div>
-                         <div className="bg-white/[0.03] border border-white/5 rounded-3xl p-5 md:p-6 text-sm md:text-base font-medium text-slate-200 leading-relaxed ">
+                         <div className="bg-white/[0.03] border border-white/5 rounded-3xl p-5 md:p-6 text-sm md:text-base font-medium text-slate-200 leading-relaxed whitespace-pre-line">
                             {selectedRing.basicEffect ? formatText(selectedRing.basicEffect) : <span className="text-slate-500 italic">(Đang cập nhật nội dung hiệu ứng...)</span>}
                          </div>
                       </div>
@@ -325,7 +356,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                                     {eff.year}
                                  </h5>
                               </div>
-                              <p className="text-slate-300 text-base leading-relaxed font-medium">
+                              <p className="text-slate-300 text-base leading-relaxed font-medium whitespace-pre-line">
                                  {eff.effect ? formatText(eff.effect) : <span className="text-slate-600 italic">(Thông tin mốc này đang được cập nhật...)</span>}
                               </p>
                            </div>
@@ -359,7 +390,7 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
                                    )}
                                    
                                    <button 
-                                     onClick={() => setSelectedRingId(r.id)}
+                                     onClick={() => handleSelectRelatedRing(r.id)}
                                      className={`flex items-center gap-4 border rounded-2xl p-4 transition-all group min-w-[200px] ${
                                        r.type === "Combined" 
                                          ? "bg-purple-500/10 border-purple-500/30 hover:bg-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.1)]" 
