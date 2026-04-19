@@ -13,7 +13,8 @@ import {
   Menu,
   X,
   Flame,
-  Database
+  Database,
+  Zap
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -65,6 +66,12 @@ export default function AdminLayout({
       href: "/admin/hon-hoan-hung-thu",
       icon: Database,
       pattern: /^\/admin\/hon-hoan-hung-thu/,
+    },
+    {
+      name: "Hồn Đạo Khí",
+      href: "/admin/hon-dao-khi",
+      icon: Zap,
+      pattern: /^\/admin\/hon-dao-khi/,
     },
   ];
 

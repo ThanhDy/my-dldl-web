@@ -12,7 +12,8 @@ import {
   ChevronRight,
   Monitor,
   Flame,
-  Database
+  Database,
+  Crosshair
 } from "lucide-react";
 import BackToTop from "@/app/components/BackToTop";
 import { NeonCard } from "@/app/components/ui/neon-card";
@@ -73,6 +74,14 @@ const features = [
     href: "/hon-hoan-hung-thu",
     active: true,
     color: "red"
+  },
+  {
+    title: "Hồn Đạo Khí",
+    description: "Khám phá các bảo vật Hồn Đạo Khí và các mốc hiệu ứng độc quyền",
+    icon: <Crosshair size={28} />,
+    href: "/hon-dao-khi",
+    active: true,
+    color: "cyan"
   }
 ];
 
@@ -122,19 +131,49 @@ export default function Home() {
               {feature.active ? (
                 <Link href={feature.href} className="group block h-full">
                   <NeonCard 
-                    glowColor={feature.color === 'blue' ? 'bg-blue-600/20' : 'bg-purple-600/20'} 
-                    hoverBorderColor={feature.color === 'blue' ? 'hover:border-blue-500/50' : 'hover:border-purple-500/50'}
+                    glowColor={
+                      feature.color === 'blue' ? 'bg-blue-600/20' : 
+                      feature.color === 'orange' ? 'bg-orange-600/20' : 
+                      feature.color === 'red' ? 'bg-red-600/20' : 
+                      feature.color === 'cyan' ? 'bg-cyan-600/20' : 
+                      'bg-purple-600/20'
+                    } 
+                    hoverBorderColor={
+                      feature.color === 'blue' ? 'hover:border-blue-500/50' : 
+                      feature.color === 'orange' ? 'hover:border-orange-500/50' : 
+                      feature.color === 'red' ? 'hover:border-red-500/50' : 
+                      feature.color === 'cyan' ? 'hover:border-cyan-500/50' : 
+                      'hover:border-purple-500/50'
+                    }
                     className="p-8 h-full flex flex-col items-start gap-4 border-white/5 transition-all duration-500 group-hover:bg-white/[0.02]"
                   >
-                    <div className={`${feature.color === 'blue' ? 'text-blue-400' : 'text-purple-400'} p-3 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
+                    <div className={`${
+                      feature.color === 'blue' ? 'text-blue-400' : 
+                      feature.color === 'orange' ? 'text-orange-400' : 
+                      feature.color === 'red' ? 'text-red-400' : 
+                      feature.color === 'cyan' ? 'text-cyan-400' : 
+                      'text-purple-400'
+                    } p-3 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
                       {feature.icon}
                     </div>
                     <div className="space-y-2 text-left">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-black uppercase tracking-tight text-white group-hover:text-blue-400 transition-colors">
+                        <h3 className={`text-xl font-black uppercase tracking-tight text-white transition-colors ${
+                          feature.color === 'blue' ? 'group-hover:text-blue-400' : 
+                          feature.color === 'orange' ? 'group-hover:text-orange-400' : 
+                          feature.color === 'red' ? 'group-hover:text-red-400' : 
+                          feature.color === 'cyan' ? 'group-hover:text-cyan-400' : 
+                          'group-hover:text-purple-400'
+                        }`}>
                           {feature.title}
                         </h3>
-                        <ChevronRight className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-blue-400" size={18} />
+                        <ChevronRight className={`opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all ${
+                          feature.color === 'blue' ? 'text-blue-400' : 
+                          feature.color === 'orange' ? 'text-orange-400' : 
+                          feature.color === 'red' ? 'text-red-400' : 
+                          feature.color === 'cyan' ? 'text-cyan-400' : 
+                          'text-purple-400'
+                        }`} size={18} />
                       </div>
                       <p className="text-slate-500 text-xs font-medium leading-relaxed">
                         {feature.description}

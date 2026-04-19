@@ -181,3 +181,19 @@ export interface HungThuSoulRing {
   createdAt?: string;
   updatedAt?: string;
 }
+
+// --- [MỚI] HỆ THỐNG HỒN ĐẠO KHÍ ---
+
+export interface HonDaoKhiStarEffect {
+  starLevel: string; // Tên hiển thị mốc sao, VD: "1 Sao Đỏ", "1 Sao Tím"
+  effect: string; // Hiệu ứng text có dính HTML tô màu
+}
+
+export interface HonDaoKhi {
+  id: string;
+  name: string;
+  image: string;
+  starEffects: HonDaoKhiStarEffect[];
+  createdAt?: string;
+  updatedAt?: string;
+}
