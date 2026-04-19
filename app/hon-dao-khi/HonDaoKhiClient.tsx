@@ -232,8 +232,22 @@ export default function HonDaoKhiClient({ initialData }: HonDaoKhiClientProps) {
                             <h4 className={`text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border ${getBadgeStyle(eff.starLevel)}`}>
                               {eff.starLevel}
                             </h4>
-                            <div className="text-slate-300 text-sm md:text-base leading-relaxed font-medium whitespace-pre-line w-full">
-                              {eff.effect ? formatText(eff.effect) : <span className="text-slate-600 italic font-normal">Chưa có thông tin mốc này...</span>}
+                            <div className="text-slate-300 text-sm md:text-base leading-relaxed font-medium w-full flex flex-col gap-3">
+                              {eff.effect ? (
+                                eff.effect.split("\n").map((line, lIdx) => {
+                                  const isTangLine = line.toLowerCase().includes("tăng:");
+                                  return (
+                                    <div 
+                                      key={lIdx} 
+                                      className={isTangLine ? "p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.03)]" : "pl-1"}
+                                    >
+                                      {formatText(line)}
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <span className="text-slate-600 italic font-normal">Chưa có thông tin mốc này...</span>
+                              )}
                             </div>
                           </motion.div>
                         ))
