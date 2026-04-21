@@ -25,7 +25,7 @@ export default async function HonDaoKhiPage() {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <div className="text-center space-y-4">
-          <h2 className="text-2xl font-bold text-white">Chưa có dữ liệu</h2>
+          <h2 className="text-2xl font-bold text-white">Chưa có dữ liệu.</h2>
           <p className="text-slate-400">Vui lòng quay lại sau.</p>
         </div>
       </div>
