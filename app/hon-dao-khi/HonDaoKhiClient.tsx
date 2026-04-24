@@ -235,7 +235,7 @@ export default function HonDaoKhiClient({ initialData }: HonDaoKhiClientProps) {
                             <div className="text-slate-300 text-sm md:text-base leading-relaxed font-medium w-full flex flex-col gap-3">
                               {eff.effect ? (
                                 eff.effect.split("\n").map((line, lIdx) => {
-                                  const isTangLine = line.toLowerCase().includes("tăng:");
+                                  const isTangLine = line.toLowerCase().includes("mới:");
                                   return (
                                     <div 
                                       key={lIdx} 
