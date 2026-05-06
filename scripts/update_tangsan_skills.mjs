@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = 'mongodb+srv://admin:admin123@dld-web.wqefflo.mongodb.net/?appName=dld-web';
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.error("MONGODB_URI is not defined in environment variables.");
+  process.exit(1);
+}
+
 const HERO_ID = '69f1eaa9795fbe61c205412f'; // Đường Tam (Thần Chỉ)
 
 async function updateData() {
