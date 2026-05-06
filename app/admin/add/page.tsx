@@ -94,6 +94,57 @@ const AM_KHI_STAR_CONFIG = [
   { star: 10, isRedStar: true, description: "" },
 ];
 
+// --- THẦN CHỈ HELPERS ---
+
+const createEmptyDivineRing = () => ({
+  name: "",
+  description: "",
+  iconUrl: "",
+  yearEffects: {
+    y50k: "",
+    y100k: "",
+    y500k: "",
+    y1000k: "",
+    y1000kBuffs: Array(9).fill(""),
+  },
+});
+
+const createEmptyDivineSkill = () => ({
+  name: "",
+  description: "",
+  iconUrl: "",
+  notes: [],
+  rings: [createEmptyDivineRing(), createEmptyDivineRing(), createEmptyDivineRing()],
+});
+
+const createEmptyDivineBranch = (name: string) => ({
+  name: name,
+  skills: Array(5).fill(null).map(() => createEmptyDivineSkill()),
+});
+
+const createEmptyDivineAvatar = (level: number) => ({
+  level: level,
+  name: "",
+  skill: "",
+  iconUrl: "",
+});
+
+const createEmptyWing = (name: string) => ({
+  name: name,
+  iconUrl: "",
+  regularSkill: { description: "", upgrades: ["", "", ""] },
+  mutatedSkill: { description: "" },
+});
+
+const INITIAL_DIVINE_SYSTEM = {
+  branches: [createEmptyDivineBranch("Nhánh 1"), createEmptyDivineBranch("Nhánh 2")],
+  avatars: Array(6).fill(null).map((_, i) => createEmptyDivineAvatar(i + 1)),
+  wings: {
+    left: [createEmptyWing("Cánh 1"), createEmptyWing("Cánh 2"), createEmptyWing("Cánh 3"), createEmptyWing("Cánh 4")],
+    right: [createEmptyWing("Cánh 1"), createEmptyWing("Cánh 2"), createEmptyWing("Cánh 3"), createEmptyWing("Cánh 4")],
+  },
+};
+
 const INITIAL_HERO = {
   id: "",
   name: "",
@@ -105,6 +156,7 @@ const INITIAL_HERO = {
   skillDetails: INITIAL_SKILLS,
   soulBones: INITIAL_SOUL_BONES,
   starUpgrades: AM_KHI_STAR_CONFIG,
+  divineSystem: INITIAL_DIVINE_SYSTEM,
 };
 
 // --- COMPONENT ACCORDION SECTION ---
@@ -179,17 +231,32 @@ export default function AddHeroPage() {
   const [skillFiles, setSkillFiles] = useState<{ [key: number]: File }>({});
   const [boneFiles, setBoneFiles] = useState<{ [key: number]: File }>({});
 
+  // Divine System Files
+  const [divineSkillFiles, setDivineSkillFiles] = useState<Record<string, File>>({});
+  const [divineRingFiles, setDivineRingFiles] = useState<Record<string, File>>({});
+  const [divineAvatarFiles, setDivineAvatarFiles] = useState<Record<number, File>>({});
+  const [divineWingFiles, setDivineWingFiles] = useState<Record<string, File>>({});
+
   const [formData, setFormData] = useState<any>(INITIAL_HERO);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [hasBranch2, setHasBranch2] = useState(true);
   const isAmKhi = formData.type === "Ám Khí";
+  const isDivine = formData.rarity === "Thần Chỉ";
 
   useEffect(() => {
     if (formData.rarity === "SP+") {
       setHasBranch2(false);
     } else {
       setHasBranch2(true);
+    }
+
+    // Tự động chuyển hệ thành "Thần" nếu là rarity "Thần Chỉ"
+    if (formData.rarity === "Thần Chỉ") {
+      setFormData((prev: any) => ({ ...prev, type: "Thần" }));
+    } else if (formData.type === "Thần") {
+      // Nếu chuyển từ Thần Chỉ sang cái khác thì reset type về Cường Công
+      setFormData((prev: any) => ({ ...prev, type: "Cường Công" }));
     }
   }, [formData.rarity]);
 
@@ -298,6 +365,75 @@ export default function AddHeroPage() {
     setFormData({ ...formData, soulBones: newBones });
   };
 
+  // --- HÀM XỬ LÝ THẦN CHỈ ---
+  const updateDivineGodSkill = (
+    branchIdx: number,
+    skillIdx: number,
+    field: string,
+    value: any,
+  ) => {
+    const newDivine = { ...formData.divineSystem };
+    newDivine.branches[branchIdx].skills[skillIdx][field] = value;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const updateDivineRing = (
+    branchIdx: number,
+    skillIdx: number,
+    ringIdx: number,
+    field: string,
+    value: any,
+  ) => {
+    const newDivine = { ...formData.divineSystem };
+    newDivine.branches[branchIdx].skills[skillIdx].rings[ringIdx][field] = value;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const updateDivineRingYear = (
+    branchIdx: number,
+    skillIdx: number,
+    ringIdx: number,
+    yearKey: string,
+    value: any,
+  ) => {
+    const newDivine = { ...formData.divineSystem };
+    newDivine.branches[branchIdx].skills[skillIdx].rings[ringIdx].yearEffects[
+      yearKey
+    ] = value;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const updateDivineRingBuff = (
+    branchIdx: number,
+    skillIdx: number,
+    ringIdx: number,
+    buffIdx: number,
+    value: string,
+  ) => {
+    const newDivine = { ...formData.divineSystem };
+    newDivine.branches[branchIdx].skills[skillIdx].rings[
+      ringIdx
+    ].yearEffects.y1000kBuffs[buffIdx] = value;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const updateDivineAvatar = (idx: number, field: string, value: string) => {
+    const newDivine = { ...formData.divineSystem };
+    newDivine.avatars[idx][field] = value;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const updateWing = (
+    side: "left" | "right",
+    wingIdx: number,
+    field: string,
+    value: any,
+  ) => {
+    const newDivine = { ...formData.divineSystem };
+    newDivine.wings[side][wingIdx][field] = value;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
   // 2. HÀM CHỌN ẢNH (CHỈ PREVIEW, KHÔNG UPLOAD)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -338,6 +474,49 @@ export default function AddHeroPage() {
     const newBones = [...formData.soulBones];
     newBones[index].iconUrl = objectUrl;
     setFormData({ ...formData, soulBones: newBones });
+  };
+
+  const handleDivineSkillFileChange = (bIdx: number, sIdx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const key = `${bIdx}-${sIdx}`;
+    setDivineSkillFiles(prev => ({ ...prev, [key]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    const newDivine = { ...formData.divineSystem };
+    newDivine.branches[bIdx].skills[sIdx].iconUrl = objectUrl;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const handleDivineRingFileChange = (bIdx: number, sIdx: number, rIdx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const key = `${bIdx}-${sIdx}-${rIdx}`;
+    setDivineRingFiles(prev => ({ ...prev, [key]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    const newDivine = { ...formData.divineSystem };
+    newDivine.branches[bIdx].skills[sIdx].rings[rIdx].iconUrl = objectUrl;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const handleDivineAvatarFileChange = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setDivineAvatarFiles(prev => ({ ...prev, [idx]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    const newDivine = { ...formData.divineSystem };
+    newDivine.avatars[idx].iconUrl = objectUrl;
+    setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const handleDivineWingFileChange = (side: string, idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const key = `${side}-${idx}`;
+    setDivineWingFiles(prev => ({ ...prev, [key]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    const newDivine = { ...formData.divineSystem };
+    newDivine.wings[side][idx].iconUrl = objectUrl;
+    setFormData({ ...formData, divineSystem: newDivine });
   };
 
   // 3. HÀM UPLOAD THỰC SỰ (SẼ GỌI KHI BẤM LƯU)
@@ -423,14 +602,114 @@ export default function AddHeroPage() {
         }),
       );
 
+      // Upload Divine System
+      let updatedDivineSystem = { ...formData.divineSystem };
+      if (isDivine && updatedDivineSystem.branches) {
+        updatedDivineSystem.branches = await Promise.all(
+          updatedDivineSystem.branches.map(async (branch: any, bIdx: number) => {
+            const updatedSkills = await Promise.all(
+              branch.skills.map(async (skill: any, sIdx: number) => {
+                const skillKey = `${bIdx}-${sIdx}`;
+                let updatedSkill = { ...skill };
+
+                if (divineSkillFiles[skillKey]) {
+                  try {
+                    const url = await uploadToCloudinary(
+                      divineSkillFiles[skillKey],
+                      currentId || "skills",
+                    );
+                    updatedSkill.iconUrl = url;
+                  } catch (err) {
+                    console.error("Error uploading divine skill icon:", err);
+                  }
+                }
+
+                // Upload Divine Rings
+                if (updatedSkill.rings) {
+                  updatedSkill.rings = await Promise.all(
+                    updatedSkill.rings.map(async (ring: any, rIdx: number) => {
+                      const ringKey = `${bIdx}-${sIdx}-${rIdx}`;
+                      let updatedRing = { ...ring };
+                      if (divineRingFiles[ringKey]) {
+                        try {
+                          const url = await uploadToCloudinary(
+                            divineRingFiles[ringKey],
+                            currentId || "rings",
+                          );
+                          updatedRing.iconUrl = url;
+                        } catch (err) {
+                          console.error("Error uploading divine ring icon:", err);
+                        }
+                      }
+                      return updatedRing;
+                    }),
+                  );
+                }
+
+                return updatedSkill;
+              }),
+            );
+            return { ...branch, skills: updatedSkills };
+          }),
+        );
+      }
+
+      // Upload Avatars
+      if (isDivine && updatedDivineSystem.avatars) {
+        updatedDivineSystem.avatars = await Promise.all(
+          updatedDivineSystem.avatars.map(async (av: any, idx: number) => {
+            if (divineAvatarFiles[idx]) {
+              try {
+                const url = await uploadToCloudinary(divineAvatarFiles[idx], currentId || "avatars");
+                return { ...av, iconUrl: url };
+              } catch (err) {
+                console.error("Error uploading divine avatar icon:", err);
+              }
+            }
+            return av;
+          })
+        );
+      }
+
+      // Upload Wings
+      if (isDivine && updatedDivineSystem.wings) {
+        const sides: ("left" | "right")[] = ["left", "right"];
+        for (const side of sides) {
+          if (updatedDivineSystem.wings[side]) {
+            updatedDivineSystem.wings[side] = await Promise.all(
+              updatedDivineSystem.wings[side].map(async (wing: any, idx: number) => {
+                const wingKey = `${side}-${idx}`;
+                if (divineWingFiles[wingKey]) {
+                  try {
+                    const url = await uploadToCloudinary(divineWingFiles[wingKey], currentId || "wings");
+                    return { ...wing, iconUrl: url };
+                  } catch (err) {
+                    console.error("Error uploading divine wing icon:", err);
+                  }
+                }
+                return wing;
+              })
+            );
+          }
+        }
+      }
+
       const cleanData = {
         ...formData,
         image: finalImageUrl,
         skillDetails: uploadedSkills,
         soulBones: uploadedBones,
+        divineSystem: updatedDivineSystem,
       };
 
-      if (!hasBranch2) {
+      if (isDivine) {
+        // Có thể xóa các phần không cần thiết của SP/SSR nếu muốn, 
+        // nhưng tốt nhất là giữ lại để linh hoạt
+      } else {
+        delete cleanData.divineSystem;
+      }
+
+      if (!isDivine && !hasBranch2) {
         cleanData.skillDetails = cleanData.skillDetails.slice(0, 4);
       }
 
@@ -466,6 +745,8 @@ export default function AddHeroPage() {
       setLoading(false);
     }
   };
+
+
 
   const renderSkillCard = (skill: any, idx: number) => (
     <div
@@ -552,6 +833,374 @@ export default function AddHeroPage() {
     </div>
   );
 
+  const renderDivineRingSystem = () => (
+    <div className="space-y-12">
+      {formData.divineSystem.branches.map((branch: any, bIdx: number) => (
+        <div key={bIdx} className="space-y-6">
+          <h3 className="text-2xl font-black text-yellow-500 border-b-2 border-yellow-500/20 pb-2 uppercase italic tracking-tighter">
+            {branch.name}
+          </h3>
+          <div className="grid gap-8">
+            {branch.skills.map((skill: any, sIdx: number) => (
+              <div
+                key={sIdx}
+                className="bg-slate-900/80 rounded-3xl border border-white/5 p-8 space-y-6 shadow-2xl relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <FaDna size={80} />
+                </div>
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-yellow-500/20 bg-black/40 shrink-0 group">
+                      {skill.iconUrl ? (
+                        <Image
+                          src={skill.iconUrl}
+                          alt="icon"
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-yellow-500/20">
+                          <FaImage size={24} />
+                        </div>
+                      )}
+                      <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                        <FaPlus size={16} className="text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleDivineSkillFileChange(bIdx, sIdx, e)}
+                        />
+                      </label>
+                    </div>
+                    <div className="flex-1 space-y-4">
+                      <div className="flex items-center gap-4">
+                        <span className="text-[10px] font-black bg-yellow-500 text-black px-2 py-0.5 rounded uppercase">
+                          Thần Kỹ {sIdx + 1}
+                        </span>
+                        <input
+                          value={skill.name}
+                          onChange={(e) =>
+                            updateDivineGodSkill(bIdx, sIdx, "name", e.target.value)
+                          }
+                          placeholder="Tên Thần Kỹ"
+                          className="flex-1 bg-transparent border-b border-white/10 py-2 font-black text-white outline-none focus:border-yellow-500 transition text-xl uppercase tracking-tight"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <textarea
+                  value={skill.description}
+                  onChange={(e) =>
+                    updateDivineGodSkill(
+                      bIdx,
+                      sIdx,
+                      "description",
+                      e.target.value,
+                    )
+                  }
+                  placeholder="Mô tả kỹ năng cơ bản..."
+                  className="w-full bg-black/40 border border-white/5 rounded-2xl p-4 text-sm h-24 outline-none focus:border-yellow-500/50 transition text-slate-300"
+                />
+                <div>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase mb-2 block">
+                    Ghi chú hiệu ứng (Mỗi dòng 1 ý)
+                  </label>
+                  <textarea
+                    value={skill.notes.join("\n")}
+                    onChange={(e) =>
+                      updateDivineGodSkill(
+                        bIdx,
+                        sIdx,
+                        "notes",
+                        e.target.value.split("\n"),
+                      )
+                    }
+                    className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs font-mono h-20 focus:border-yellow-500/30 outline-none text-slate-400"
+                    placeholder="Giải thích tên hiệu ứng..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-4">
+                  {skill.rings.map((ring: any, rIdx: number) => (
+                    <div
+                      key={rIdx}
+                      className="bg-black/40 rounded-2xl border border-white/5 p-5 space-y-4 hover:border-yellow-500/20 transition-all"
+                    >
+                      <div className="flex items-center gap-3 border-b border-white/5 pb-3">
+                        <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-white/10 bg-black/40 shrink-0 group">
+                          {ring.iconUrl ? (
+                            <Image
+                              src={ring.iconUrl}
+                              alt="icon"
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-yellow-500/20">
+                              <span className="text-xs font-black">{rIdx + 1}</span>
+                            </div>
+                          )}
+                          <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                            <FaPlus size={10} className="text-white" />
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => handleDivineRingFileChange(bIdx, sIdx, rIdx, e)}
+                            />
+                          </label>
+                        </div>
+                        <input
+                          value={ring.name}
+                          onChange={(e) =>
+                            updateDivineRing(
+                              bIdx,
+                              sIdx,
+                              rIdx,
+                              "name",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Tên Thần Hoàn"
+                          className="flex-1 bg-transparent py-1 font-bold text-sm text-yellow-400 outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2 pt-2 border-t border-white/5">
+                        {["y50k", "y100k", "y500k", "y1000k"].map((y) => (
+                          <div key={y} className="flex gap-3">
+                            <span
+                              className={`text-[9px] font-black w-8 pt-2 ${y === "y1000k" ? "text-red-500" : "text-slate-600"}`}
+                            >
+                              {y === "y50k" ? "5v" : y === "y100k" ? "10v" : y === "y500k" ? "50v" : "100v"}
+                            </span>
+                            <textarea
+                              value={ring.yearEffects[y]}
+                              onChange={(e) =>
+                                updateDivineRingYear(
+                                  bIdx,
+                                  sIdx,
+                                  rIdx,
+                                  y,
+                                  e.target.value,
+                                )
+                              }
+                              className="flex-1 bg-black/20 border border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-slate-300 outline-none focus:border-yellow-500/50 min-h-[40px]"
+                            />
+                          </div>
+                        ))}
+                        <div className="flex flex-col gap-2 pt-2">
+                          {ring.yearEffects.y1000kBuffs.map(
+                            (buff: string, buffIdx: number) => (
+                              <div key={buffIdx} className="flex items-center gap-2">
+                                <span className="text-[10px] font-black text-yellow-600 w-5">+{buffIdx + 1}</span>
+                                <input
+                                  value={buff}
+                                  onChange={(e) =>
+                                    updateDivineRingBuff(
+                                      bIdx,
+                                      sIdx,
+                                      rIdx,
+                                      buffIdx,
+                                      e.target.value,
+                                    )
+                                  }
+                                  placeholder={`Chỉ số +${buffIdx + 1}`}
+                                  className="flex-1 bg-black/40 border border-white/5 rounded px-3 py-1.5 text-[11px] text-yellow-500 outline-none focus:border-yellow-500"
+                                />
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderDivineAvatarSystem = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {formData.divineSystem.avatars.map((av: any, idx: number) => (
+        <div
+          key={idx}
+          className="bg-slate-900/60 rounded-2xl border border-white/5 p-6 space-y-4 hover:border-blue-500/30 transition-all group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-blue-500/20 bg-black/40 shrink-0 group">
+              {av.iconUrl ? (
+                <Image
+                  src={av.iconUrl}
+                  alt="icon"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-blue-500/20">
+                  <FaImage size={16} />
+                </div>
+              )}
+              <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                <FaPlus size={12} className="text-white" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleDivineAvatarFileChange(idx, e)}
+                />
+              </label>
+            </div>
+            <div className="h-10 px-3 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-black text-xs whitespace-nowrap">
+              Lvl {av.level}
+            </div>
+            <input
+              value={av.name}
+              onChange={(e) => updateDivineAvatar(idx, "name", e.target.value)}
+              placeholder="Tên Pháp Tướng"
+              className="flex-1 bg-transparent border-b border-white/10 py-2 font-bold text-white outline-none focus:border-blue-400 transition"
+            />
+          </div>
+          <textarea
+            value={av.skill}
+            onChange={(e) => updateDivineAvatar(idx, "skill", e.target.value)}
+            placeholder="Kỹ năng pháp tướng..."
+            className="w-full bg-black/40 border border-white/5 rounded-xl p-4 text-sm h-32 outline-none focus:border-blue-500/50 transition text-slate-300"
+          />
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderWingSystem = () => (
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+      {["left", "right"].map((side) => (
+        <div key={side} className="space-y-6">
+          <h3 className="text-xl font-black text-pink-500 border-b border-pink-500/20 pb-2 uppercase italic tracking-widest">
+            Cánh {side === "left" ? "Trái" : "Phải"}
+          </h3>
+          <div className="space-y-8">
+            {formData.divineSystem.wings[side].map((wing: any, wIdx: number) => (
+              <div
+                key={wIdx}
+                className="bg-slate-900/60 rounded-3xl border border-white/5 p-6 space-y-6"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-pink-500/20 bg-black/40 shrink-0 group">
+                    {wing.iconUrl ? (
+                      <Image
+                        src={wing.iconUrl}
+                        alt="icon"
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-pink-500/20">
+                        <FaImage size={14} />
+                      </div>
+                    )}
+                    <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                      <FaPlus size={10} className="text-white" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleDivineWingFileChange(side, wIdx, e)}
+                      />
+                    </label>
+                  </div>
+                  <div className="w-8 h-8 rounded-lg bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 font-black text-xs uppercase">
+                    {wIdx + 1}
+                  </div>
+                  <input
+                    value={wing.name}
+                    onChange={(e) =>
+                      updateWing(side as any, wIdx, "name", e.target.value)
+                    }
+                    placeholder="Tên Cánh"
+                    className="flex-1 bg-transparent border-b border-white/10 py-1 font-bold text-slate-200 outline-none focus:border-pink-500/50"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">
+                      Kỹ năng thường
+                    </span>
+                    <textarea
+                      value={wing.regularSkill.description}
+                      onChange={(e) =>
+                        updateWing(side as any, wIdx, "regularSkill", {
+                          ...wing.regularSkill,
+                          description: e.target.value,
+                        })
+                      }
+                      className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs h-24 focus:border-pink-500/30 outline-none text-slate-300"
+                      placeholder="Mô tả cơ bản..."
+                    />
+                    <div className="space-y-2">
+                      {wing.regularSkill.upgrades.map(
+                        (up: string, upIdx: number) => (
+                          <div key={upIdx} className="flex gap-2">
+                            <span className="text-[9px] font-bold text-slate-600 pt-2 w-10">
+                              Lvl {upIdx + 1}
+                            </span>
+                            <input
+                              value={up}
+                              onChange={(e) => {
+                                const newUpgrades = [
+                                  ...wing.regularSkill.upgrades,
+                                ];
+                                newUpgrades[upIdx] = e.target.value;
+                                updateWing(side as any, wIdx, "regularSkill", {
+                                  ...wing.regularSkill,
+                                  upgrades: newUpgrades,
+                                });
+                              }}
+                              className="flex-1 bg-black/20 border border-white/5 rounded-lg px-2 py-1 text-[11px] text-slate-400 focus:border-pink-500/50"
+                              placeholder="Nâng cấp..."
+                            />
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <span className="text-[10px] font-black text-purple-500 uppercase tracking-widest block">
+                      Kỹ năng suy biến
+                    </span>
+                    <textarea
+                      value={wing.mutatedSkill.description}
+                      onChange={(e) =>
+                        updateWing(side as any, wIdx, "mutatedSkill", {
+                          description: e.target.value,
+                        })
+                      }
+                      className="w-full bg-purple-900/10 border border-purple-500/10 rounded-xl p-3 text-xs h-full focus:border-purple-500/30 outline-none text-slate-300 min-h-[150px]"
+                      placeholder="Mô tả kỹ năng suy biến..."
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="min-h-full bg-slate-950 text-slate-200 p-6 md:p-8 pb-32 font-sans selection:bg-yellow-500/30">
       <div className="max-w-7xl mx-auto">
@@ -586,9 +1235,10 @@ export default function AddHeroPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-4">
-            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 sticky top-28 shadow-2xl space-y-6">
+        <div className="flex flex-col gap-10">
+          {/* PHẦN TRÊN: THÔNG TIN CƠ BẢN (FULL WIDTH) */}
+          <div className="space-y-6">
+            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6">
               <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
                 <FaImage className="text-yellow-500" />
                 <h2 className="text-lg font-bold text-slate-100">
@@ -681,6 +1331,7 @@ export default function AddHeroPage() {
                     <option value="SP+">SP+</option>
                     <option value="SSR+">SSR+</option>
                     <option value="SSR">SSR</option>
+                    <option value="Thần Chỉ">Thần Chỉ</option>
                   </select>
                 </div>
                 <div>
@@ -691,14 +1342,21 @@ export default function AddHeroPage() {
                     name="type"
                     value={formData.type}
                     onChange={handleChange}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 outline-none"
+                    disabled={formData.rarity === "Thần Chỉ"}
+                    className={`w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 outline-none ${formData.rarity === "Thần Chỉ" ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
-                    <option value="Cường Công">Cường Công</option>
-                    <option value="Mẫn Công">Mẫn Công</option>
-                    <option value="Khống Chế">Khống Chế</option>
-                    <option value="Phụ Trợ">Phụ Trợ</option>
-                    <option value="Phòng Ngự">Phòng Ngự</option>
-                    <option value="Ám Khí">Ám Khí</option>
+                    {formData.rarity === "Thần Chỉ" ? (
+                      <option value="Thần">Thần</option>
+                    ) : (
+                      <>
+                        <option value="Cường Công">Cường Công</option>
+                        <option value="Mẫn Công">Mẫn Công</option>
+                        <option value="Khống Chế">Khống Chế</option>
+                        <option value="Phụ Trợ">Phụ Trợ</option>
+                        <option value="Phòng Ngự">Phòng Ngự</option>
+                        <option value="Ám Khí">Ám Khí</option>
+                      </>
+                    )}
                   </select>
                 </div>
               </div>
@@ -727,86 +1385,115 @@ export default function AddHeroPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-8 space-y-8">
-            {isAmKhi ? (
-              <Section
-                title="Mốc Sức Mạnh Nâng Sao"
-                icon={<FaStar />}
-                color="red"
-              >
-                <div className="grid gap-4">
-                  {formData.starUpgrades.map((up: any, idx: number) => (
-                    <div
-                      key={idx}
-                      className="bg-slate-900 p-4 rounded-xl border border-slate-800 flex gap-4"
-                    >
-                      <div
-                        className={`w-12 h-12 rounded-full border-2 flex flex-col items-center justify-center font-bold shrink-0 ${up.isRedStar ? "border-red-500 text-red-500 bg-red-950/20" : "border-yellow-500 text-yellow-500 bg-yellow-950/20"}`}
-                      >
-                        <span className="text-lg leading-none">
-                          {up.star > 5 ? up.star - 5 : up.star}
-                        </span>
-                        <FaStar size={10} />
-                      </div>
-                      <textarea
-                        value={up.description}
-                        onChange={(e) => updateStarUpgrade(idx, e.target.value)}
-                        placeholder="Mô tả..."
-                        className="flex-1 bg-slate-950 border border-slate-800 rounded p-3 text-sm h-24 outline-none focus:border-orange-500 transition resize-none"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Section>
-            ) : (
-              <Section
-                title="Chi Tiết Kỹ Năng Hồn Hoàn"
-                color="slate"
-                action={
-                  <label className="flex items-center gap-3 cursor-pointer bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg hover:border-blue-500 transition">
-                    <span className="text-xs font-bold text-slate-400 uppercase">
-                      Kích hoạt Nhánh 2
-                    </span>
-                    <div className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={hasBranch2}
-                        onChange={(e) => setHasBranch2(e.target.checked)}
-                        className="sr-only peer"
-                      />
-                      <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                    </div>
-                  </label>
-                }
-              >
-                <div
-                  className={`grid gap-8 ${hasBranch2 ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"}`}
+          {/* PHẦN DƯỚI: CÁC HỆ THỐNG CHI TIẾT (FULL WIDTH) */}
+          <div className="space-y-10">
+            {isDivine && (
+              <>
+                <Section
+                  title="Hệ Thống Thần Hoàn"
+                  icon={<FaDna />}
+                  color="yellow"
                 >
-                  {/* Cột Nhánh 1 */}
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-bold text-blue-400 border-b border-blue-500/30 pb-2 mb-4">
-                      NHÁNH 1
-                    </h3>
-                    {formData.skillDetails.map((skill: any, idx: number) => {
-                      if (idx >= 4) return null;
-                      return renderSkillCard(skill, idx);
-                    })}
-                  </div>
+                  {renderDivineRingSystem()}
+                </Section>
+                <Section
+                  title="Hệ Thống Pháp Tướng"
+                  icon={<FaArrowUp />}
+                  color="blue"
+                >
+                  {renderDivineAvatarSystem()}
+                </Section>
+                <Section
+                  title="Hệ Thống Cánh"
+                  icon={<FaBone />}
+                  color="pink"
+                >
+                  {renderWingSystem()}
+                </Section>
+              </>
+            )}
 
-                  {/* Cột Nhánh 2 */}
-                  {hasBranch2 && (
+            {!isDivine && (
+              isAmKhi ? (
+                <Section
+                  title="Mốc Sức Mạnh Nâng Sao"
+                  icon={<FaStar />}
+                  color="red"
+                >
+                  <div className="grid gap-4">
+                    {formData.starUpgrades.map((up: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="bg-slate-900 p-4 rounded-xl border border-slate-800 flex gap-4"
+                      >
+                        <div
+                          className={`w-12 h-12 rounded-full border-2 flex flex-col items-center justify-center font-bold shrink-0 ${up.isRedStar ? "border-red-500 text-red-500 bg-red-950/20" : "border-yellow-500 text-yellow-500 bg-yellow-950/20"}`}
+                        >
+                          <span className="text-lg leading-none">
+                            {up.star > 5 ? up.star - 5 : up.star}
+                          </span>
+                          <FaStar size={10} />
+                        </div>
+                        <textarea
+                          value={up.description}
+                          onChange={(e) => updateStarUpgrade(idx, e.target.value)}
+                          placeholder="Mô tả..."
+                          className="flex-1 bg-slate-950 border border-slate-800 rounded p-3 text-sm h-24 outline-none focus:border-orange-500 transition resize-none"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </Section>
+              ) : (
+                <Section
+                  title="Chi Tiết Kỹ Năng Hồn Hoàn"
+                  color="slate"
+                  action={
+                    <label className="flex items-center gap-3 cursor-pointer bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg hover:border-blue-500 transition">
+                      <span className="text-xs font-bold text-slate-400 uppercase">
+                        Kích hoạt Nhánh 2
+                      </span>
+                      <div className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={hasBranch2}
+                          onChange={(e) => setHasBranch2(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                      </div>
+                    </label>
+                  }
+                >
+                  <div
+                    className={`grid gap-8 ${hasBranch2 ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"}`}
+                  >
+                    {/* Cột Nhánh 1 */}
                     <div className="space-y-6">
-                      <h3 className="text-xl font-bold text-purple-400 border-b border-purple-500/30 pb-2 mb-4">
-                        NHÁNH 2
+                      <h3 className="text-xl font-bold text-blue-400 border-b border-blue-500/30 pb-2 mb-4">
+                        NHÁNH 1
                       </h3>
                       {formData.skillDetails.map((skill: any, idx: number) => {
-                        if (idx < 4) return null;
+                        if (idx >= 4) return null;
                         return renderSkillCard(skill, idx);
                       })}
                     </div>
-                  )}
-                </div>
-              </Section>
+
+                    {/* Cột Nhánh 2 */}
+                    {hasBranch2 && (
+                      <div className="space-y-6">
+                        <h3 className="text-xl font-bold text-purple-400 border-b border-purple-500/30 pb-2 mb-4">
+                          NHÁNH 2
+                        </h3>
+                        {formData.skillDetails.map((skill: any, idx: number) => {
+                          if (idx < 4) return null;
+                          return renderSkillCard(skill, idx);
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </Section>
+              )
             )}
 
             <Section title="Hệ Thống Hồn Cốt" color="yellow">

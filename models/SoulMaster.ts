@@ -127,6 +127,64 @@ const NvvCardSchema = new Schema(
   { _id: false },
 );
 
+// --- Divine System Sub-Schemas (Thần Chỉ) ---
+
+const DivineRingYearEffectSchema = new Schema({
+  y50k: String,
+  y100k: String,
+  y500k: String,
+  y1000k: String,
+  y1000kBuffs: [String], // Array for +1 to +9 buffs at 1000k
+}, { _id: false });
+
+const DivineRingSkillSchema = new Schema({
+  name: String,
+  description: String,
+  iconUrl: { type: String, default: "" },
+  yearEffects: { type: DivineRingYearEffectSchema, default: {} },
+}, { _id: false });
+
+const DivineGodSkillSchema = new Schema({
+  name: String,
+  description: String,
+  iconUrl: { type: String, default: "" },
+  notes: [String],
+  rings: [DivineRingSkillSchema], // 3 rings per God Skill
+}, { _id: false });
+
+const DivineAvatarLevelSchema = new Schema({
+  level: { type: Number, required: true },
+  name: { type: String, default: "" },
+  skill: { type: String, default: "" },
+  iconUrl: { type: String, default: "" },
+}, { _id: false });
+
+const WingRegularSkillSchema = new Schema({
+  description: String,
+  upgrades: [String], // 3 levels
+}, { _id: false });
+
+const WingSchema = new Schema({
+  name: { type: String, required: true }, // Wing 1, 2, 3, 4
+  iconUrl: { type: String, default: "" },
+  regularSkill: { type: WingRegularSkillSchema, default: {} },
+  mutatedSkill: {
+    description: { type: String, default: "" },
+  },
+}, { _id: false });
+
+const DivineSystemSchema = new Schema({
+  branches: [{
+    name: String, // e.g., "Nhánh 1", "Nhánh 2"
+    skills: [DivineGodSkillSchema], // 5 skills per branch
+  }],
+  avatars: [DivineAvatarLevelSchema], // 6 levels
+  wings: {
+    left: [WingSchema], // 4 wings
+    right: [WingSchema], // 4 wings
+  },
+}, { _id: false });
+
 // --- 2. Main Schema (Hồn Sư) ---
 
 const SoulMasterSchema = new Schema(
@@ -139,7 +197,7 @@ const SoulMasterSchema = new Schema(
 
     rarity: {
       type: String,
-      enum: ["SP", "SSR", "SSR+", "SP+"],
+      enum: ["SP", "SSR", "SSR+", "SP+", "Thần Chỉ"],
       required: true,
     },
 
@@ -154,6 +212,7 @@ const SoulMasterSchema = new Schema(
         "Phụ Trợ",
         "Phòng Ngự",
         "Ám Khí",
+        "Thần",
       ],
       required: true,
     },
@@ -170,6 +229,9 @@ const SoulMasterSchema = new Schema(
     nvvCardSystem: {
       cards: [NvvCardSchema],
     },
+
+    // Hệ thống cho Hồn Sư Thần Chỉ (Optional)
+    divineSystem: { type: DivineSystemSchema },
   },
   {
     timestamps: true, // Tự động tạo createdAt, updatedAt
@@ -178,7 +240,11 @@ const SoulMasterSchema = new Schema(
 
 // --- 3. Export Model ---
 
-// Kiểm tra xem Model đã tồn tại chưa để tránh lỗi OverwriteModelError khi hot-reload trong Next.js
+// Trong môi trường development, ta xóa model cũ để Mongoose register lại với Schema mới nhất
+if (process.env.NODE_ENV === "development") {
+  delete mongoose.models.SoulMaster;
+}
+
 const SoulMaster =
   mongoose.models.SoulMaster || mongoose.model("SoulMaster", SoulMasterSchema);
 

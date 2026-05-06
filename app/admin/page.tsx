@@ -40,6 +40,7 @@ const rarityStyles: Record<string, string> = {
   "SP": "bg-purple-500/20 text-purple-400 border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.2)]",
   "SSR+": "bg-orange-500/20 text-orange-400 border-orange-500/50 shadow-[0_0_10px_rgba(249,115,22,0.2)]",
   "SSR": "bg-amber-500/20 text-amber-400 border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]",
+  "Thần Chỉ": "bg-yellow-500/20 text-yellow-400 border-yellow-500/50 shadow-[0_0_20px_rgba(234,179,8,0.3)] font-black italic",
 };
 
 export default function AdminListPage() {
@@ -145,6 +146,7 @@ export default function AdminListPage() {
                 <SelectItem value="SP" className="focus:bg-indigo-600 focus:text-white cursor-pointer rounded-lg m-1">SP</SelectItem>
                 <SelectItem value="SSR+" className="focus:bg-indigo-600 focus:text-white cursor-pointer rounded-lg m-1">SSR+</SelectItem>
                 <SelectItem value="SSR" className="focus:bg-indigo-600 focus:text-white cursor-pointer rounded-lg m-1">SSR</SelectItem>
+                <SelectItem value="Thần Chỉ" className="focus:bg-indigo-600 focus:text-white cursor-pointer rounded-lg m-1 text-yellow-500 font-bold">Thần Chỉ</SelectItem>
               </SelectContent>
             </Select>
 
@@ -249,8 +251,14 @@ export default function AdminListPage() {
                     </TableCell>
                     <TableCell className="py-4 md:py-5 hidden sm:table-cell">
                       <div className="flex items-center gap-2 text-[11px] md:text-xs text-slate-400 font-bold group-hover:text-slate-200 transition-colors">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" />
-                        {hero.type}
+                        {hero.rarity === "Thần Chỉ" ? (
+                          "—"
+                        ) : (
+                          <>
+                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" />
+                            {hero.type}
+                          </>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="py-4 md:py-5 text-right pr-8">
