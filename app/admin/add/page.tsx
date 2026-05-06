@@ -12,6 +12,7 @@ import {
   FaChevronDown,
   FaDna,
   FaArrowUp,
+  FaPlus,
 } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 

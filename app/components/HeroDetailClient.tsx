@@ -122,7 +122,7 @@ const TabButton = ({
   onClick: () => void, 
   icon: React.ReactNode, 
   label: string,
-  color: 'blue' | 'rose' | 'amber' | 'cyan' | 'pink'
+  color: 'blue' | 'rose' | 'amber' | 'cyan' | 'pink' | 'gold'
 }) => {
   const activeStyles = {
     blue: "text-blue-400 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)] bg-blue-500/5",
