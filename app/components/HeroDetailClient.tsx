@@ -472,7 +472,7 @@ const NvvCardModal = ({
 
             {/* Badges overlapping the borders */}
             <div className="absolute -top-4 inset-x-0 px-6 flex justify-center z-30">
-               <h3 className="text-xs font-black text-white text-center bg-slate-950 border-2 border-pink-500/50 px-6 py-2.5 rounded-2xl shadow-[0_0_20px_rgba(219,39,119,0.3)] uppercase tracking-tight italic leading-snug">
+               <h3 className="text-xs font-black text-white text-center bg-slate-950 border-2 border-pink-500/50 px-6 py-2.5 rounded-2xl shadow-[0_0_20px_rgba(219,39,119,0.3)] uppercase tracking-tight leading-snug">
                 {card.name}
               </h3>
             </div>
@@ -1449,7 +1449,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent opacity-80" />
                       <div className="absolute bottom-0 inset-x-0 p-5 pt-20">
-                        <h4 className="text-xs font-black text-white uppercase italic tracking-tight group-hover:text-pink-400 transition-colors leading-relaxed">
+                        <h4 className="text-xs font-black text-white uppercase tracking-tight group-hover:text-pink-400 transition-colors leading-relaxed">
                           {card.name}
                         </h4>
                       </div>
