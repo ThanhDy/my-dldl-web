@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -450,31 +450,41 @@ const NvvCardModal = ({
         </button>
 
         {/* Left Side: Card Visual */}
-        <div className="w-full md:w-[45%] shrink-0 relative bg-slate-900/50 p-12 flex items-center justify-center border-r border-white/5">
+        <div className="w-full md:w-[45%] shrink-0 relative bg-slate-900/50 p-8 md:p-12 flex items-center justify-center border-b md:border-b-0 md:border-r border-white/5">
            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#db277710_0%,transparent_100%)] pointer-events-none" />
            
-           <div className="w-full max-w-[280px] rounded-[2rem] overflow-hidden border-2 border-pink-500/50 relative aspect-[3/4] shadow-[0_0_30px_rgba(219,39,119,0.2)] group">
-            <Image
-              src={optimizeCloudinary(card.image, 600) || card.image}
-              alt={card.name}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-              sizes="280px"
-            />
-            {/* Rarity & Title Badges */}
-            <div className="absolute top-0 inset-x-0 pt-6 flex flex-col items-center gap-2 z-20">
-               <span className="bg-pink-600/90 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full uppercase font-black tracking-widest border border-pink-400/50">
-                 {card.type === "Thông Dụng" ? "Common Gear" : "EX Gear"}
-               </span>
-               <h3 className="text-sm font-black text-white text-center bg-black/60 backdrop-blur-md border border-white/10 px-4 py-1.5 rounded-full shadow-2xl mx-4 truncate max-w-[90%] uppercase tracking-tight italic">
+           <div className="w-full max-w-[200px] md:max-w-[280px] relative aspect-[3/4] group">
+            {/* Image Container with clipped edges */}
+            <div className="absolute inset-0 rounded-[2rem] overflow-hidden border-2 border-pink-500/50 shadow-[0_0_40px_rgba(219,39,119,0.15)] bg-slate-900">
+              <Image
+                src={optimizeCloudinary(card.image, 600) || card.image}
+                alt={card.name}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                sizes="280px"
+              />
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-20 flex items-end justify-center">
+                <p className="text-slate-300 text-[11px] italic text-center line-clamp-3 leading-relaxed opacity-90 font-medium">
+                  {card.shortDescription}
+                </p>
+              </div>
+            </div>
+
+            {/* Badges overlapping the borders */}
+            <div className="absolute -top-4 inset-x-0 px-6 flex justify-center z-30">
+               <h3 className="text-xs font-black text-white text-center bg-slate-950 border-2 border-pink-500/50 px-6 py-2.5 rounded-2xl shadow-[0_0_20px_rgba(219,39,119,0.3)] uppercase tracking-tight italic leading-snug">
                 {card.name}
               </h3>
             </div>
 
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-20 flex items-end justify-center">
-              <p className="text-slate-300 text-[11px] italic text-center line-clamp-3 leading-relaxed opacity-90 font-medium">
-                {card.shortDescription}
-              </p>
+            <div className="absolute top-[40%] -right-3.5 -translate-y-1/2 z-30">
+               <div className="bg-pink-600 text-white text-[8px] py-4 px-1.5 rounded-full flex flex-col items-center justify-center gap-0.5 font-black uppercase tracking-tighter border-2 border-pink-400 shadow-2xl min-w-[24px]">
+                 {(card.type === "Thông Dụng" ? "Thông Dụng" : "Chuyên Thuộc").split("").map((char: string, i: number) => (
+                    <span key={i} className={char === " " ? "h-2" : "leading-none"}>
+                      {char}
+                    </span>
+                 ))}
+               </div>
             </div>
           </div>
         </div>
@@ -484,10 +494,10 @@ const NvvCardModal = ({
           <section className="space-y-4">
              <div className="flex items-center gap-2">
                <Zap size={14} className="text-pink-400" />
-               <h4 className="text-pink-400 font-black text-[10px] uppercase tracking-[0.3em]">Basic Module</h4>
+               <h4 className="text-pink-400 font-black text-[10px] uppercase tracking-[0.3em]">Kỹ năng cơ bản</h4>
              </div>
              <div className="bg-white/[0.02] p-6 rounded-[2rem] border border-white/5">
-                <p className="text-slate-300 text-sm leading-relaxed font-medium italic">
+                <p className="text-slate-300 text-sm leading-relaxed font-medium ">
                   {card.basicSkill}
                 </p>
              </div>
@@ -496,7 +506,7 @@ const NvvCardModal = ({
           <section className="space-y-4">
             <div className="flex items-center gap-2">
                <Info size={14} className="text-blue-400" />
-               <h4 className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em]">Advanced Matrix</h4>
+               <h4 className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em]">Chi tiết hiệu ứng</h4>
              </div>
 
             <div className="bg-blue-600/5 p-6 rounded-[2rem] border border-blue-500/10 hover:border-blue-500/30 transition-all group">
@@ -504,31 +514,28 @@ const NvvCardModal = ({
               <div className="space-y-6">
                 <div className="space-y-2">
                   <p className="text-[10px] text-blue-500/50 uppercase font-black tracking-widest">
-                    Trial Quest
+                    Nhiệm vụ thử luyện
                   </p>
-                  <p className="text-blue-100/90 text-sm leading-relaxed font-medium pl-4 border-l-2 border-blue-500/30 italic">
+                  <p className="text-blue-100/90 text-sm leading-relaxed font-medium pl-4 border-l-2 border-blue-500/30 ">
                     {card.detailedEffect.quest?.description}
                   </p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-[10px] text-blue-500/50 uppercase font-black tracking-widest">
-                    Matrix Reward
+                    Phần thưởng thử luyện
                   </p>
-                  <p className="text-blue-300 text-sm leading-relaxed font-black pl-4 border-l-2 border-blue-500/30 italic">
+                  <p className="text-blue-100/90 text-sm leading-relaxed font-medium  pl-4 border-l-2 border-blue-500/30">
                     {card.detailedEffect.quest?.buff}
                   </p>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="inline-block px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400 italic">
+                <div className="inline-block px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400 ">
                    {card.detailedEffect.condition}
                 </div>
                 <div className="space-y-2">
-                  <p className="text-[10px] text-blue-500/50 uppercase font-bold tracking-widest font-black">
-                    Analysis
-                  </p>
-                  <p className="text-blue-100/90 text-sm leading-relaxed font-medium italic pl-4 border-l-2 border-blue-500/30">
+                  <p className="text-blue-100/90 text-sm leading-relaxed font-medium  pl-4 border-l-2 border-blue-500/30">
                     {card.detailedEffect.effect}
                   </p>
                 </div>
@@ -541,7 +548,7 @@ const NvvCardModal = ({
             <section className="space-y-4">
                <div className="flex items-center gap-2">
                  <Sparkles size={14} className="text-purple-400" />
-                 <h4 className="text-purple-400 font-black text-[10px] uppercase tracking-[0.3em]">Hardware Upgrades</h4>
+                 <h4 className="text-purple-400 font-black text-[10px] uppercase tracking-[0.3em]">Hiệu ứng tiến hoá</h4>
                </div>
                <div className="grid gap-4">
                 {card.upgradeEffects.map((upgrade, idx) => (
@@ -550,8 +557,7 @@ const NvvCardModal = ({
                       {upgrade.condition}
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[10px] text-purple-500/50 uppercase font-black tracking-widest">New Protocol</p>
-                      <p className="text-blue-100/90 text-sm leading-relaxed font-medium italic pl-4 border-l-2 border-purple-500/30">
+                      <p className="text-blue-100/90 text-sm leading-relaxed font-medium  pl-4 border-l-2 border-purple-500/30">
                         {upgrade.effect}
                       </p>
                     </div>
@@ -888,6 +894,30 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
     "Tất Cả",
   );
 
+  // Drag-to-scroll state for filters
+  const filterScrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!filterScrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - filterScrollRef.current.offsetLeft);
+    setScrollLeftState(filterScrollRef.current.scrollLeft);
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
+  const handleMouseLeave = () => setIsDragging(false);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !filterScrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - filterScrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // scroll speed multiplier
+    filterScrollRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
   const isVinhVinh = hero?.name?.toLowerCase().includes("vinh vinh");
   const isTranTam = hero?.id === "cuc-han---kiem-dao-tran-tam";
   const isAmKhi = hero?.type === "Ám Khí";
@@ -970,7 +1000,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`relative rounded-[3rem] overflow-hidden shadow-2xl aspect-[3/4] w-full p-1 bg-gradient-to-b ${rarityColor} ${rarityShadow}`}
+            className={`relative rounded-[3rem] overflow-hidden shadow-2xl aspect-[3/4] w-full max-w-[280px] sm:max-w-[400px] lg:max-w-none mx-auto p-1 bg-gradient-to-b ${rarityColor} ${rarityShadow}`}
           >
             <div className="relative w-full h-full bg-[#020617] rounded-[2.8rem] overflow-hidden">
               {/* Floating Rarity Badge */}
@@ -1018,9 +1048,9 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
         </div>
 
         {/* Right Column: Information Tabs */}
-        <div className="lg:col-span-8 flex flex-col">
+        <div className="lg:col-span-8 flex flex-col min-w-0">
           {/* TAB NAVIGATION */}
-          <div className="flex gap-2 border-b border-white/5 mb-10 overflow-x-auto pb-4 no-scrollbar">
+          <div className="flex gap-2 border-b border-white/5 mb-10 overflow-x-auto pb-4 custom-scrollbar-visible cursor-grab active:cursor-grabbing select-none">
             {isAmKhi ? (
               <TabButton active={activeTab === "stars"} onClick={() => setActiveTab("stars")} icon={<Star size={14} />} label="Hệ thống năng sao" color="rose" />
             ) : isDivine ? (
@@ -1372,18 +1402,30 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
 
             {/* THẺ BÀI VINH VINH (ROLEPLAY CARDS) */}
             {activeTab === "nvv_cards" && isVinhVinh && hero.nvvCardSystem && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10">
-                <div className="pb-4 overflow-x-auto no-scrollbar">
-                  <div className="flex gap-2 min-w-max">
-                    {filters.map((f) => (
-                      <button
-                        key={f}
-                        onClick={() => setActiveFilter(f)}
-                        className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 ${activeFilter === f ? "bg-pink-600 border-pink-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]" : "bg-white/5 border-white/5 text-slate-500 hover:border-white/10 hover:text-slate-300"}`}
-                      >
-                        {f}
-                      </button>
-                    ))}
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10 w-full overflow-hidden">
+                <div 
+                  ref={filterScrollRef}
+                  className={`pb-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none ${isDragging ? "cursor-grabbing" : ""}`}
+                  onMouseDown={handleMouseDown}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseLeave}
+                  onMouseMove={handleMouseMove}
+                >
+                  <div className="flex gap-2 min-w-max px-1">
+                    {filters.map((f) => {
+                      const count = f === "Tất Cả" 
+                        ? hero.nvvCardSystem?.cards?.length || 0
+                        : hero.nvvCardSystem?.cards?.filter((c: any) => c.type === f).length || 0;
+                      return (
+                        <button
+                          key={f}
+                          onClick={() => setActiveFilter(f)}
+                          className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 ${activeFilter === f ? "bg-pink-600 border-pink-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]" : "bg-white/5 border-white/5 text-slate-500 hover:border-white/10 hover:text-slate-300"}`}
+                        >
+                          {f} ({count})
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
@@ -1395,7 +1437,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                     >
                       <div className="absolute top-4 left-4 z-20">
                         <span className="bg-pink-600/90 backdrop-blur-md text-white text-[8px] px-2.5 py-1 rounded-lg uppercase font-black tracking-widest border border-white/20">
-                          {card.type === "Thông Dụng" ? "Common" : "Elite"}
+                          {card.type === "Thông Dụng" ? "Thông Dụng" : "Chuyên Thuộc"}
                         </span>
                       </div>
                       <Image
@@ -1407,13 +1449,9 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent opacity-80" />
                       <div className="absolute bottom-0 inset-x-0 p-5 pt-20">
-                        <h4 className="text-xs font-black text-white truncate uppercase italic tracking-tight group-hover:text-pink-400 transition-colors">
+                        <h4 className="text-xs font-black text-white uppercase italic tracking-tight group-hover:text-pink-400 transition-colors leading-relaxed">
                           {card.name}
                         </h4>
-                        <div className="flex items-center gap-1.5 mt-1 opacity-50">
-                           <div className="w-1 h-1 rounded-full bg-pink-500 animate-pulse" />
-                           <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Protocol Active</span>
-                        </div>
                       </div>
                     </div>
                   ))}
@@ -1445,13 +1483,9 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest opacity-70">
                             {bone.position}
                           </p>
-                          <h4 className={`text-sm font-black italic uppercase tracking-tight truncate transition-colors ${isMutated ? "text-rose-400 group-hover:text-rose-300" : "text-slate-200 group-hover:text-amber-400"}`}>
+                          <h4 className={`text-sm font-black italic uppercase tracking-tight transition-colors leading-snug ${isMutated ? "text-rose-400 group-hover:text-rose-300" : "text-slate-200 group-hover:text-amber-400"}`}>
                             {bone.name}
                           </h4>
-                          <div className="flex items-center gap-2 pt-1">
-                             <div className={`w-1 h-1 rounded-full ${isMutated ? "bg-rose-500" : "bg-amber-500"} animate-pulse`} />
-                             <span className="text-[9px] font-bold text-slate-500 uppercase">Equipped</span>
-                          </div>
                         </div>
                       </div>
                     );
