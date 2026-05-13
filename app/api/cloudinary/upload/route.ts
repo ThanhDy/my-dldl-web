@@ -30,11 +30,6 @@ export async function POST(req: Request) {
           folder: folder || "soul-masters",
           resource_type: "auto",
           format: "webp",
-          transformation: [
-            { effect: "enhance" }, // Tự động tối ưu chi tiết và màu sắc
-            { quality: "auto:best" }, // Chuyển sang chất lượng tốt nhất
-            { dpr: "auto" } // Tự động tăng mật độ điểm ảnh (độ phân giải) cho thiết bị sắc nét
-          ]
         },
         (error, result) => {
           if (error) {
