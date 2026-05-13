@@ -15,7 +15,8 @@ import {
   RefreshCw,
   MoreHorizontal,
   ChevronRight,
-  ArrowLeft
+  ArrowLeft,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/app/components/ui/input";
@@ -40,6 +41,7 @@ export default function AdminHungThuSoulRing() {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSystem, setFilterSystem] = useState<string>("All");
+  const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -127,6 +129,50 @@ export default function AdminHungThuSoulRing() {
       alert("Lỗi upload ảnh!");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleAiScan = async (file: File) => {
+    setScanning(true);
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const base64Data = reader.result as string;
+
+        const res = await fetch("/api/ai/analyze-hung-thu", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageBase64: base64Data }),
+        });
+
+        const result = await res.json();
+        
+        if (result.success && result.data) {
+          const aiData = result.data;
+          setEditingItem((prev: any) => {
+             const isNewItem = !prev.name && (!prev.basicEffect || prev.basicEffect.trim() === "");
+             return {
+                ...prev,
+                name: prev.name || aiData.name || "",
+                systems: isNewItem ? (aiData.systems?.length > 0 ? aiData.systems : prev.systems) : (aiData.systems?.length > 0 ? Array.from(new Set([...(prev.systems || []), ...aiData.systems])) : prev.systems),
+                type: (prev.type && prev.type !== "Regular") ? prev.type : (aiData.type || prev.type),
+                basicEffect: aiData.basicEffect ? (prev.basicEffect ? prev.basicEffect + '\n' + aiData.basicEffect : aiData.basicEffect) : prev.basicEffect,
+                yearEffects: aiData.yearEffects?.length > 0 ? [...(prev.yearEffects || []).filter((e: any) => e.year || e.effect), ...aiData.yearEffects] : prev.yearEffects,
+             };
+          });
+        } else {
+          alert("Lỗi phân tích AI: " + result.error);
+        }
+        setScanning(false);
+      };
+      reader.onerror = () => {
+        alert("Lỗi đọc file");
+        setScanning(false);
+      };
+    } catch (error) {
+      alert("Lỗi khi quét ảnh bằng AI");
+      setScanning(false);
     }
   };
 
@@ -312,8 +358,12 @@ export default function AdminHungThuSoulRing() {
                 <tr key={item.id} className="hover:bg-white/[0.02] transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
-                      <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-white/10 bg-slate-950">
-                        <Image src={item.image} alt={item.name} fill className="object-cover" unoptimized />
+                      <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center">
+                        {item.image ? (
+                          <Image src={item.image} alt={item.name} fill className="object-cover" unoptimized />
+                        ) : (
+                          <ImageIcon size={20} className="text-slate-700" />
+                        )}
                       </div>
                       <div>
                         <div className="font-bold text-white text-sm">{item.name}</div>
@@ -377,6 +427,20 @@ export default function AdminHungThuSoulRing() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onPaste={(e) => {
+                const items = e.clipboardData?.items;
+                if (!items) return;
+                for (let i = 0; i < items.length; i++) {
+                  if (items[i].type.indexOf("image") !== -1) {
+                    const file = items[i].getAsFile();
+                    if (file) {
+                      e.preventDefault();
+                      handleAiScan(file);
+                      break;
+                    }
+                  }
+                }
+              }}
               className="relative w-full max-w-4xl bg-slate-900 border border-white/10 rounded-[2.5rem] p-8 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
               <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
@@ -419,7 +483,14 @@ export default function AdminHungThuSoulRing() {
                           value={editingItem.image || ""}
                           onChange={(e) => setEditingItem({ ...editingItem, image: e.target.value })}
                         />
-                         <p className="text-[9px] text-slate-500 italic">* Ưu tiên tải ảnh lên để có tốc độ tải ổn định nhất.</p>
+                         <div className="flex items-center justify-between">
+                           <p className="text-[9px] text-slate-500 italic">* Ưu tiên tải ảnh lên để có tốc độ tải.</p>
+                           <label className={`flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 rounded-lg text-[10px] font-black text-white uppercase tracking-widest transition-all shadow-lg shadow-purple-500/20 cursor-pointer ${scanning ? 'opacity-50 pointer-events-none' : ''}`}>
+                             {scanning ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                             <span>{scanning ? "Đang phân tích..." : "Quét Ảnh Bằng AI"}</span>
+                             <input type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && handleAiScan(e.target.files[0])} />
+                           </label>
+                         </div>
                       </div>
                     </div>
                   </div>
