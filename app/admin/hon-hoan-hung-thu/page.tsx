@@ -42,6 +42,7 @@ export default function AdminHungThuSoulRing() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSystem, setFilterSystem] = useState<string>("All");
   const [scanning, setScanning] = useState(false);
+  const [modalSearchQuery, setModalSearchQuery] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -538,11 +539,11 @@ export default function AdminHungThuSoulRing() {
                     <div className="space-y-3">
                       <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 pl-1">Loại hồn hoàn</label>
                       <select 
-                        className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-slate-300 outline-none"
+                        className="w-full h-12 bg-slate-900 border border-white/10 rounded-xl px-4 text-sm text-white outline-none focus:border-orange-500/50"
                         value={editingItem.type}
                         onChange={(e) => setEditingItem({ ...editingItem, type: e.target.value as HungThuType })}
                       >
-                        {TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                        {TYPES.map(t => <option key={t.value} value={t.value} className="bg-slate-800 text-white">{t.label}</option>)}
                       </select>
                     </div>
                   </div>
@@ -557,10 +558,24 @@ export default function AdminHungThuSoulRing() {
                   </div>
 
                   {editingItem.type === "Combined" ? (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                        <label className="text-[10px] font-black uppercase tracking-widest text-orange-500/60 pl-1">Hồn Hoàn Thành Phần (Chọn 2)</label>
-                       <div className="grid grid-cols-1 gap-2 max-h-[150px] overflow-y-auto px-1">
-                          {data.filter(d => d.type === "Regular" && d.id !== editingItem.id).map(r => {
+                       
+                       <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={14} />
+                          <Input 
+                            placeholder="Tìm kiếm hồn hoàn..." 
+                            className="pl-9 h-10 bg-slate-900/50 border-white/10 text-xs rounded-xl mb-2 focus:ring-orange-500/20"
+                            value={modalSearchQuery}
+                            onChange={(e) => setModalSearchQuery(e.target.value)}
+                          />
+                       </div>
+
+                       <div className="grid grid-cols-1 gap-2 max-h-[150px] overflow-y-auto px-1 custom-scrollbar">
+                          {data
+                            .filter(d => d.type === "Regular" && d.id !== editingItem.id)
+                            .filter(d => d.name.toLowerCase().includes(modalSearchQuery.toLowerCase()))
+                            .map(r => {
                             const isSelected = editingItem.componentIds?.includes(r.id);
                             return (
                               <button 
@@ -576,7 +591,7 @@ export default function AdminHungThuSoulRing() {
                                   }
                                 }}
                                 className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
-                                  isSelected ? "bg-orange-500/10 border-orange-500/30 text-white" : "bg-white/5 border-white/5 text-slate-500"
+                                  isSelected ? "bg-orange-500/10 border-orange-500/30 text-white" : "bg-slate-900 border-white/5 text-slate-500 hover:bg-white/5"
                                 }`}
                               >
                                 <div className="w-6 h-6 rounded-md overflow-hidden relative border border-white/10">
@@ -589,18 +604,53 @@ export default function AdminHungThuSoulRing() {
                        </div>
                     </div>
                   ) : (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                        <label className="text-[10px] font-black uppercase tracking-widest text-blue-500/60 pl-1">Hồn Hoàn Kết Hợp Cùng (Tùy chọn)</label>
-                       <select 
-                        className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-slate-300 outline-none"
-                        value={editingItem.suitableWithId || ""}
-                        onChange={(e) => setEditingItem({ ...editingItem, suitableWithId: e.target.value || undefined })}
-                      >
-                        <option value="">Không có</option>
-                        {data.filter(d => d.type === "Regular" && d.id !== editingItem.id).map(r => (
-                          <option key={r.id} value={r.id}>{r.name}</option>
-                        ))}
-                      </select>
+                       
+                       <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={14} />
+                          <Input 
+                            placeholder="Tìm kiếm hồn hoàn..." 
+                            className="pl-9 h-10 bg-slate-900/50 border-white/10 text-xs rounded-xl mb-2 focus:ring-blue-500/20"
+                            value={modalSearchQuery}
+                            onChange={(e) => setModalSearchQuery(e.target.value)}
+                          />
+                       </div>
+
+                       <div className="grid grid-cols-1 gap-2 max-h-[150px] overflow-y-auto px-1 custom-scrollbar">
+                          <button 
+                             onClick={() => setEditingItem({ ...editingItem, suitableWithId: undefined })}
+                             className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
+                               !editingItem.suitableWithId ? "bg-blue-500/10 border-blue-500/30 text-white" : "bg-slate-900 border-white/5 text-slate-500 hover:bg-white/5"
+                             }`}
+                          >
+                             <div className="w-6 h-6 rounded-md border border-white/10 flex items-center justify-center bg-slate-800">
+                               <X size={12} />
+                             </div>
+                             <span className="text-xs font-bold">Không có</span>
+                          </button>
+
+                          {data
+                            .filter(d => d.type === "Regular" && d.id !== editingItem.id)
+                            .filter(d => d.name.toLowerCase().includes(modalSearchQuery.toLowerCase()))
+                            .map(r => {
+                              const isSelected = editingItem.suitableWithId === r.id;
+                              return (
+                                <button 
+                                  key={r.id}
+                                  onClick={() => setEditingItem({ ...editingItem, suitableWithId: r.id })}
+                                  className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
+                                    isSelected ? "bg-blue-500/10 border-blue-500/30 text-white" : "bg-slate-900 border-white/5 text-slate-500 hover:bg-white/5"
+                                  }`}
+                                >
+                                  <div className="w-6 h-6 rounded-md overflow-hidden relative border border-white/10">
+                                     <Image src={r.image} alt="" fill className="object-cover" unoptimized />
+                                  </div>
+                                  <span className="text-xs font-bold">{r.name}</span>
+                                </button>
+                              );
+                            })}
+                       </div>
                     </div>
                   )}
                 </div>

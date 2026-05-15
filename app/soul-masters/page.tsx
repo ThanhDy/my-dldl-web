@@ -1,4 +1,7 @@
 export const revalidate = 60; // Đây là Server Component (Mặc định, không có "use client")
+export const metadata = {
+  title: "Hồn Sư | Đấu La Đại Lục"
+};
 import dbConnect from "@/lib/mongodb";
 import SoulMaster from "@/models/SoulMaster";
 import SoulMasterList from "@/app/components/SoulMasterList"; // Import component vừa tạo

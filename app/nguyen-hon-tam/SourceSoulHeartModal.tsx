@@ -150,9 +150,9 @@ export default function SourceSoulHeartModal({
                  <div className="flex items-center gap-2 pb-3 border-b border-white/5">
                     <span className="text-blue-400 font-black text-xs uppercase tracking-tighter">Nguyên Hồn Tâm</span>
                     <span className="text-white font-black">Lv1</span>
-                    <span className="text-slate-600 font-bold">/ 40 / 50 / 60 / 100</span>
+                    <span className="text-slate-600 font-bold">{isSP ? "/ 60 / 80 / 90 / 100" : isSSR_Plus ? "/ 30 / 40 / 60 / 80" : "/ 10 / 20 / 40 / 60"}</span>
                  </div>
-                 <p className="whitespace-pre-wrap opacity-90">{formatText(item.basicSkill)}</p>
+                 <p className="whitespace-pre-wrap ">{formatText(item.basicSkill)}</p>
                </div>
             </section>
           )}
