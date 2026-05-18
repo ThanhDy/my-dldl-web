@@ -1061,7 +1061,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
               </div>
             ) : (
               <div className="flex gap-2">
-                 {!hasSkillGrid && <TabButton active={activeTab === "build"} onClick={() => setActiveTab("build")} icon={<LayoutGrid size={14} />} label="Hồn Hoàn & Xương" color="blue" />}
+                 {!hasSkillGrid && <TabButton active={activeTab === "build"} onClick={() => setActiveTab("build")} icon={<LayoutGrid size={14} />} label="Hồn Hoàn" color="blue" />}
                  {hasSkillGrid && <TabButton active={activeTab === "skills"} onClick={() => setActiveTab("skills")} icon={<Zap size={14} />} label="Hệ thống kỹ năng" color="blue" />}
                  {isTranTam && <TabButton active={activeTab === "thien_phu"} onClick={() => setActiveTab("thien_phu")} icon={<Sparkles size={14} />} label="Thiên Phú" color="cyan" />}
                  {isVinhVinh && hero.nvvCardSystem && <TabButton active={activeTab === "nvv_cards"} onClick={() => setActiveTab("nvv_cards")} icon={<Gamepad2 size={14} />} label="Thẻ Bài" color="pink" />}
@@ -1119,6 +1119,38 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                     </div>
                   );
                 })}
+              </motion.div>
+            )}
+
+            {/* KỸ NĂNG CHI TIẾT (GRID) */}
+            {activeTab === "skills" && hasSkillGrid && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                {hero.skillDetails?.map((skill: any, index: number) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center gap-4 bg-white/[0.02] p-6 rounded-[2rem] border border-white/5 hover:border-blue-500/50 hover:bg-white/[0.05] transition-all cursor-pointer group shadow-xl"
+                    onClick={() => setSelectedSkill(skill)}
+                  >
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/10 relative overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                      {skill.iconUrl ? (
+                        <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-slate-900 text-xl font-black italic">
+                          {index + 1}
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <div className="space-y-1 text-center w-full">
+                       <p className="text-[10px] font-black uppercase text-blue-400/70 tracking-tighter opacity-70">
+                         {skill.type}
+                       </p>
+                       <h4 className="text-[11px] font-black text-slate-200 truncate group-hover:text-white transition-colors uppercase italic tracking-tight">
+                         {skill.name}
+                       </h4>
+                    </div>
+                  </div>
+                ))}
               </motion.div>
             )}
 
@@ -1276,38 +1308,6 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                     </div>
                   </div>
                 )}
-              </motion.div>
-            )}
-
-            {/* KỸ NĂNG CHI TIẾT (GRID) */}
-            {activeTab === "skills" && hasSkillGrid && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                {hero.skillDetails?.map((skill: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center gap-4 bg-white/[0.02] p-6 rounded-[2rem] border border-white/5 hover:border-blue-500/50 hover:bg-white/[0.05] transition-all cursor-pointer group shadow-xl"
-                    onClick={() => setSelectedSkill(skill)}
-                  >
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/10 relative overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                      {skill.iconUrl ? (
-                        <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-900 text-xl font-black italic">
-                          {index + 1}
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="space-y-1 text-center w-full">
-                       <p className="text-[10px] font-black uppercase text-blue-400/70 tracking-tighter opacity-70">
-                         {skill.type}
-                       </p>
-                       <h4 className="text-[11px] font-black text-slate-200 truncate group-hover:text-white transition-colors uppercase italic tracking-tight">
-                         {skill.name}
-                       </h4>
-                    </div>
-                  </div>
-                ))}
               </motion.div>
             )}
 
