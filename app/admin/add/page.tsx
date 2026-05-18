@@ -435,6 +435,50 @@ export default function AddHeroPage() {
     setFormData({ ...formData, divineSystem: newDivine });
   };
 
+  // --- HÀM XỬ LÝ ĐỆ THẤT, ĐỆ BÁT, ĐỆ CỬU HỒN KỸ ---
+  const updateSeventhSkill = (year: string, field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      seventhSkill: {
+        ...prev.seventhSkill,
+        [year]: { ...prev.seventhSkill?.[year], [field]: value }
+      }
+    }));
+  };
+
+  const updateEighthSkillActive = (field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      eighthSkill: {
+        ...prev.eighthSkill,
+        active: { ...prev.eighthSkill?.active, [field]: value }
+      }
+    }));
+  };
+
+  const updateEighthSkillPassive = (key: string, field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      eighthSkill: {
+        ...prev.eighthSkill,
+        passives: {
+          ...prev.eighthSkill?.passives,
+          [key]: { ...prev.eighthSkill?.passives?.[key], [field]: value }
+        }
+      }
+    }));
+  };
+
+  const updateNinthSkill = (type: 'active' | 'passive', field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      ninthSkill: {
+        ...prev.ninthSkill,
+        [type]: { ...prev.ninthSkill?.[type], [field]: value }
+      }
+    }));
+  };
+
   // 2. HÀM CHỌN ẢNH (CHỈ PREVIEW, KHÔNG UPLOAD)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1707,6 +1751,138 @@ export default function AddHeroPage() {
                 ))}
               </div>
             </Section>
+
+            {/* ĐỆ THẤT HỒN KỸ */}
+            {!isDivine && (
+              <Section title="Đệ Thất Hồn Kỹ" color="blue" defaultOpen={false}>
+                <div className="space-y-6">
+                  {[
+                    { key: 'y250k', label: 'Mốc 25 vạn năm' },
+                    { key: 'y350k', label: 'Mốc 35 vạn năm' },
+                    { key: 'y400k', label: 'Mốc 40 vạn năm' },
+                    { key: 'y450k', label: 'Mốc 45 vạn năm' },
+                    { key: 'y500k', label: 'Mốc 50 vạn năm' },
+                  ].map(({ key, label }) => (
+                    <div key={key} className="bg-slate-800/50 p-4 rounded-xl space-y-4">
+                      <div className="text-blue-400 font-bold">{label}</div>
+                      <input
+                        placeholder="Tên hiệu ứng"
+                        value={formData.seventhSkill?.[key]?.name || ''}
+                        onChange={(e) => updateSeventhSkill(key, 'name', e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                      />
+                      <textarea
+                        placeholder="Mô tả hiệu ứng"
+                        value={formData.seventhSkill?.[key]?.description || ''}
+                        onChange={(e) => updateSeventhSkill(key, 'description', e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500 h-24"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            )}
+
+            {/* ĐỆ BÁT HỒN KỸ */}
+            {!isDivine && (
+              <Section title="Đệ Bát Hồn Kỹ" color="blue" defaultOpen={false}>
+                <div className="space-y-6">
+                  {/* Chủ động */}
+                  <div className="bg-slate-800/50 p-4 rounded-xl space-y-4">
+                    <div className="text-blue-400 font-bold">Kỹ Năng Chủ Động</div>
+                    <input
+                      placeholder="Tên kỹ năng"
+                      value={formData.eighthSkill?.active?.name || ''}
+                      onChange={(e) => updateEighthSkillActive('name', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                    />
+                    <textarea
+                      placeholder="Mô tả kỹ năng"
+                      value={formData.eighthSkill?.active?.description || ''}
+                      onChange={(e) => updateEighthSkillActive('description', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500 h-24"
+                    />
+                  </div>
+
+                  {/* Bị động */}
+                  <div className="text-blue-400 font-bold mt-6 mb-2">Kỹ Năng Bị Động</div>
+                  {[
+                    { key: 'honHoanSongHe', label: 'Hồn Hoàn Song Hệ' },
+                    { key: 'nguyenHonLuc', label: 'Nguyên Hồn Lực' },
+                    { key: 'uyApChanThan', label: 'Uy Áp Chân Thân' },
+                  ].map(({ key, label }) => (
+                    <div key={key} className="bg-slate-800/50 p-4 rounded-xl space-y-4">
+                      <div className="text-slate-300 font-semibold">{label}</div>
+                      <input
+                        placeholder="Tên kỹ năng"
+                        value={formData.eighthSkill?.passives?.[key]?.name || ''}
+                        onChange={(e) => updateEighthSkillPassive(key, 'name', e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                      />
+                      <input
+                        placeholder="Điều kiện mở khoá"
+                        value={formData.eighthSkill?.passives?.[key]?.unlockCondition || ''}
+                        onChange={(e) => updateEighthSkillPassive(key, 'unlockCondition', e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                      />
+                      <textarea
+                        placeholder="Mô tả kỹ năng"
+                        value={formData.eighthSkill?.passives?.[key]?.description || ''}
+                        onChange={(e) => updateEighthSkillPassive(key, 'description', e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500 h-24"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            )}
+
+            {/* ĐỆ CỬU HỒN KỸ */}
+            {!isDivine && (
+              <Section title="Đệ Cửu Hồn Kỹ" color="blue" defaultOpen={false}>
+                <div className="space-y-6">
+                  {/* Chủ động */}
+                  <div className="bg-slate-800/50 p-4 rounded-xl space-y-4">
+                    <div className="text-blue-400 font-bold">Kỹ Năng Chủ Động</div>
+                    <input
+                      placeholder="Tên kỹ năng"
+                      value={formData.ninthSkill?.active?.name || ''}
+                      onChange={(e) => updateNinthSkill('active', 'name', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                    />
+                    <textarea
+                      placeholder="Mô tả kỹ năng"
+                      value={formData.ninthSkill?.active?.description || ''}
+                      onChange={(e) => updateNinthSkill('active', 'description', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500 h-24"
+                    />
+                  </div>
+
+                  {/* Bị động */}
+                  <div className="bg-slate-800/50 p-4 rounded-xl space-y-4">
+                    <div className="text-blue-400 font-bold">Kỹ Năng Khí Nguyên Thần Khí (Bị động)</div>
+                    <input
+                      placeholder="Tên kỹ năng"
+                      value={formData.ninthSkill?.passive?.name || ''}
+                      onChange={(e) => updateNinthSkill('passive', 'name', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                    />
+                    <input
+                      placeholder="Điều kiện mở khoá"
+                      value={formData.ninthSkill?.passive?.unlockCondition || ''}
+                      onChange={(e) => updateNinthSkill('passive', 'unlockCondition', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500"
+                    />
+                    <textarea
+                      placeholder="Mô tả kỹ năng"
+                      value={formData.ninthSkill?.passive?.description || ''}
+                      onChange={(e) => updateNinthSkill('passive', 'description', e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500 h-24"
+                    />
+                  </div>
+                </div>
+              </Section>
+            )}
           </div>
         </div>
       </div>

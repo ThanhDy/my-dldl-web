@@ -122,6 +122,27 @@ export interface SoulMaster {
   nvvCardSystem?: {
     cards: NvvCard[];
   };
+
+  // Hệ thống Đệ thất, Đệ bát, Đệ cửu hồn kỹ
+  seventhSkill?: {
+    y250k: { name: string; description: string };
+    y350k: { name: string; description: string };
+    y400k: { name: string; description: string };
+    y450k: { name: string; description: string };
+    y500k: { name: string; description: string };
+  };
+  eighthSkill?: {
+    active?: { name: string; description: string };
+    passives?: {
+      honHoanSongHe?: { name: string; description: string; unlockCondition?: string };
+      nguyenHonLuc?: { name: string; description: string; unlockCondition?: string };
+      uyApChanThan?: { name: string; description: string; unlockCondition?: string };
+    };
+  };
+  ninthSkill?: {
+    active?: { name: string; description: string };
+    passive?: { name: string; description: string; unlockCondition?: string }; // Khí Nguyên Thần Khí
+  };
 }
 
 //==========================================================================

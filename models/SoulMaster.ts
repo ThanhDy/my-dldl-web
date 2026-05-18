@@ -185,6 +185,41 @@ const DivineSystemSchema = new Schema({
   },
 }, { _id: false });
 
+// --- 7th, 8th, 9th Soul Skills Sub-Schemas ---
+
+const SeventhSkillEffectSchema = new Schema({
+  name: { type: String, default: "" },
+  description: { type: String, default: "" },
+}, { _id: false });
+
+const SeventhSkillSchema = new Schema({
+  y250k: { type: SeventhSkillEffectSchema, default: {} },
+  y350k: { type: SeventhSkillEffectSchema, default: {} },
+  y400k: { type: SeventhSkillEffectSchema, default: {} },
+  y450k: { type: SeventhSkillEffectSchema, default: {} },
+  y500k: { type: SeventhSkillEffectSchema, default: {} },
+}, { _id: false });
+
+const EighthSkillDetailSchema = new Schema({
+  name: { type: String, default: "" },
+  description: { type: String, default: "" },
+  unlockCondition: { type: String, default: "" },
+}, { _id: false });
+
+const EighthSkillSchema = new Schema({
+  active: { type: EighthSkillDetailSchema, default: {} },
+  passives: {
+    honHoanSongHe: { type: EighthSkillDetailSchema, default: {} },
+    nguyenHonLuc: { type: EighthSkillDetailSchema, default: {} },
+    uyApChanThan: { type: EighthSkillDetailSchema, default: {} },
+  }
+}, { _id: false });
+
+const NinthSkillSchema = new Schema({
+  active: { type: EighthSkillDetailSchema, default: {} },
+  passive: { type: EighthSkillDetailSchema, default: {} }, // Khí Nguyên Thần Khí
+}, { _id: false });
+
 // --- 2. Main Schema (Hồn Sư) ---
 
 const SoulMasterSchema = new Schema(
@@ -232,6 +267,11 @@ const SoulMasterSchema = new Schema(
 
     // Hệ thống cho Hồn Sư Thần Chỉ (Optional)
     divineSystem: { type: DivineSystemSchema },
+
+    // Hệ thống Đệ thất, Đệ bát, Đệ cửu hồn kỹ
+    seventhSkill: { type: SeventhSkillSchema, default: () => ({}) },
+    eighthSkill: { type: EighthSkillSchema, default: () => ({}) },
+    ninthSkill: { type: NinthSkillSchema, default: () => ({}) },
   },
   {
     timestamps: true, // Tự động tạo createdAt, updatedAt
