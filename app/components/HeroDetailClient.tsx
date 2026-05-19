@@ -279,6 +279,90 @@ function SkillModal({
     </motion.div>
   );
 }
+
+function SeventhSkillModal({
+  skill,
+  onClose,
+}: {
+  skill: {
+    name: string;
+    description: string;
+    label: string;
+    color: string;
+    bg: string;
+    iconUrl?: string;
+  } | null;
+  onClose: () => void;
+}) {
+  if (!skill) return null;
+
+  const color = skill.color;
+  const isRedOrRose = color.includes("rose") || color.includes("red");
+  const glowClass = isRedOrRose ? "shadow-rose-500/20 border-rose-500/50" : "shadow-yellow-500/20 border-yellow-500/50";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-md"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        className={`bg-slate-950/80 rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-hidden relative border border-white/10 shadow-2xl backdrop-blur-2xl flex flex-col ${glowClass}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white bg-white/5 rounded-full transition-all z-20 hover:rotate-90"
+        >
+          <X size={20} />
+        </button>
+
+        {/* Modal Header */}
+        <div className="p-8 pb-6 flex items-center gap-6 border-b border-white/5">
+          <div className={`relative w-20 h-20 rounded-full overflow-hidden border-2 flex items-center justify-center bg-slate-900 ${glowClass}`}>
+            {skill.iconUrl ? (
+              <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
+            ) : (
+              <div className={`w-full h-full flex flex-col items-center justify-center bg-slate-950 font-black italic`}>
+                <span className={`text-xl ${color}`}>{skill.label.split(" ")[0]}</span>
+                <span className="text-[8px] uppercase tracking-tighter text-slate-500 font-bold -mt-0.5">Vạn Năm</span>
+              </div>
+            )}
+          </div>
+          <div>
+            <h3 className="text-2xl font-black text-white italic uppercase tracking-tighter mb-2">{skill.name}</h3>
+            <div className="flex gap-2">
+              <span className="bg-rose-600/10 text-rose-400 border border-rose-500/20 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border">
+                Đệ Thất Hồn Kỹ
+              </span>
+              <span className={`${skill.bg} ${skill.color} px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border border-current`}>
+                {skill.label}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal Body */}
+        <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+          <section>
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles size={14} className="text-rose-400" />
+              <h4 className="text-[10px] font-black text-rose-400 uppercase tracking-[0.3em]">Hiệu ứng kỹ năng</h4>
+            </div>
+            <div className="text-slate-300 text-sm leading-relaxed bg-white/[0.02] p-6 rounded-3xl border border-white/5 whitespace-pre-wrap">
+              {formatText(skill.description)}
+            </div>
+          </section>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function SoulBoneModal({
   bone,
   onClose,
@@ -884,6 +968,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
 
   const [activeTab, setActiveTab] = useState<string>("");
   const [selectedSkill, setSelectedSkill] = useState<SkillDetail | null>(null);
+  const [selectedSeventhSkill, setSelectedSeventhSkill] = useState<any>(null);
   const [selectedBone, setSelectedBone] = useState<SoulBone | null>(null);
   const [selectedCard, setSelectedCard] = useState<NvvCard | null>(null);
   const [selectedDivineRing, setSelectedDivineRing] = useState<any>(null);
@@ -977,6 +1062,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
 
       <AnimatePresence>
         {selectedSkill && <SkillModal skill={selectedSkill} onClose={() => setSelectedSkill(null)} />}
+        {selectedSeventhSkill && <SeventhSkillModal skill={selectedSeventhSkill} onClose={() => setSelectedSeventhSkill(null)} />}
         {selectedBone && <SoulBoneModal bone={selectedBone} onClose={() => setSelectedBone(null)} />}
         {selectedCard && <NvvCardModal card={selectedCard} onClose={() => setSelectedCard(null)} />}
         {selectedDivineSkill && <DivineSkillModal skill={selectedDivineSkill} onClose={() => setSelectedDivineSkill(null)} />}
@@ -1156,37 +1242,51 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
               </motion.div>
             )}
 
-                        {/* ĐỆ THẤT HỒN KỸ */}
-            {(activeTab === "build" || activeTab === "skills") && hero.seventhSkill && (
+            {/* ĐỆ THẤT HỒN KỸ */}
+            {(activeTab === "build" || activeTab === "skills") && hero.seventhSkill && Object.values(hero.seventhSkill).some((s: any) => s?.name) && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 mt-8">
                 <h3 className="text-2xl font-black text-rose-500 uppercase tracking-widest border-b border-rose-500/20 pb-4 mb-6 flex items-center gap-3">
                   <Sparkles size={24} /> Đệ Thất Hồn Kỹ
                 </h3>
-                {[
-                  { key: 'y250k', label: '25 Vạn Năm', color: 'text-rose-400', bg: 'bg-rose-500/10' },
-                  { key: 'y350k', label: '35 Vạn Năm', color: 'text-rose-400', bg: 'bg-rose-500/10' },
-                  { key: 'y400k', label: '40 Vạn Năm', color: 'text-red-500', bg: 'bg-red-500/10' },
-                  { key: 'y450k', label: '45 Vạn Năm', color: 'text-red-500', bg: 'bg-red-500/10' },
-                  { key: 'y500k', label: '50 Vạn Năm', color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
-                ].map(({ key, label, color, bg }) => {
-                  const skill = hero.seventhSkill[key];
-                  if (!skill?.name) return null;
-                  return (
-                    <div key={key} className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 flex gap-8 items-start shadow-xl hover:bg-white/[0.04] transition-all group">
-                      <div className={`px-6 py-3 rounded-2xl border-2 font-black text-sm flex items-center gap-2 shrink-0 shadow-2xl ${color} ${bg} border-current`}>
-                        {label} <Star size={16} fill="currentColor" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {[
+                    { key: 'y250k', label: '25 Vạn Năm', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', hover: 'hover:border-rose-500/60 shadow-rose-500/5' },
+                    { key: 'y350k', label: '35 Vạn Năm', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', hover: 'hover:border-rose-500/60 shadow-rose-500/5' },
+                    { key: 'y400k', label: '40 Vạn Năm', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', hover: 'hover:border-red-500/60 shadow-red-500/5' },
+                    { key: 'y450k', label: '45 Vạn Năm', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', hover: 'hover:border-red-500/60 shadow-red-500/5' },
+                    { key: 'y500k', label: '50 Vạn Năm', color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', hover: 'hover:border-yellow-500/60 shadow-yellow-500/5' },
+                  ].map(({ key, label, color, bg, border, hover }) => {
+                    const skill = hero.seventhSkill[key];
+                    if (!skill?.name) return null;
+                    return (
+                      <div
+                        key={key}
+                        className="flex flex-col items-center gap-4 bg-white/[0.02] p-6 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-rose-500/30 transition-all cursor-pointer group shadow-xl"
+                        onClick={() => setSelectedSeventhSkill({ ...skill, label, color, bg })}
+                      >
+                        <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-2 ${border} ${hover} relative overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 flex items-center justify-center bg-slate-900`}>
+                          {(skill as any).iconUrl ? (
+                            <Image src={optimizeCloudinary((skill as any).iconUrl, 160) || (skill as any).iconUrl} alt={skill.name} fill className="object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-950 font-black italic rounded-full text-slate-300">
+                              <span className={`text-xl ${color}`}>{label.split(" ")[0]}</span>
+                              <span className="text-[8px] uppercase tracking-tighter text-slate-500 font-bold -mt-0.5">Vạn Năm</span>
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-rose-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <div className="space-y-1 text-center w-full">
+                          <p className={`text-[9px] font-black uppercase ${color} tracking-wider`}>
+                            {label}
+                          </p>
+                          <h4 className="text-[11px] font-black text-slate-200 truncate group-hover:text-white transition-colors uppercase italic tracking-tight">
+                            {skill.name}
+                          </h4>
+                        </div>
                       </div>
-                      <div className="space-y-3">
-                         <h4 className={`text-xl font-black uppercase italic tracking-tight ${color}`}>
-                           {skill.name}
-                         </h4>
-                         <p className="text-sm text-slate-300 leading-relaxed font-medium whitespace-pre-wrap">
-                           {formatText(skill.description)}
-                         </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </motion.div>
             )}
 

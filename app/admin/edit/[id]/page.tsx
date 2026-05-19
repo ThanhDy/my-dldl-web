@@ -227,6 +227,7 @@ export default function EditHeroPage() {
   const [divineWingFiles, setDivineWingFiles] = useState<Record<string, File>>({});
   const [divineWingPreviews, setDivineWingPreviews] = useState<Record<string, string>>({});
   const [vhctFiles, setVhctFiles] = useState<Record<string, File>>({});
+  const [seventhSkillFiles, setSeventhSkillFiles] = useState<Record<string, File>>({});
 
 
 
@@ -762,6 +763,18 @@ export default function EditHeroPage() {
   };
 
   // --- HÀM XỬ LÝ ĐỆ THẤT, ĐỆ BÁT, ĐỆ CỬU HỒN KỸ ---
+  const handleSeventhSkillFileChange = (year: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSeventhSkillFiles((prev) => ({ ...prev, [year]: file }));
+    setFormData((prev: any) => {
+      const updatedSeventh = { ...prev.seventhSkill };
+      if (!updatedSeventh[year]) updatedSeventh[year] = { name: "", description: "", iconUrl: "" };
+      updatedSeventh[year].iconUrl = URL.createObjectURL(file);
+      return { ...prev, seventhSkill: updatedSeventh };
+    });
+  };
+
   const updateSeventhSkill = (year: string, field: string, value: string) => {
     setFormData((prev: any) => ({
       ...prev,
@@ -1486,6 +1499,28 @@ export default function EditHeroPage() {
         }
       }
 
+      // Upload Seventh Skill Icons
+      let updatedSeventhSkill = { ...formData.seventhSkill };
+      if (updatedSeventhSkill) {
+        for (const key of ["y250k", "y350k", "y400k", "y450k", "y500k"]) {
+          if (seventhSkillFiles[key]) {
+            try {
+              const oldUrl = updatedSeventhSkill[key]?.iconUrl;
+              if (oldUrl && oldUrl.startsWith("http")) {
+                await deleteCloudinaryImage(oldUrl);
+              }
+              const url = await uploadToCloudinary(seventhSkillFiles[key], folderName);
+              if (!updatedSeventhSkill[key]) {
+                updatedSeventhSkill[key] = { name: "", description: "", iconUrl: "" };
+              }
+              updatedSeventhSkill[key].iconUrl = url;
+            } catch (err) {
+              console.error(`Error uploading seventh skill ${key} icon:`, err);
+            }
+          }
+        }
+      }
+
       const cleanData = {
         ...formData,
         image: finalImageUrl,
@@ -1494,6 +1529,7 @@ export default function EditHeroPage() {
         nvvCardSystem: { ...formData.nvvCardSystem, cards: uploadedCards },
         divineSystem: updatedDivineSystem,
         vuHonChanThan: updatedVhct,
+        seventhSkill: updatedSeventhSkill,
       };
 
       // 1. Tự động sinh ID cho skill nếu bị thiếu
@@ -2730,7 +2766,36 @@ export default function EditHeroPage() {
                         { key: 'y500k', label: 'Mốc 50 vạn năm' },
                       ].map(({ key, label }) => (
                         <div key={key} className="bg-slate-800/50 p-4 rounded-xl space-y-4">
-                          <div className="text-blue-400 font-bold">{label}</div>
+                          <div className="flex justify-between items-center">
+                            <div className="text-blue-400 font-bold">{label}</div>
+                            
+                            {/* Input Image */}
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-slate-750 bg-slate-950 shrink-0 group">
+                              {formData.seventhSkill?.[key]?.iconUrl ? (
+                                <Image
+                                  src={formData.seventhSkill[key].iconUrl}
+                                  alt="icon"
+                                  fill
+                                  className="object-cover"
+                                  unoptimized
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-600">
+                                  <FaImage size={16} />
+                                </div>
+                              )}
+                              <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                                <FaImage size={16} className="text-white" />
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={(e) => handleSeventhSkillFileChange(key, e)}
+                                />
+                              </label>
+                            </div>
+                          </div>
+
                           <input
                             placeholder="Tên hiệu ứng"
                             value={formData.seventhSkill?.[key]?.name || ''}

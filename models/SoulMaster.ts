@@ -190,6 +190,7 @@ const DivineSystemSchema = new Schema({
 const SeventhSkillEffectSchema = new Schema({
   name: { type: String, default: "" },
   description: { type: String, default: "" },
+  iconUrl: { type: String, default: "" },
 }, { _id: false });
 
 const SeventhSkillSchema = new Schema({
