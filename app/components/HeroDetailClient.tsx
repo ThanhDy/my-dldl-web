@@ -926,6 +926,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
   const isDivine = hero?.rarity === "Thần Chỉ";
 
   const hasSkillGrid = hero?.rarity === "SP+";
+  const hasVhct = !!(hero.vuHonChanThan && (hero.vuHonChanThan.trieuHoi?.name || hero.vuHonChanThan.chuDong?.name || hero.vuHonChanThan.biDong?.name));
 
   useEffect(() => {
     if (mounted && hero) {
@@ -1066,6 +1067,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                  {isTranTam && <TabButton active={activeTab === "thien_phu"} onClick={() => setActiveTab("thien_phu")} icon={<Sparkles size={14} />} label="Thiên Phú" color="cyan" />}
                  {isVinhVinh && hero.nvvCardSystem && <TabButton active={activeTab === "nvv_cards"} onClick={() => setActiveTab("nvv_cards")} icon={<Gamepad2 size={14} />} label="Thẻ Bài" color="pink" />}
                  <TabButton active={activeTab === "bones"} onClick={() => setActiveTab("bones")} icon={<Shield size={14} />} label="Hồn Cốt" color="amber" />
+                 {hasVhct && <TabButton active={activeTab === "vhct"} onClick={() => setActiveTab("vhct")} icon={<Crown size={14} />} label="Chân Thân" color="gold" />}
               </div>
             )}
           </div>
@@ -1680,6 +1682,208 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* VŨ HỒN CHÂN THÂN (MARTIAL SOUL TRUE BODY) */}
+            {activeTab === "vhct" && hasVhct && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-10"
+              >
+                
+
+                <div className="grid grid-cols-1 gap-8">
+                  {/* Kỹ Năng Triệu Hồi */}
+                  {hero.vuHonChanThan?.trieuHoi?.name && (
+                    <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 hover:border-blue-500/30 transition-all duration-300 shadow-xl space-y-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-6">
+                        <div className="flex items-center gap-5">
+                          <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-blue-500/30 bg-slate-900 shadow-lg shadow-blue-500/5 flex items-center justify-center shrink-0">
+                            {hero.vuHonChanThan.trieuHoi.avatar ? (
+                              <Image
+                                src={optimizeCloudinary(hero.vuHonChanThan.trieuHoi.avatar, 160) || hero.vuHonChanThan.trieuHoi.avatar}
+                                alt={hero.vuHonChanThan.trieuHoi.name}
+                                fill
+                                className="object-cover"
+                                unoptimized
+                              />
+                            ) : (
+                              <Zap className="text-blue-400" size={28} />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="text-2xl font-black uppercase italic tracking-tighter text-white">{hero.vuHonChanThan.trieuHoi.name}</h4>
+                            <span className="text-[10px] font-black uppercase text-blue-400 tracking-[0.2em]">Triệu Hồi</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {hero.vuHonChanThan.trieuHoi.summonCondition && (
+                        <div className="self-start sm:self-center bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-xl text-xs font-bold text-blue-400">
+                          Điều kiện: {hero.vuHonChanThan.trieuHoi.summonCondition}
+                        </div>
+                      )}
+                      <div className="space-y-4">
+                        <p className="text-sm text-slate-300 leading-relaxed font-medium whitespace-pre-wrap">
+                          {formatText(hero.vuHonChanThan.trieuHoi.description)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/5">
+                        {hero.vuHonChanThan.trieuHoi.y200k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-blue-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-blue-400 font-black text-xs flex items-center gap-1">
+                              20 Vạn Năm (1★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.trieuHoi.y200k)}
+                            </p>
+                          </div>
+                        )}
+                        {hero.vuHonChanThan.trieuHoi.y400k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-blue-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-blue-400 font-black text-xs flex items-center gap-1">
+                              40 Vạn Năm (3★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.trieuHoi.y400k)}
+                            </p>
+                          </div>
+                        )}
+                        {hero.vuHonChanThan.trieuHoi.y1400k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-blue-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-blue-400 font-black text-xs flex items-center gap-1">
+                              140 Vạn Năm (4★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.trieuHoi.y1400k)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Chủ Động */}
+                  {hero.vuHonChanThan.chuDong?.name && (
+                    <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 hover:border-purple-500/30 transition-all duration-300 shadow-xl space-y-6">
+                      <div className="flex items-center gap-5 border-b border-white/5 pb-6">
+                        <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-purple-500/30 bg-slate-900 shadow-lg shadow-purple-500/5 flex items-center justify-center shrink-0">
+                          {hero.vuHonChanThan.chuDong.avatar ? (
+                            <Image
+                              src={optimizeCloudinary(hero.vuHonChanThan.chuDong.avatar, 160) || hero.vuHonChanThan.chuDong.avatar}
+                              alt={hero.vuHonChanThan.chuDong.name}
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          ) : (
+                            <Zap className="text-purple-400" size={28} />
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="text-2xl font-black uppercase italic tracking-tighter text-white">{hero.vuHonChanThan.chuDong.name}</h4>
+                          <span className="text-[10px] font-black uppercase text-purple-400 tracking-[0.2em]">Chủ Động</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <p className="text-sm text-slate-300 leading-relaxed font-medium whitespace-pre-wrap">
+                          {formatText(hero.vuHonChanThan.chuDong.description)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/5">
+                        {hero.vuHonChanThan.chuDong.y600k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-purple-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-purple-400 font-black text-xs flex items-center gap-1">
+                              60 Vạn Năm (2★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.chuDong.y600k)}
+                            </p>
+                          </div>
+                        )}
+                        {hero.vuHonChanThan.chuDong.y1200k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-purple-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-purple-400 font-black text-xs flex items-center gap-1">
+                              120 Vạn Năm (4★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.chuDong.y1200k)}
+                            </p>
+                          </div>
+                        )}
+                        {hero.vuHonChanThan.chuDong.y2000k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-purple-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-purple-400 font-black text-xs flex items-center gap-1">
+                              200 Vạn Năm (5★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.chuDong.y2000k)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bị Động */}
+                  {hero.vuHonChanThan.biDong?.name && (
+                    <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all duration-300 shadow-xl space-y-6">
+                      <div className="flex items-center gap-5 border-b border-white/5 pb-6">
+                        <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-orange-500/30 bg-slate-900 shadow-lg shadow-orange-500/5 flex items-center justify-center shrink-0">
+                          {hero.vuHonChanThan.biDong.avatar ? (
+                            <Image
+                              src={optimizeCloudinary(hero.vuHonChanThan.biDong.avatar, 160) || hero.vuHonChanThan.biDong.avatar}
+                              alt={hero.vuHonChanThan.biDong.name}
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          ) : (
+                            <Zap className="text-orange-400" size={28} />
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="text-2xl font-black uppercase italic tracking-tighter text-white">{hero.vuHonChanThan.biDong.name}</h4>
+                          <span className="text-[10px] font-black uppercase text-orange-400 tracking-[0.2em]">Bị Động</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <p className="text-sm text-slate-300 leading-relaxed font-medium whitespace-pre-wrap">
+                          {formatText(hero.vuHonChanThan.biDong.description)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                        {hero.vuHonChanThan.biDong.y800k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-orange-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-orange-400 font-black text-xs flex items-center gap-1">
+                              80 Vạn Năm (3★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.biDong.y800k)}
+                            </p>
+                          </div>
+                        )}
+                        {hero.vuHonChanThan.biDong.y2000k && (
+                          <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-orange-500/30 hover:bg-white/[0.04] transition-all space-y-2">
+                            <span className="text-orange-400 font-black text-xs flex items-center gap-1">
+                              200 Vạn Năm (5★)
+                            </span>
+                            <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                              {formatText(hero.vuHonChanThan.biDong.y2000k)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}

@@ -146,6 +146,12 @@ const INITIAL_DIVINE_SYSTEM = {
   },
 };
 
+const INITIAL_VU_HON_CHAN_THAN = {
+  trieuHoi: { name: "", avatar: "", description: "", summonCondition: "", y200k: "", y400k: "", y1400k: "" },
+  chuDong: { name: "", avatar: "", description: "", y600k: "", y1200k: "", y2000k: "" },
+  biDong: { name: "", avatar: "", description: "", y800k: "", y2000k: "" },
+};
+
 const INITIAL_HERO = {
   id: "",
   name: "",
@@ -158,6 +164,7 @@ const INITIAL_HERO = {
   soulBones: INITIAL_SOUL_BONES,
   starUpgrades: AM_KHI_STAR_CONFIG,
   divineSystem: INITIAL_DIVINE_SYSTEM,
+  vuHonChanThan: INITIAL_VU_HON_CHAN_THAN,
 };
 
 // --- COMPONENT ACCORDION SECTION ---
@@ -237,6 +244,9 @@ export default function AddHeroPage() {
   const [divineRingFiles, setDivineRingFiles] = useState<Record<string, File>>({});
   const [divineAvatarFiles, setDivineAvatarFiles] = useState<Record<number, File>>({});
   const [divineWingFiles, setDivineWingFiles] = useState<Record<string, File>>({});
+
+  // Vũ Hồn Chân Thân Files
+  const [vhctFiles, setVhctFiles] = useState<{ [key: string]: File }>({});
 
   const [formData, setFormData] = useState<any>(INITIAL_HERO);
   const [loading, setLoading] = useState(false);
@@ -479,6 +489,16 @@ export default function AddHeroPage() {
     }));
   };
 
+  const updateVhct = (typeKey: string, field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      vuHonChanThan: {
+        ...prev.vuHonChanThan,
+        [typeKey]: { ...prev.vuHonChanThan?.[typeKey], [field]: value }
+      }
+    }));
+  };
+
   // 2. HÀM CHỌN ẢNH (CHỈ PREVIEW, KHÔNG UPLOAD)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -562,6 +582,20 @@ export default function AddHeroPage() {
     const newDivine = { ...formData.divineSystem };
     newDivine.wings[side][idx].iconUrl = objectUrl;
     setFormData({ ...formData, divineSystem: newDivine });
+  };
+
+  const handleVhctFileChange = (typeKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setVhctFiles(prev => ({ ...prev, [typeKey]: file }));
+    const objectUrl = URL.createObjectURL(file);
+    setFormData((prev: any) => ({
+      ...prev,
+      vuHonChanThan: {
+        ...prev.vuHonChanThan,
+        [typeKey]: { ...prev.vuHonChanThan?.[typeKey], avatar: objectUrl }
+      }
+    }));
   };
 
   // 3. HÀM UPLOAD THỰC SỰ (SẼ GỌI KHI BẤM LƯU)
@@ -739,12 +773,28 @@ export default function AddHeroPage() {
         }
       }
 
+      // Upload Vũ Hồn Chân Thân Avatars
+      let updatedVhct = { ...formData.vuHonChanThan };
+      if (updatedVhct) {
+        for (const typeKey of ["trieuHoi", "chuDong", "biDong"]) {
+          if (vhctFiles[typeKey]) {
+            try {
+              const url = await uploadToCloudinary(vhctFiles[typeKey], currentId || "vhct");
+              updatedVhct[typeKey].avatar = url;
+            } catch (err) {
+              console.error(`Error uploading ${typeKey} avatar:`, err);
+            }
+          }
+        }
+      }
+
       const cleanData = {
         ...formData,
         image: finalImageUrl,
         skillDetails: uploadedSkills,
         soulBones: uploadedBones,
         divineSystem: updatedDivineSystem,
+        vuHonChanThan: updatedVhct,
       };
 
       if (isDivine) {
@@ -1749,6 +1799,266 @@ export default function AddHeroPage() {
                     )}
                   </div>
                 ))}
+              </div>
+            </Section>
+
+            {/* VŨ HỒN CHÂN THÂN */}
+            <Section title="Vũ Hồn Chân Thân" color="blue" defaultOpen={false}>
+              <div className="space-y-8">
+                {/* Triệu Hồi */}
+                <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                  <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h3 className="text-lg font-bold text-blue-400 uppercase tracking-wide">
+                      1. Kỹ Năng Triệu Hồi
+                    </h3>
+                    <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                      {formData.vuHonChanThan?.trieuHoi?.avatar ? (
+                        <Image
+                          src={formData.vuHonChanThan.trieuHoi.avatar}
+                          alt="avatar"
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-600">
+                          <FaImage size={12} />
+                        </div>
+                      )}
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                        <FaImage size={12} className="text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleVhctFileChange("trieuHoi", e)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400">Tên kỹ năng</label>
+                      <input
+                        value={formData.vuHonChanThan?.trieuHoi?.name || ""}
+                        onChange={(e) => updateVhct("trieuHoi", "name", e.target.value)}
+                        placeholder="Tên kỹ năng triệu hồi..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 outline-none focus:border-blue-500 transition"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400">Điều kiện triệu hồi</label>
+                      <input
+                        value={formData.vuHonChanThan?.trieuHoi?.summonCondition || ""}
+                        onChange={(e) => updateVhct("trieuHoi", "summonCondition", e.target.value)}
+                        placeholder="Ví dụ: VHCT đạt 1 sao, ..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 outline-none focus:border-blue-500 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400">Mô tả cơ bản</label>
+                    <textarea
+                      value={formData.vuHonChanThan?.trieuHoi?.description || ""}
+                      onChange={(e) => updateVhct("trieuHoi", "description", e.target.value)}
+                      placeholder="Mô tả kỹ năng triệu hồi..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 min-h-[80px] outline-none focus:border-blue-500 transition resize-y"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-800/50">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-blue-400">Mốc 20 Vạn Năm (1 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.trieuHoi?.y200k || ""}
+                        onChange={(e) => updateVhct("trieuHoi", "y200k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-blue-500 transition resize-y"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-blue-400">Mốc 40 Vạn Năm (3 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.trieuHoi?.y400k || ""}
+                        onChange={(e) => updateVhct("trieuHoi", "y400k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-blue-500 transition resize-y"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-blue-400">Mốc 140 Vạn Năm (4 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.trieuHoi?.y1400k || ""}
+                        onChange={(e) => updateVhct("trieuHoi", "y1400k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-blue-500 transition resize-y"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chủ Động */}
+                <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                  <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h3 className="text-lg font-bold text-purple-400 uppercase tracking-wide">
+                      2. Kỹ Năng Chủ Động
+                    </h3>
+                    <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                      {formData.vuHonChanThan?.chuDong?.avatar ? (
+                        <Image
+                          src={formData.vuHonChanThan.chuDong.avatar}
+                          alt="avatar"
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-600">
+                          <FaImage size={12} />
+                        </div>
+                      )}
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                        <FaImage size={12} className="text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleVhctFileChange("chuDong", e)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400">Tên kỹ năng</label>
+                      <input
+                        value={formData.vuHonChanThan?.chuDong?.name || ""}
+                        onChange={(e) => updateVhct("chuDong", "name", e.target.value)}
+                        placeholder="Tên kỹ năng chủ động..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 outline-none focus:border-purple-500 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400">Mô tả cơ bản</label>
+                    <textarea
+                      value={formData.vuHonChanThan?.chuDong?.description || ""}
+                      onChange={(e) => updateVhct("chuDong", "description", e.target.value)}
+                      placeholder="Mô tả kỹ năng chủ động..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 min-h-[80px] outline-none focus:border-purple-500 transition resize-y"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-800/50">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-purple-400">Mốc 60 Vạn Năm (2 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.chuDong?.y600k || ""}
+                        onChange={(e) => updateVhct("chuDong", "y600k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-purple-500 transition resize-y"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-purple-400">Mốc 120 Vạn Năm (4 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.chuDong?.y1200k || ""}
+                        onChange={(e) => updateVhct("chuDong", "y1200k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-purple-500 transition resize-y"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-purple-400">Mốc 200 Vạn Năm (5 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.chuDong?.y2000k || ""}
+                        onChange={(e) => updateVhct("chuDong", "y2000k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-purple-500 transition resize-y"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bị Động */}
+                <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                  <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h3 className="text-lg font-bold text-orange-400 uppercase tracking-wide">
+                      3. Kỹ Năng Bị Động
+                    </h3>
+                    <div className="relative w-10 h-10 rounded overflow-hidden border border-slate-700 bg-slate-950 shrink-0 group">
+                      {formData.vuHonChanThan?.biDong?.avatar ? (
+                        <Image
+                          src={formData.vuHonChanThan.biDong.avatar}
+                          alt="avatar"
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-600">
+                          <FaImage size={12} />
+                        </div>
+                      )}
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                        <FaImage size={12} className="text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleVhctFileChange("biDong", e)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400">Tên kỹ năng</label>
+                      <input
+                        value={formData.vuHonChanThan?.biDong?.name || ""}
+                        onChange={(e) => updateVhct("biDong", "name", e.target.value)}
+                        placeholder="Tên kỹ năng bị động..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 outline-none focus:border-orange-500 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400">Mô tả cơ bản</label>
+                    <textarea
+                      value={formData.vuHonChanThan?.biDong?.description || ""}
+                      onChange={(e) => updateVhct("biDong", "description", e.target.value)}
+                      placeholder="Mô tả kỹ năng bị động..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-sm text-slate-200 min-h-[80px] outline-none focus:border-orange-500 transition resize-y"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-800/50">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-orange-400">Mốc 80 Vạn Năm (3 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.biDong?.y800k || ""}
+                        onChange={(e) => updateVhct("biDong", "y800k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-orange-500 transition resize-y"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-orange-400">Mốc 200 Vạn Năm (5 Sao VHCT)</label>
+                      <textarea
+                        value={formData.vuHonChanThan?.biDong?.y2000k || ""}
+                        onChange={(e) => updateVhct("biDong", "y2000k", e.target.value)}
+                        placeholder="Hiệu ứng..."
+                        className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[60px] outline-none focus:border-orange-500 transition resize-y"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </Section>
 

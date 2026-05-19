@@ -220,6 +220,28 @@ const NinthSkillSchema = new Schema({
   passive: { type: EighthSkillDetailSchema, default: {} }, // Khí Nguyên Thần Khí
 }, { _id: false });
 
+// --- Vũ Hồn Chân Thân Sub-Schemas ---
+
+const VuHonChanThanSkillSchema = new Schema({
+  name: { type: String, default: "" },
+  avatar: { type: String, default: "" },
+  description: { type: String, default: "" },
+  summonCondition: { type: String, default: "" }, // Dành cho loại Triệu Hồi
+  y200k: { type: String, default: "" }, // 20 vạn
+  y400k: { type: String, default: "" }, // 40 vạn
+  y600k: { type: String, default: "" }, // 60 vạn
+  y800k: { type: String, default: "" }, // 80 vạn
+  y1200k: { type: String, default: "" }, // 120 vạn
+  y1400k: { type: String, default: "" }, // 140 vạn
+  y2000k: { type: String, default: "" }, // 200 vạn
+}, { _id: false });
+
+const VuHonChanThanSchema = new Schema({
+  trieuHoi: { type: VuHonChanThanSkillSchema, default: () => ({}) },
+  chuDong: { type: VuHonChanThanSkillSchema, default: () => ({}) },
+  biDong: { type: VuHonChanThanSkillSchema, default: () => ({}) },
+}, { _id: false });
+
 // --- 2. Main Schema (Hồn Sư) ---
 
 const SoulMasterSchema = new Schema(
@@ -272,6 +294,9 @@ const SoulMasterSchema = new Schema(
     seventhSkill: { type: SeventhSkillSchema, default: () => ({}) },
     eighthSkill: { type: EighthSkillSchema, default: () => ({}) },
     ninthSkill: { type: NinthSkillSchema, default: () => ({}) },
+
+    // Hệ thống Vũ Hồn Chân Thân
+    vuHonChanThan: { type: VuHonChanThanSchema, default: () => ({}) },
   },
   {
     timestamps: true, // Tự động tạo createdAt, updatedAt
