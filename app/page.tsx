@@ -132,7 +132,7 @@ export default function Home() {
           </h1>
           
           <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base font-medium leading-relaxed">
-            Hệ thống tra cứu cơ sở dữ liệu hồn sư, nguyên hồn tâm và các phụ kiện cao cấp bậc nhất dành cho các hồn sư thế hệ mới.
+            Hệ thống tra cứu cơ sở dữ liệu hồn sư, nguyên hồn tâm và các phụ kiện cao cấp bậc nhất dành cho các hồn sư thế hệ mới
           </p>
         </motion.div>
 
