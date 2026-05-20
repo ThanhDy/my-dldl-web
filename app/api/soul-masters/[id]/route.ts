@@ -2,6 +2,7 @@
 import dbConnect from "@/lib/mongodb";
 import SoulMaster from "@/models/SoulMaster";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   request: Request,
@@ -58,6 +59,13 @@ export async function PUT(
       );
     }
 
+    // Revalidate soul masters list and detail pages
+    revalidatePath("/soul-masters");
+    revalidatePath(`/soul-masters/${id}`);
+    if (updatedHero && updatedHero.id !== id) {
+      revalidatePath(`/soul-masters/${updatedHero.id}`);
+    }
+
     return NextResponse.json({ success: true, data: updatedHero });
   } catch (error: any) {
     return NextResponse.json(
@@ -83,6 +91,10 @@ export async function DELETE(
         { status: 404 },
       );
     }
+
+    // Revalidate soul masters list and detail pages
+    revalidatePath("/soul-masters");
+    revalidatePath(`/soul-masters/${id}`);
 
     return NextResponse.json({ success: true, message: "Đã xóa thành công" });
   } catch (error: any) {

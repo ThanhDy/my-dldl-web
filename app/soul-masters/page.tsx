@@ -1,4 +1,4 @@
-export const revalidate = 60; // Đây là Server Component (Mặc định, không có "use client")
+export const revalidate = false; // Đây là Server Component (Mặc định, không có "use client")
 export const metadata = {
   title: "Hồn Sư | Đấu La Đại Lục"
 };

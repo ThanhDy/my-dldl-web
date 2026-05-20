@@ -3,7 +3,7 @@ import SourceSoulHeart from "@/models/SourceSoulHeart";
 import SourceSoulHeartList from "./SourceSoulHeartList";
 import { SourceSoulHeart as SourceSoulHeartType } from "@/data/types";
 
-export const revalidate = 60;
+export const revalidate = false;
 export const metadata = {
   title: "Tâm Nguyên Hồn | Đấu La Đại Lục"
 };

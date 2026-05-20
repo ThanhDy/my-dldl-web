@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/mongodb";
 import BoneBurning from "@/models/BoneBurning";
 
@@ -28,6 +29,9 @@ export async function POST(req: Request) {
       { type, levels },
       { upsert: true, new: true, runValidators: true }
     );
+
+    // Revalidate bone burning page on-demand
+    revalidatePath("/dot-cot");
 
     return NextResponse.json({ success: true, data: item });
   } catch (error: any) {

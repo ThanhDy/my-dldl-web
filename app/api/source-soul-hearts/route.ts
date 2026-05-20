@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/mongodb";
 import SourceSoulHeart from "@/models/SourceSoulHeart";
 
@@ -26,6 +27,9 @@ export async function POST(request: Request) {
     // Client gửi id rỗng, ta cần loại bỏ nó trước khi tạo
     const { id, ...newItemData } = body;
     const newItem = await SourceSoulHeart.create(newItemData);
+    // Revalidate nguyen-hon-tam page on-demand
+    revalidatePath("/nguyen-hon-tam");
+
     return NextResponse.json(newItem, { status: 201 });
   } catch (error: any) {
     console.error("API_POST_ERROR:", error);
@@ -61,6 +65,9 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Item not found" }, { status: 404 });
     }
 
+    // Revalidate nguyen-hon-tam page on-demand
+    revalidatePath("/nguyen-hon-tam");
+
     return NextResponse.json(updatedItem);
   } catch (error: any) {
     console.error("API_PUT_ERROR:", error);
@@ -85,6 +92,9 @@ export async function DELETE(request: Request) {
     }
 
     await SourceSoulHeart.findByIdAndDelete(id);
+
+    // Revalidate nguyen-hon-tam page on-demand
+    revalidatePath("/nguyen-hon-tam");
 
     return NextResponse.json({ message: "Item deleted successfully" });
   } catch (error: any) {

@@ -4,7 +4,7 @@ import BoneBurning from "@/models/BoneBurning";
 import BoneBurningClient from "./BoneBurningClient";
 import { BoneBurning as IBoneBurning } from "@/data/types";
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = false;
 export const metadata = {
   title: "Đốt Cốt | Đấu La Đại Lục"
 };

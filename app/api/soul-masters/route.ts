@@ -2,6 +2,7 @@
 import dbConnect from "@/lib/mongodb"; // Import hàm kết nối DB (đã tạo ở bước 3)
 import SoulMaster from "@/models/SoulMaster"; // Import Model (vừa tạo ở bước 4)
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 // 1. HÀM GET: Lấy danh sách tướng từ MongoDB về
 export async function GET() {
@@ -42,6 +43,9 @@ export async function POST(request: Request) {
 
     // Tạo bản ghi mới
     const newHero = await SoulMaster.create(body);
+
+    // Revalidate soul masters list page on-demand
+    revalidatePath("/soul-masters");
 
     return NextResponse.json({ data: newHero }, { status: 201 });
   } catch (error: any) {

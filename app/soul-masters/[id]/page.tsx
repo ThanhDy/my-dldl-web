@@ -1,4 +1,4 @@
-export const revalidate = 60; // Web sẽ kiểm tra dữ liệu mới mỗi 60 giây
+export const revalidate = false; // Web sẽ kiểm tra dữ liệu mới thông qua on-demand revalidation
 export const dynamicParams = true;
 
 import dbConnect from "@/lib/mongodb";
