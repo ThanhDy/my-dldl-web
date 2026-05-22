@@ -99,6 +99,14 @@ const features = [
     href: "/hon-dao-khi",
     active: true,
     color: "cyan"
+  },
+  {
+    title: "Khắc Ấn Hồn Cốt",
+    description: "Khám phá hệ thống khắc ấn hồn cốt và các chỉ số cộng thêm",
+    icon: <Crosshair size={28} />,
+    href: "/khac-an-hon-cot",
+    active: true,
+    color: "emerald"
   }
 ];
 
@@ -153,6 +161,7 @@ export default function Home() {
                       feature.color === 'orange' ? 'bg-orange-600/20' : 
                       feature.color === 'red' ? 'bg-red-600/20' : 
                       feature.color === 'cyan' ? 'bg-cyan-600/20' : 
+                      feature.color === 'emerald' ? 'bg-emerald-600/20' : 
                       'bg-purple-600/20'
                     } 
                     hoverBorderColor={
@@ -160,6 +169,7 @@ export default function Home() {
                       feature.color === 'orange' ? 'hover:border-orange-500/50' : 
                       feature.color === 'red' ? 'hover:border-red-500/50' : 
                       feature.color === 'cyan' ? 'hover:border-cyan-500/50' : 
+                      feature.color === 'emerald' ? 'hover:border-emerald-500/50' : 
                       'hover:border-purple-500/50'
                     }
                     className="p-8 h-full flex flex-col items-start gap-4 border-white/5 transition-all duration-500 group-hover:bg-white/[0.02]"
@@ -169,6 +179,7 @@ export default function Home() {
                       feature.color === 'orange' ? 'text-orange-400' : 
                       feature.color === 'red' ? 'text-red-400' : 
                       feature.color === 'cyan' ? 'text-cyan-400' : 
+                      feature.color === 'emerald' ? 'text-emerald-400' : 
                       'text-purple-400'
                     } p-3 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
                       {feature.icon}
@@ -180,6 +191,7 @@ export default function Home() {
                           feature.color === 'orange' ? 'group-hover:text-orange-400' : 
                           feature.color === 'red' ? 'group-hover:text-red-400' : 
                           feature.color === 'cyan' ? 'group-hover:text-cyan-400' : 
+                          feature.color === 'emerald' ? 'group-hover:text-emerald-400' : 
                           'group-hover:text-purple-400'
                         }`}>
                           {feature.title}
@@ -189,6 +201,7 @@ export default function Home() {
                           feature.color === 'orange' ? 'text-orange-400' : 
                           feature.color === 'red' ? 'text-red-400' : 
                           feature.color === 'cyan' ? 'text-cyan-400' : 
+                          feature.color === 'emerald' ? 'text-emerald-400' : 
                           'text-purple-400'
                         }`} size={18} />
                       </div>

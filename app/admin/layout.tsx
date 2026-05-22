@@ -14,7 +14,8 @@ import {
   X,
   Flame,
   Database,
-  Zap
+  Zap,
+  Crosshair
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -72,6 +73,12 @@ export default function AdminLayout({
       href: "/admin/hon-dao-khi",
       icon: Zap,
       pattern: /^\/admin\/hon-dao-khi/,
+    },
+    {
+      name: "Khắc Ấn Hồn Cốt",
+      href: "/admin/khac-an-hon-cot",
+      icon: Crosshair,
+      pattern: /^\/admin\/khac-an-hon-cot/,
     },
   ];
 
@@ -178,6 +185,7 @@ function SidebarContent({ closeSidebar, pathname, menuItems, handleLogout }: any
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               onClick={closeSidebar}
               className={`group relative w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 font-bold text-sm overflow-hidden ${
                 isActive 

@@ -218,3 +218,27 @@ export interface HonDaoKhi {
   createdAt?: string;
   updatedAt?: string;
 }
+
+// --- [MỚI] HỆ THỐNG KHẮC ẤN HỒN CỐT ---
+
+export interface KhacAnPiece {
+  id: string; // 'main' | 'sub1' | 'sub2' | 'sub3' | 'sub4' | 'sub5'
+  name: string;
+  image: string;
+  descriptionPVP: string;
+  descriptionPVE: string;
+}
+
+export interface KhacAnSet {
+  setId: number; // 1, 2, 3, 4
+  name: string; // Ví dụ: "Bộ Khắc Ấn 1"
+  pieces: KhacAnPiece[];
+}
+
+export interface KhacAnSystem {
+  id: string;
+  type: string; // 'Cường Công - Mẫn Công' | 'Hỗ Trợ' | 'Khống Chế'
+  sets: KhacAnSet[];
+  createdAt?: string;
+  updatedAt?: string;
+}
