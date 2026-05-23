@@ -242,3 +242,27 @@ export interface KhacAnSystem {
   createdAt?: string;
   updatedAt?: string;
 }
+
+// --- [MỚI] HỆ THỐNG THẦN THÚ ---
+
+export interface ThanThuSkill {
+  name: string;
+  description: string;
+}
+
+export interface ThanThuLevelEffect {
+  level: number;
+  effect: string;
+}
+
+export interface ThanThu {
+  id: string;
+  name: string;
+  image: string;
+  rarity?: string; // R, SR, SSR, SSR+, SP, SP+
+  description: string;
+  skills: ThanThuSkill[];
+  levelEffects: ThanThuLevelEffect[];
+  createdAt?: string;
+  updatedAt?: string;
+}

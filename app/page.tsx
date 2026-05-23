@@ -13,7 +13,8 @@ import {
   Monitor,
   Flame,
   Database,
-  Crosshair
+  Crosshair,
+  PawPrint
 } from "lucide-react";
 import BackToTop from "@/app/components/BackToTop";
 import { NeonCard } from "@/app/components/ui/neon-card";
@@ -107,6 +108,14 @@ const features = [
     href: "/khac-an-hon-cot",
     active: true,
     color: "emerald"
+  },
+  {
+    title: "Thần Thú",
+    description: "Tra cứu thông tin, kỹ năng và hiệu ứng của các Thần Thú",
+    icon: <PawPrint size={28} />,
+    href: "/than-thu",
+    active: true,
+    color: "yellow"
   }
 ];
 
@@ -162,6 +171,7 @@ export default function Home() {
                       feature.color === 'red' ? 'bg-red-600/20' : 
                       feature.color === 'cyan' ? 'bg-cyan-600/20' : 
                       feature.color === 'emerald' ? 'bg-emerald-600/20' : 
+                      feature.color === 'yellow' ? 'bg-yellow-600/20' : 
                       'bg-purple-600/20'
                     } 
                     hoverBorderColor={
@@ -170,6 +180,7 @@ export default function Home() {
                       feature.color === 'red' ? 'hover:border-red-500/50' : 
                       feature.color === 'cyan' ? 'hover:border-cyan-500/50' : 
                       feature.color === 'emerald' ? 'hover:border-emerald-500/50' : 
+                      feature.color === 'yellow' ? 'hover:border-yellow-500/50' : 
                       'hover:border-purple-500/50'
                     }
                     className="p-8 h-full flex flex-col items-start gap-4 border-white/5 transition-all duration-500 group-hover:bg-white/[0.02]"
@@ -180,6 +191,7 @@ export default function Home() {
                       feature.color === 'red' ? 'text-red-400' : 
                       feature.color === 'cyan' ? 'text-cyan-400' : 
                       feature.color === 'emerald' ? 'text-emerald-400' : 
+                      feature.color === 'yellow' ? 'text-yellow-400' : 
                       'text-purple-400'
                     } p-3 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
                       {feature.icon}
@@ -192,6 +204,7 @@ export default function Home() {
                           feature.color === 'red' ? 'group-hover:text-red-400' : 
                           feature.color === 'cyan' ? 'group-hover:text-cyan-400' : 
                           feature.color === 'emerald' ? 'group-hover:text-emerald-400' : 
+                          feature.color === 'yellow' ? 'group-hover:text-yellow-400' : 
                           'group-hover:text-purple-400'
                         }`}>
                           {feature.title}
@@ -202,6 +215,7 @@ export default function Home() {
                           feature.color === 'red' ? 'text-red-400' : 
                           feature.color === 'cyan' ? 'text-cyan-400' : 
                           feature.color === 'emerald' ? 'text-emerald-400' : 
+                          feature.color === 'yellow' ? 'text-yellow-400' : 
                           'text-purple-400'
                         }`} size={18} />
                       </div>

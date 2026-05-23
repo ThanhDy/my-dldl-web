@@ -15,7 +15,8 @@ import {
   Flame,
   Database,
   Zap,
-  Crosshair
+  Crosshair,
+  PawPrint
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -79,6 +80,12 @@ export default function AdminLayout({
       href: "/admin/khac-an-hon-cot",
       icon: Crosshair,
       pattern: /^\/admin\/khac-an-hon-cot/,
+    },
+    {
+      name: "Thần Thú",
+      href: "/admin/than-thu",
+      icon: PawPrint,
+      pattern: /^\/admin\/than-thu/,
     },
   ];
 
