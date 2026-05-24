@@ -1,33 +1,18 @@
-import React from "react";
+import ThanThuClient from "./ThanThuClient";
 import dbConnect from "@/lib/mongodb";
 import ThanThu from "@/models/ThanThu";
-import ThanThuClient from "./ThanThuClient";
-import { ThanThu as IThanThu } from "@/data/types";
 
-export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Thần Thú | DLDL Wiki",
+  description: "Tra cứu thông tin, kỹ năng và hiệu ứng của các Thần Thú",
+};
 
-async function getThanThuData() {
-  await dbConnect();
-  const items = await ThanThu.find({}).sort({ name: 1 }).lean();
-  
-  return JSON.parse(JSON.stringify(items)).map((item: any) => ({
-    ...item,
-    id: item.id || item._id.toString()
-  })) as IThanThu[];
-}
+export const revalidate = 60;
 
 export default async function ThanThuPage() {
-  const data = await getThanThuData();
+  await dbConnect();
+  const data = await ThanThu.find({}).sort({ rarity: -1, name: 1 }).lean();
+  const serializedData = JSON.parse(JSON.stringify(data));
 
-  return (
-    <main>
-      <ThanThuClient initialData={data} />
-    </main>
-  );
-}
-
-export function generateMetadata() {
-  return {
-    title: "Danh Sách Thần Thú - DLDL Wiki",
-  };
+  return <ThanThuClient initialData={serializedData} />;
 }

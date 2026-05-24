@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Crosshair, Wrench, Sword, Shield, Sparkles, X, Star } from "lucide-react";
+import { ArrowLeft, Crosshair, Wrench, Sword, Shield, Sparkles, X, Star, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackToTop from "@/app/components/BackToTop";
 import { KhacAnSystem, KhacAnSet, KhacAnPiece } from "@/data/types";
@@ -27,7 +27,8 @@ export default function KhacAnClient({ initialData }: Props) {
     pieceId: string;
     pieceData: KhacAnPiece;
   } | null>(null);
-  const [viewMode, setViewMode] = useState<"PVP" | "PVE">("PVP");
+  const [viewMode, setViewMode] = useState<"PVE" | "PVP">("PVE");
+  const [viewSetEffect, setViewSetEffect] = useState<KhacAnSet | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -192,9 +193,21 @@ export default function KhacAnClient({ initialData }: Props) {
                       <span className="text-2xl font-black italic">{num}</span>
                     </div>
                     
-                    <h3 className="text-2xl font-black text-white uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
-                      {setName}
-                    </h3>
+                    <div className="flex items-center gap-2 relative z-20">
+                      <h3 className="text-2xl font-black text-white uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
+                        {setName}
+                      </h3>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setViewSetEffect(setData || { setId: num, name: setName, pieces: [] } as KhacAnSet);
+                        }}
+                        className="text-slate-500 hover:text-emerald-400 transition-colors p-1.5 bg-white/5 hover:bg-emerald-500/20 rounded-full"
+                        title="Hiệu ứng cả bộ"
+                      >
+                        <AlertCircle size={18} />
+                      </button>
+                    </div>
 
                     {/* Cấu trúc 6 Thành phần Khắc Ấn */}
                     <div className="w-full bg-black/20 rounded-2xl p-5 flex flex-col items-center gap-4 border border-white/5 relative z-10 my-2">
@@ -346,15 +359,59 @@ export default function KhacAnClient({ initialData }: Props) {
 
               <div className="bg-black/40 rounded-2xl p-5 border border-white/5 space-y-4 relative z-10">
                 <div className="flex bg-slate-950 rounded-xl p-1 border border-white/5">
-                  <button onClick={() => setViewMode("PVP")} className={`flex-1 py-1.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${viewMode === "PVP" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]" : "text-slate-500 hover:text-slate-300 hover:bg-white/5"}`}>PVP</button>
                   <button onClick={() => setViewMode("PVE")} className={`flex-1 py-1.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${viewMode === "PVE" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]" : "text-slate-500 hover:text-slate-300 hover:bg-white/5"}`}>PVE</button>
+                  <button onClick={() => setViewMode("PVP")} className={`flex-1 py-1.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${viewMode === "PVP" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]" : "text-slate-500 hover:text-slate-300 hover:bg-white/5"}`}>PVP</button>
                 </div>
                 <div>
                   <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Mô tả chi tiết ({viewMode})</h4>
                   <div className="text-sm text-slate-300 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5 min-h-[80px] whitespace-pre-wrap">
-                    {(viewMode === "PVP" ? selectedPiece.pieceData.descriptionPVP : selectedPiece.pieceData.descriptionPVE) || `Dữ liệu chi tiết ${viewMode} đang trong quá trình cập nhật.`}
+                    {(viewMode === "PVE" ? selectedPiece.pieceData.descriptionPVE : selectedPiece.pieceData.descriptionPVP) || `Dữ liệu chi tiết ${viewMode} đang trong quá trình cập nhật.`}
                   </div>
                 </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+        
+        {/* Modal Hiệu Ứng Cả Bộ */}
+        {viewSetEffect && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setViewSetEffect(null)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-slate-900 border border-white/10 rounded-3xl p-6 z-[101] shadow-2xl overflow-hidden"
+            >
+              <div className="absolute -top-10 -right-10 opacity-5 text-emerald-500 transform rotate-12 pointer-events-none">
+                <AlertCircle size={150} />
+              </div>
+              <div className="flex items-start justify-between mb-4 relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <AlertCircle size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black uppercase tracking-tighter text-emerald-400 italic">
+                      Hiệu Ứng Cả Bộ
+                    </h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                      {viewSetEffect.name || `Bộ Khắc Ấn ${viewSetEffect.setId}`}
+                    </p>
+                  </div>
+                </div>
+                <button onClick={() => setViewSetEffect(null)} className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors text-slate-400 hover:text-white">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="bg-emerald-500/5 rounded-2xl p-4 border border-emerald-500/20 text-sm text-emerald-400/90 leading-relaxed whitespace-pre-wrap min-h-[100px] relative z-10 shadow-inner">
+                {viewSetEffect.description || "Đang cập nhật hiệu ứng bộ."}
               </div>
             </motion.div>
           </>
