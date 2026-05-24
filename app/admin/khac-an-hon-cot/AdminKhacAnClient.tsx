@@ -24,6 +24,7 @@ const DEFAULT_PIECES = [
 const DEFAULT_SETS = [1, 2, 3, 4].map(num => ({
   setId: num,
   name: `Bộ Khắc Ấn ${num}`,
+  description: "",
   pieces: JSON.parse(JSON.stringify(DEFAULT_PIECES))
 }));
 
@@ -80,7 +81,7 @@ export default function AdminKhacAnClient({ initialData }: Props) {
     }
   };
 
-  const handleUpdateSetName = (setId: number, newName: string) => {
+  const handleUpdateSetField = (setId: number, field: keyof KhacAnSet, value: string) => {
     const newData = [...data];
     let systemIndex = newData.findIndex(s => s.id === activeTab);
     
@@ -95,7 +96,10 @@ export default function AdminKhacAnClient({ initialData }: Props) {
 
     const setIndex = newData[systemIndex].sets.findIndex(s => s.setId === setId);
     if (setIndex !== -1) {
-      newData[systemIndex].sets[setIndex].name = newName;
+      newData[systemIndex].sets[setIndex] = {
+        ...newData[systemIndex].sets[setIndex],
+        [field]: value
+      };
       setData(newData);
     }
   };
@@ -287,12 +291,12 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                           </div>
                         </div>
                         <div>
-                          <label className="text-[10px] text-slate-500 uppercase font-bold text-blue-400">Mô tả PVP</label>
-                          <textarea placeholder="Mô tả cho PVP..." value={piece.descriptionPVP} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVP", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-blue-500/50 resize-none custom-scrollbar" />
-                        </div>
-                        <div>
                           <label className="text-[10px] text-slate-500 uppercase font-bold text-orange-400">Mô tả PVE</label>
                           <textarea placeholder="Mô tả cho PVE..." value={piece.descriptionPVE} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVE", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-orange-500/50 resize-none custom-scrollbar" />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-slate-500 uppercase font-bold text-blue-400">Mô tả PVP</label>
+                          <textarea placeholder="Mô tả cho PVP..." value={piece.descriptionPVP} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVP", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-blue-500/50 resize-none custom-scrollbar" />
                         </div>
                       </div>
                     </div>
@@ -313,8 +317,20 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                     type="text"
                     placeholder={`VD: Cốt Ngữ...`} 
                     value={set.name}
-                    onChange={(e) => handleUpdateSetName(set.setId, e.target.value)}
+                    onChange={(e) => handleUpdateSetField(set.setId, "name", e.target.value)}
                     className="bg-slate-950/50 border border-white/5 rounded-xl p-2 text-sm text-slate-200 outline-none focus:border-emerald-500/50 w-full md:w-64" 
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className="text-[10px] text-slate-500 uppercase font-bold text-emerald-400">Mô tả cả bộ</label>
+                  <textarea 
+                    placeholder="Mô tả chung cho cả bộ..." 
+                    value={set.description || ""}
+                    onChange={(e) => handleUpdateSetField(set.setId, "description", e.target.value)}
+                    className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
                   />
                 </div>
               </div>
@@ -365,20 +381,20 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                           </div>
                         </div>
                         <div>
-                          <label className="text-[10px] text-slate-500 uppercase font-bold text-blue-400">Mô tả PVP</label>
-                          <textarea 
-                            placeholder="Mô tả cho PVP..." 
-                            value={piece.descriptionPVP}
-                            onChange={(e) => handleUpdatePiece(set.setId, piece.id, "descriptionPVP", e.target.value)}
-                            className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
-                          />
-                        </div>
-                        <div>
                           <label className="text-[10px] text-slate-500 uppercase font-bold text-orange-400">Mô tả PVE</label>
                           <textarea 
                             placeholder="Mô tả cho PVE..." 
                             value={piece.descriptionPVE}
                             onChange={(e) => handleUpdatePiece(set.setId, piece.id, "descriptionPVE", e.target.value)}
+                            className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-slate-500 uppercase font-bold text-blue-400">Mô tả PVP</label>
+                          <textarea 
+                            placeholder="Mô tả cho PVP..." 
+                            value={piece.descriptionPVP}
+                            onChange={(e) => handleUpdatePiece(set.setId, piece.id, "descriptionPVP", e.target.value)}
                             className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
                           />
                         </div>

@@ -11,6 +11,7 @@ const KhacAnPieceSchema = new Schema({
 const KhacAnSetSchema = new Schema({
   setId: { type: Number, required: true }, // 1, 2, 3, 4
   name: { type: String, default: "" },
+  description: { type: String, default: "" },
   pieces: [KhacAnPieceSchema],
 }, { _id: false });
 
