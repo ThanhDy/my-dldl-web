@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  FaArrowLeft, FaPlus, FaSave, FaTrash, FaEdit, FaImage, FaStar
+  FaArrowLeft, FaPlus, FaSave, FaTrash, FaEdit, FaImage, FaStar, FaSearch
 } from "react-icons/fa";
 import { ThanThuIcon } from "@/app/components/Icons";
 
@@ -19,6 +19,7 @@ export default function AdminThanThuPage() {
   const [formData, setFormData] = useState<any>(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   
   // State cho ảnh
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
@@ -68,20 +69,6 @@ export default function AdminThanThuPage() {
         fetchItems();
       } else {
         alert("Lỗi khi xóa");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDeleteAll = async () => {
-    if (!confirm("CẢNH BÁO: Bạn có chắc muốn XÓA TOÀN BỘ dữ liệu Thần Thú không? Hành động này không thể hoàn tác!")) return;
-    try {
-      const res = await fetch(`/api/than-thu`, { method: "DELETE" });
-      if (res.ok) {
-        fetchItems();
-      } else {
-        alert("Lỗi khi xóa toàn bộ");
       }
     } catch (err) {
       console.error(err);
@@ -238,6 +225,44 @@ export default function AdminThanThuPage() {
     setFormData({ ...formData, levelEffects: newArr });
   };
 
+  const removeAccents = (str: string) => {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D");
+  };
+
+  const RARITY_ORDER: Record<string, number> = {
+    "SP+": 6,
+    "SP": 5,
+    "SSR+": 4,
+    "SSR": 3,
+    "SR": 2,
+    "R": 1,
+  };
+
+  const getRarityWeight = (rarity: string) => {
+    const r = (rarity || "").toUpperCase().trim();
+    return RARITY_ORDER[r] || 0;
+  };
+
+  const filteredAndSortedItems = items
+    .filter((item) => {
+      if (!searchQuery.trim()) return true;
+      const normalizedQuery = removeAccents(searchQuery.toLowerCase());
+      const normalizedName = removeAccents(item.name.toLowerCase());
+      return normalizedName.includes(normalizedQuery) || item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    })
+    .sort((a, b) => {
+      const weightA = getRarityWeight(a.rarity);
+      const weightB = getRarityWeight(b.rarity);
+      if (weightB !== weightA) {
+        return weightB - weightA;
+      }
+      return (a.name || "").localeCompare(b.name || "", "vi");
+    });
+
   if (view === "list") {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-200 p-8 font-sans selection:bg-yellow-500/30">
@@ -255,14 +280,27 @@ export default function AdminThanThuPage() {
               </h2>
             </div>
             <div className="flex gap-3 w-full xl:w-auto justify-end">
-              <button onClick={handleDeleteAll} className="bg-red-600/20 hover:bg-red-500/40 text-red-500 px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-all border border-red-500/20">
-                <FaTrash /> Xóa Tất Cả
-              </button>
               <button onClick={handleAddNew} className="bg-yellow-600 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-all">
                 <FaPlus /> Thêm Mới
               </button>
             </div>
           </header>
+
+          {/* Search bar */}
+          <div className="mb-6">
+            <div className="relative w-full max-w-md">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Tìm kiếm thần thú theo tên..."
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 pl-10 text-sm text-slate-200 placeholder:text-slate-500 outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/50 transition-all"
+              />
+              <div className="absolute left-3.5 top-3.5 text-slate-500">
+                <FaSearch size={14} />
+              </div>
+            </div>
+          </div>
 
           <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
             <table className="w-full text-left">
@@ -275,7 +313,7 @@ export default function AdminThanThuPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/50">
-                {items.map((item) => (
+                {filteredAndSortedItems.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-800/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 overflow-hidden relative">
@@ -292,7 +330,7 @@ export default function AdminThanThuPage() {
                     </td>
                   </tr>
                 ))}
-                {items.length === 0 && (
+                {filteredAndSortedItems.length === 0 && (
                   <tr><td colSpan={4} className="text-center py-8 text-slate-500">Chưa có dữ liệu</td></tr>
                 )}
               </tbody>

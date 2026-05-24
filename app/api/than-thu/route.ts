@@ -3,10 +3,34 @@ import dbConnect from "@/lib/mongodb";
 import ThanThu from "@/models/ThanThu";
 import { revalidatePath } from "next/cache";
 
+const RARITY_ORDER: Record<string, number> = {
+  "SP+": 6,
+  "SP": 5,
+  "SSR+": 4,
+  "SSR": 3,
+  "SR": 2,
+  "R": 1,
+};
+
+const getRarityWeight = (rarity: string) => {
+  const r = (rarity || "").toUpperCase().trim();
+  return RARITY_ORDER[r] || 0;
+};
+
 export async function GET() {
   try {
     await dbConnect();
-    const items = await ThanThu.find({}).sort({ rarity: -1, name: 1 });
+    const items = await ThanThu.find({});
+    
+    items.sort((a: any, b: any) => {
+      const weightA = getRarityWeight(a.rarity);
+      const weightB = getRarityWeight(b.rarity);
+      if (weightB !== weightA) {
+        return weightB - weightA;
+      }
+      return (a.name || "").localeCompare(b.name || "", "vi");
+    });
+
     return NextResponse.json(items);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
