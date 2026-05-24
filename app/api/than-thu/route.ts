@@ -29,11 +29,25 @@ export async function POST(req: Request) {
   }
 }
 
-export async function DELETE() {
+export async function PUT(req: Request) {
+  // Hàm POST đã sử dụng findOneAndUpdate với upsert: true nên có thể dùng chung logic
+  return POST(req);
+}
+
+export async function DELETE(req: Request) {
   try {
     await dbConnect();
-    await ThanThu.deleteMany({});
     
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (id) {
+      await ThanThu.findOneAndDelete({ id });
+      revalidatePath("/than-thu");
+      return NextResponse.json({ message: `Đã xóa thần thú ${id} thành công` });
+    }
+
+    await ThanThu.deleteMany({});
     revalidatePath("/than-thu");
     return NextResponse.json({ message: "Đã xóa toàn bộ thành công" });
   } catch (error: any) {
