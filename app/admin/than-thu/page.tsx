@@ -56,7 +56,7 @@ export default function AdminThanThuPage() {
   const handleDelete = async (id: string) => {
     if (!confirm("Bạn có chắc muốn xóa Thần Thú này?")) return;
     try {
-      const res = await fetch(`/api/than-thu/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/than-thu?id=${id}`, { method: "DELETE" });
       if (res.ok) {
         fetchItems();
       } else {
@@ -141,7 +141,7 @@ export default function AdminThanThuPage() {
       };
 
       const isEdit = !!items.find(i => i.id === payload.id);
-      const url = isEdit ? `/api/than-thu/${payload.id}` : "/api/than-thu";
+      const url = "/api/than-thu";
       const method = isEdit ? "PUT" : "POST";
 
       const res = await fetch(url, {

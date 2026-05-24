@@ -232,6 +232,7 @@ export interface KhacAnPiece {
 export interface KhacAnSet {
   setId: number; // 1, 2, 3, 4
   name: string; // Ví dụ: "Bộ Khắc Ấn 1"
+  description?: string;
   pieces: KhacAnPiece[];
 }
 
