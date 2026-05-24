@@ -19,6 +19,13 @@ import {
   PawPrint
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  NguyenHonTamIcon,
+  HonHoanHungThuIcon,
+  HonDaoKhiIcon,
+  KhacAnHonCotIcon,
+  ThanThuIcon
+} from "@/app/components/Icons";
 
 export default function AdminLayout({
   children,
@@ -54,7 +61,7 @@ export default function AdminLayout({
     {
       name: "Nguyên Hồn Tâm",
       href: "/admin/nguyen-hon-tam",
-      icon: Sparkles,
+      icon: NguyenHonTamIcon,
       pattern: /^\/admin\/nguyen-hon-tam/,
     },
     {
@@ -66,25 +73,25 @@ export default function AdminLayout({
     {
       name: "Hồn Hoàn Hung Thú",
       href: "/admin/hon-hoan-hung-thu",
-      icon: Database,
+      icon: HonHoanHungThuIcon,
       pattern: /^\/admin\/hon-hoan-hung-thu/,
     },
     {
       name: "Hồn Đạo Khí",
       href: "/admin/hon-dao-khi",
-      icon: Zap,
+      icon: HonDaoKhiIcon,
       pattern: /^\/admin\/hon-dao-khi/,
     },
     {
       name: "Khắc Ấn Hồn Cốt",
       href: "/admin/khac-an-hon-cot",
-      icon: Crosshair,
+      icon: KhacAnHonCotIcon,
       pattern: /^\/admin\/khac-an-hon-cot/,
     },
     {
       name: "Thần Thú",
       href: "/admin/than-thu",
-      icon: PawPrint,
+      icon: ThanThuIcon,
       pattern: /^\/admin\/than-thu/,
     },
   ];

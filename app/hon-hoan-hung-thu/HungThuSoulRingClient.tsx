@@ -21,6 +21,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HungThuSoulRing, HungThuSystem } from "@/data/types";
 import BackToTop from "@/app/components/BackToTop";
 import Image from "next/image";
+import { HonHoanHungThuIcon } from "@/app/components/Icons";
 
 const SYSTEMS_UI = ["Cường/Mẫn", "Khống Chế", "Phụ Trợ/Phòng Ngự"] as const;
 type HungThuSystemUI = typeof SYSTEMS_UI[number];
@@ -170,7 +171,10 @@ export default function HungThuSoulRingClient({ initialData }: HungThuSoulRingCl
             <span>Trang chủ</span>
           </Link>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="p-3 bg-orange-500/10 rounded-2xl ring-1 ring-orange-500/20">
+                <HonHoanHungThuIcon className="text-orange-400" size={32} />
+              </div>
               <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-tight drop-shadow-2xl">
                 Hồn Hoàn <span className="text-orange-500 underline decoration-orange-500/30 underline-offset-8">Hung Thú</span>
               </h1>

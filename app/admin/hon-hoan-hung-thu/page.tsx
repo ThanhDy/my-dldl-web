@@ -24,6 +24,7 @@ import Link from "next/link";
 import { HungThuSoulRing, HungThuSystem, HungThuType, HungThuYearEffect } from "@/data/types";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { HonHoanHungThuIcon } from "@/app/components/Icons";
 
 const SYSTEMS: HungThuSystem[] = ["Cường Công", "Mẫn Công", "Khống Chế", "Phụ Trợ/Phòng Ngự"];
 const SYSTEMS_FILTER = ["Cường/Mẫn", "Khống Chế", "Phụ Trợ/Phòng Ngự"];
@@ -265,7 +266,7 @@ export default function AdminHungThuSoulRing() {
               <ArrowLeft size={18} className="text-slate-400" />
             </Link>
             <div className="p-2.5 bg-orange-500/10 rounded-2xl ring-1 ring-orange-500/20 shadow-lg shadow-orange-500/5">
-              <Zap className="text-orange-400" size={24} />
+              <HonHoanHungThuIcon className="text-orange-400" size={24} />
             </div>
             <h2 className="text-xl md:text-3xl font-black text-white tracking-tight uppercase">
               Quản Lý Hồn Hoàn Hung Thú

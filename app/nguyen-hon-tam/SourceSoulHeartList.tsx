@@ -21,6 +21,7 @@ import { Input } from "@/app/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { optimizeCloudinary } from "@/lib/utils";
 import BackToTop from "@/app/components/BackToTop";
+import { NguyenHonTamIcon } from "@/app/components/Icons";
 
 const rarities = ["Tất cả", "SP", "SSR", "SSR+"];
 const types = [
@@ -101,8 +102,11 @@ export default function SourceSoulHeartPage({
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
               <span>Trang chủ</span>
             </Link>
-            <div>
-              <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight pb-2">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="p-3 bg-purple-500/10 rounded-2xl ring-1 ring-purple-500/20">
+                <NguyenHonTamIcon className="text-purple-400 scale-125" size={32} />
+              </div>
+              <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight">
                 NGUYÊN HỒN TÂM
               </h1>
             </div>

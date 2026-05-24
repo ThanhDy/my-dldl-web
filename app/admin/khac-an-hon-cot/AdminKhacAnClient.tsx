@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Crosshair, Save, Shield, Sword, Sparkles, AlertCircle, Upload, RefreshCw, Star, Trash2, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { KhacAnSystem, KhacAnSet, KhacAnPiece } from "@/data/types";
+import { KhacAnHonCotIcon } from "@/app/components/Icons";
 
 const TABS = [
   { id: "cuong-man", label: "Cường Công - Mẫn Công", icon: Sword },
@@ -194,7 +195,7 @@ export default function AdminKhacAnClient({ initialData }: Props) {
       <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
         <div className="flex items-center gap-3">
           <div className="p-2 md:p-2.5 bg-emerald-500/10 rounded-2xl ring-1 ring-emerald-500/20">
-            <Crosshair className="text-emerald-400" size={24} />
+            <KhacAnHonCotIcon className="text-emerald-400" size={24} />
           </div>
           <div>
             <h2 className="text-xl md:text-3xl font-black text-white tracking-tight uppercase">

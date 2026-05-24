@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import BackToTop from "@/app/components/BackToTop";
 import { KhacAnSystem, KhacAnSet, KhacAnPiece } from "@/data/types";
 import { optimizeCloudinary } from "@/lib/utils";
+import { KhacAnHonCotIcon } from "@/app/components/Icons";
 
 const TABS = [
   { id: "cuong-man", label: "Cường Công - Mẫn Công", icon: Sword },
@@ -80,7 +81,7 @@ export default function KhacAnClient({ initialData }: Props) {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-tight drop-shadow-2xl italic flex items-center gap-4">
-                <Crosshair className="text-emerald-500" size={56} />
+                <KhacAnHonCotIcon className="text-emerald-500" size={56} />
                 <span>Khắc Ấn <span className="text-emerald-500">Hồn Cốt</span></span>
               </h1>
               <p className="text-slate-400 mt-4 max-w-2xl text-sm md:text-base font-medium">

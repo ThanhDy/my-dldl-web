@@ -20,6 +20,7 @@ import Link from "next/link";
 import { HonDaoKhi, HonDaoKhiStarEffect } from "@/data/types";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { HonDaoKhiIcon } from "@/app/components/Icons";
 
 export default function AdminHonDaoKhi() {
   const [data, setData] = useState<HonDaoKhi[]>([]);
@@ -185,7 +186,7 @@ export default function AdminHonDaoKhi() {
               <ArrowLeft size={18} className="text-slate-400" />
             </Link>
             <div className="p-2.5 bg-blue-500/10 rounded-2xl ring-1 ring-blue-500/20 shadow-lg shadow-blue-500/5">
-              <Zap className="text-blue-400" size={24} />
+              <HonDaoKhiIcon className="text-blue-400" size={24} />
             </div>
             <h2 className="text-xl md:text-3xl font-black text-white tracking-tight uppercase">
               Quản Lý Hồn Đạo Khí

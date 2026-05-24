@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HonDaoKhi } from "@/data/types";
 import BackToTop from "@/app/components/BackToTop";
 import Image from "next/image";
+import { HonDaoKhiIcon } from "@/app/components/Icons";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dom5kcwri/image/upload/v1713080000/hung-thu-soul-rings/placeholder.png";
 
@@ -78,15 +79,18 @@ export default function HonDaoKhiClient({ initialData }: HonDaoKhiClientProps) {
             <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
             <span>Trang chủ</span>
           </Link>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="p-3 bg-blue-500/10 rounded-2xl ring-1 ring-blue-500/20">
+                <HonDaoKhiIcon className="text-blue-400" size={32} />
+              </div>
               <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-tight drop-shadow-2xl">
                 Hồn Đạo <span className="text-blue-500 underline decoration-blue-500/30 underline-offset-8">Khí</span>
               </h1>
-              <p className="mt-4 text-slate-400 text-sm md:text-base max-w-2xl font-medium">
-                Khám phá các bảo vật Hồn Đạo Khí và các mốc hiệu ứng độc quyền giúp gia tăng sức mạnh một cách vượt trội.
-              </p>
             </div>
+            <p className="text-slate-400 text-sm md:text-base max-w-2xl font-medium">
+              Khám phá các bảo vật Hồn Đạo Khí và các mốc hiệu ứng độc quyền giúp gia tăng sức mạnh một cách vượt trội.
+            </p>
           </div>
         </motion.div>
 

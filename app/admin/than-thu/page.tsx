@@ -6,10 +6,11 @@ import Image from "next/image";
 import { 
   FaArrowLeft, FaPlus, FaSave, FaTrash, FaEdit, FaImage, FaStar
 } from "react-icons/fa";
+import { ThanThuIcon } from "@/app/components/Icons";
 
 const INITIAL_FORM = {
   id: "", name: "", image: "", rarity: "SSR", description: "",
-  skills: [], levelEffects: []
+  skills: [], unionSkills: [], levelEffects: []
 };
 
 export default function AdminThanThuPage() {
@@ -46,7 +47,13 @@ export default function AdminThanThuPage() {
   };
 
   const handleEdit = (item: any) => {
-    setFormData(item);
+    setFormData({
+      ...INITIAL_FORM,
+      ...item,
+      skills: item.skills || [],
+      unionSkills: item.unionSkills || [],
+      levelEffects: item.levelEffects || []
+    });
     setMainImageFile(null);
     setMainImagePreview(item.image || "");
     setView("form");
@@ -182,6 +189,46 @@ export default function AdminThanThuPage() {
     setFormData({ ...formData, skills: newArr });
   };
 
+  const addUnionSkill = () => {
+    setFormData({ 
+      ...formData, 
+      unionSkills: [...(formData.unionSkills || []), { name: "", linkedThanThuId: "", levelEffects: [] }] 
+    });
+  };
+  const removeUnionSkill = (idx: number) => {
+    const newArr = [...(formData.unionSkills || [])];
+    newArr.splice(idx, 1);
+    setFormData({ ...formData, unionSkills: newArr });
+  };
+
+  const addUnionSkillLevelEffect = (skillIdx: number) => {
+    const newUnionSkills = [...(formData.unionSkills || [])];
+    const targetSkill = { ...newUnionSkills[skillIdx] };
+    targetSkill.levelEffects = [...(targetSkill.levelEffects || []), { level: 2, effect: "" }];
+    newUnionSkills[skillIdx] = targetSkill;
+    setFormData({ ...formData, unionSkills: newUnionSkills });
+  };
+
+  const removeUnionSkillLevelEffect = (skillIdx: number, effectIdx: number) => {
+    const newUnionSkills = [...(formData.unionSkills || [])];
+    const targetSkill = { ...newUnionSkills[skillIdx] };
+    const newEffects = [...(targetSkill.levelEffects || [])];
+    newEffects.splice(effectIdx, 1);
+    targetSkill.levelEffects = newEffects;
+    newUnionSkills[skillIdx] = targetSkill;
+    setFormData({ ...formData, unionSkills: newUnionSkills });
+  };
+
+  const handleUnionSkillLevelChange = (skillIdx: number, effectIdx: number, field: "level" | "effect", value: any) => {
+    const newUnionSkills = [...(formData.unionSkills || [])];
+    const targetSkill = { ...newUnionSkills[skillIdx] };
+    const newEffects = [...(targetSkill.levelEffects || [])];
+    newEffects[effectIdx] = { ...newEffects[effectIdx], [field]: value };
+    targetSkill.levelEffects = newEffects;
+    newUnionSkills[skillIdx] = targetSkill;
+    setFormData({ ...formData, unionSkills: newUnionSkills });
+  };
+
   const addLevelEffect = () => {
     setFormData({ ...formData, levelEffects: [...formData.levelEffects, { level: 2, effect: "" }] });
   };
@@ -195,16 +242,19 @@ export default function AdminThanThuPage() {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-200 p-8 font-sans selection:bg-yellow-500/30">
         <div className="max-w-7xl mx-auto">
-          <header className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-4">
-              <Link href="/admin" className="text-slate-400 hover:text-white">
-                <FaArrowLeft size={20} />
+          <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8">
+            <div className="flex items-center gap-3">
+              <Link href="/admin" className="p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                <FaArrowLeft size={18} className="text-slate-400" />
               </Link>
-              <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase">
+              <div className="p-2.5 bg-yellow-500/10 rounded-2xl ring-1 ring-yellow-500/20 shadow-lg shadow-yellow-500/5">
+                <ThanThuIcon className="text-yellow-500" size={24} />
+              </div>
+              <h2 className="text-xl md:text-3xl font-black text-white tracking-tight uppercase">
                 Quản Lý Thần Thú
-              </h1>
+              </h2>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 w-full xl:w-auto justify-end">
               <button onClick={handleDeleteAll} className="bg-red-600/20 hover:bg-red-500/40 text-red-500 px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-all border border-red-500/20">
                 <FaTrash /> Xóa Tất Cả
               </button>
@@ -362,15 +412,17 @@ export default function AdminThanThuPage() {
           </div>
         </section>
 
-        {/* TRẠNG THÁI ĐẶC BIỆT */}
+        {/* TRẠNG THÁI ĐẶC BIỆT / KỸ NĂNG CƠ BẢN */}
         <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-            <h2 className="text-xl font-black text-blue-400 uppercase tracking-wider">Trạng Thái Đặc Biệt</h2>
+            <h2 className="text-xl font-black text-blue-400 uppercase tracking-wider">
+              Trạng Thái Đặc Biệt
+            </h2>
             <button onClick={addSkill} className="text-xs bg-blue-500/20 text-blue-400 px-3 py-1 rounded font-bold hover:bg-blue-500/40">+ Thêm trạng thái</button>
           </div>
           
           <div className="space-y-4">
-            {formData.skills.map((skill: any, idx: number) => (
+            {(formData.skills || []).map((skill: any, idx: number) => (
               <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex gap-4">
                 <div className="flex-1 space-y-2 w-full">
                   <div className="flex gap-2">
@@ -393,9 +445,112 @@ export default function AdminThanThuPage() {
                 </div>
               </div>
             ))}
-            {formData.skills.length === 0 && <p className="text-center text-sm text-slate-500 py-4">Chưa có trạng thái nào</p>}
+            {(formData.skills || []).length === 0 && <p className="text-center text-sm text-slate-500 py-4">Chưa có trạng thái nào</p>}
           </div>
         </section>
+
+        {/* KỸ NĂNG LIÊN MINH (Chỉ dành cho SP+) */}
+        {formData.rarity === "SP+" && (
+          <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h2 className="text-xl font-black text-pink-400 uppercase tracking-wider">Kỹ Năng Liên Minh</h2>
+              <button onClick={addUnionSkill} className="text-xs bg-pink-500/20 text-pink-400 px-3 py-1 rounded font-bold hover:bg-pink-500/40">+ Thêm kỹ năng liên minh</button>
+            </div>
+            
+            <div className="space-y-4">
+              {(formData.unionSkills || []).map((skill: any, idx: number) => (
+                <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                  <div className="flex justify-between items-start gap-4">
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Tên kỹ năng liên minh</label>
+                        <input 
+                          value={skill.name} onChange={e => {
+                            const newArr = [...formData.unionSkills]; newArr[idx].name = e.target.value; setFormData({...formData, unionSkills: newArr})
+                          }}
+                          className="w-full bg-slate-900 border border-slate-800 rounded p-2 text-sm font-bold text-white outline-none focus:border-pink-500" 
+                          placeholder="Ví dụ: Thiên Địa Đồng Thọ..."
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Thần Thú Liên Kết</label>
+                        <select
+                          value={skill.linkedThanThuId || ""}
+                          onChange={e => {
+                            const newArr = [...formData.unionSkills]; newArr[idx].linkedThanThuId = e.target.value; setFormData({...formData, unionSkills: newArr})
+                          }}
+                          className="w-full bg-slate-900 border border-slate-800 rounded p-2 text-sm font-bold text-white outline-none focus:border-pink-500"
+                        >
+                          <option value="">-- Chọn Thần Thú Liên Kết --</option>
+                          {items
+                            .filter(i => i.id !== formData.id)
+                            .map(i => (
+                              <option key={i.id} value={i.id}>{i.name} ({i.rarity})</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+                    </div>
+                    <button onClick={() => removeUnionSkill(idx)} className="bg-red-500/20 text-red-400 p-2 rounded hover:bg-red-500/40 shrink-0"><FaTrash size={14} /></button>
+                  </div>
+
+                  {/* Level effects for Union Skill */}
+                  <div className="border-t border-slate-850 pt-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-black text-pink-400 uppercase tracking-widest">Các mốc Level</span>
+                      <button 
+                        type="button"
+                        onClick={() => addUnionSkillLevelEffect(idx)} 
+                        className="text-[10px] bg-pink-500/10 text-pink-400 px-2 py-0.5 rounded font-bold hover:bg-pink-500/20"
+                      >
+                        + Thêm mốc Lv
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      {(skill.levelEffects || []).map((eff: any, effIdx: number) => (
+                        <div key={effIdx} className="flex gap-3 items-start bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                          <div className="w-20 shrink-0">
+                            <div className="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded px-1.5 py-1">
+                              <span className="text-slate-500 font-bold text-[10px]">Lv.</span>
+                              <input 
+                                type="number" min="1" max="10"
+                                value={eff.level} onChange={e => {
+                                  handleUnionSkillLevelChange(idx, effIdx, "level", Number(e.target.value));
+                                }}
+                                className="w-full bg-transparent text-center font-bold text-yellow-500 text-xs outline-none" 
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <textarea 
+                              value={eff.effect} onChange={e => {
+                                  handleUnionSkillLevelChange(idx, effIdx, "effect", e.target.value);
+                              }}
+                              className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 min-h-[50px] outline-none focus:border-pink-500" 
+                              placeholder="Mô tả hiệu ứng kỹ năng liên minh..."
+                            />
+                          </div>
+                          <button 
+                            type="button"
+                            onClick={() => removeUnionSkillLevelEffect(idx, effIdx)} 
+                            className="bg-red-500/10 text-red-400 p-1.5 rounded hover:bg-red-500/25 shrink-0"
+                          >
+                            <FaTrash size={12} />
+                          </button>
+                        </div>
+                      ))}
+                      {(skill.levelEffects || []).length === 0 && (
+                        <p className="text-center text-xs text-slate-600 py-1 italic">Chưa có mốc level nào</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {(formData.unionSkills || []).length === 0 && <p className="text-center text-sm text-slate-500 py-4">Chưa có kỹ năng liên minh nào</p>}
+            </div>
+          </section>
+        )}
 
       </div>
     </div>

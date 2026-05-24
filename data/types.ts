@@ -256,6 +256,15 @@ export interface ThanThuLevelEffect {
   effect: string;
 }
 
+export interface ThanThuUnionSkill {
+  name: string;
+  linkedThanThuId: string;
+  levelEffects: {
+    level: number;
+    effect: string;
+  }[];
+}
+
 export interface ThanThu {
   id: string;
   name: string;
@@ -263,6 +272,7 @@ export interface ThanThu {
   rarity?: string; // R, SR, SSR, SSR+, SP, SP+
   description: string;
   skills: ThanThuSkill[];
+  unionSkills?: ThanThuUnionSkill[];
   levelEffects: ThanThuLevelEffect[];
   createdAt?: string;
   updatedAt?: string;
