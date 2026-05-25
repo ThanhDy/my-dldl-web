@@ -216,7 +216,7 @@ function SkillModal({
               <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Hệ thống kỹ năng</h4>
             </div>
             <div className="text-slate-300 text-sm leading-relaxed bg-white/[0.02] p-6 rounded-3xl border border-white/5 whitespace-pre-wrap">
-              {skill.description}
+              {formatText(skill.description)}
             </div>
           </section>
 
@@ -236,7 +236,7 @@ function SkillModal({
                       <span className="font-black text-blue-500/80 text-[10px] uppercase tracking-widest min-w-[80px] pt-1 group-hover:text-blue-400 transition-colors">
                         {YEAR_LABELS[key]}
                       </span>
-                      <p className="text-slate-300 text-sm leading-relaxed">{desc}</p>
+                      <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{formatText(desc)}</p>
                     </div>
                   );
                 })}
@@ -261,12 +261,12 @@ function SkillModal({
                           <div className="mb-2 text-amber-400 font-black uppercase tracking-tighter text-base">
                             {content.split(":")[0].trim()}
                           </div>
-                          <div className="text-slate-400 leading-relaxed pt-2 border-t border-white/5">
-                            {content.split(":").slice(1).join(":").trim()}
+                          <div className="text-slate-400 leading-relaxed pt-2 border-t border-white/5 whitespace-pre-wrap">
+                            {formatText(content.split(":").slice(1).join(":").trim())}
                           </div>
                         </>
                       ) : (
-                        <p className="italic text-amber-400/80">{content}</p>
+                        <p className="italic text-amber-400/80 whitespace-pre-wrap">{formatText(content)}</p>
                       )}
                     </div>
                   );
