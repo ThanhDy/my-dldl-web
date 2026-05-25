@@ -115,7 +115,7 @@ export default function KhacAnClient({ initialData }: Props) {
                   />
                 )}
                 <Icon size={18} className={`relative z-10 transition-colors ${isActive ? "text-emerald-400" : ""}`} />
-                <span className="relative z-10 text-xs font-black uppercase tracking-tighter italic">{tab.label}</span>
+                <span className="relative z-10 text-xs font-black uppercase tracking-tighter italic pr-1">{tab.label}</span>
               </button>
             );
           })}
@@ -133,9 +133,12 @@ export default function KhacAnClient({ initialData }: Props) {
           >
             {activeTab === "sp" ? (
               <div className="space-y-8 relative z-10 w-full">
-                <div className="text-center w-full px-4">
+                <div className="text-center w-full px-4 space-y-2">
                   <p className="text-xs md:text-sm font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     Khắc Ấn SP dành cho cả Cường Công - Mẫn Công - Hỗ Trợ - Phòng Ngự - Khống Chế
+                  </p>
+                  <p className="text-[11px] md:text-xs font-bold text-slate-400 tracking-wide">
+                    * Ghi chú: Khắc ấn <span className="text-purple-400 font-extrabold">[Tinh Hóa]</span> có thể kích hoạt tất cả các hiệu ứng Khắc ấn khác.
                   </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
@@ -345,11 +348,11 @@ export default function KhacAnClient({ initialData }: Props) {
                     </div>
                   )}
                   <div className="ml-4">
-                    <h3 className={`text-xl font-black uppercase tracking-tighter italic ${activeTab === 'sp' ? 'text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-yellow-400 to-purple-400' : selectedPiece.pieceData.image ? 'text-yellow-400' : 'text-white'}`}>
+                    <h3 className={`text-xl font-black uppercase tracking-tighter italic pr-2 ${activeTab === 'sp' ? 'text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-yellow-400 to-purple-400' : selectedPiece.pieceData.image ? 'text-yellow-400' : 'text-white'}`}>
                       {selectedPiece.pieceData.name || (activeTab === 'sp' ? "Khắc Ấn SP" : (selectedPiece.pieceId === 'main' ? "Viên Chủ" : `Viên Phụ ${selectedPiece.pieceId.replace('sub', '')}`))}
                     </h3>
                     <p className={`text-[10px] font-bold uppercase tracking-widest ${activeTab === 'sp' ? 'text-purple-400' : 'text-emerald-500'}`}>
-                      {activeTab === 'sp' ? "Khắc Ấn Đặc Biệt" : (getSetData(selectedPiece.setNum)?.name || `Bộ Khắc Ấn ${selectedPiece.setNum}`)}
+                      {activeTab === 'sp' ? "Khắc Ấn Vạn Năng" : (getSetData(selectedPiece.setNum)?.name || `Bộ Khắc Ấn ${selectedPiece.setNum}`)}
                     </p>
                   </div>
                 </div>
@@ -402,7 +405,7 @@ export default function KhacAnClient({ initialData }: Props) {
                     <AlertCircle size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-black uppercase tracking-tighter text-emerald-400 italic">
+                    <h3 className="text-lg font-black uppercase tracking-tighter text-emerald-400 italic pr-2">
                       Hiệu Ứng Cả Bộ
                     </h3>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">

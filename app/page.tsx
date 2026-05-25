@@ -113,7 +113,7 @@ export default function Home() {
           
           <h1 className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter leading-none">
             <span className="block text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">ĐẤU LA</span>
-            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 drop-shadow-[0_0_20px_rgba(99,102,241,0.5)] pb-10">ĐẠI LỤC WIKI</span>
+            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 drop-shadow-[0_0_20px_rgba(99,102,241,0.5)] px-4 pb-10">ĐẠI LỤC WIKI</span>
           </h1>
           
           <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base font-medium leading-relaxed">
