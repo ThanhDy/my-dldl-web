@@ -15,6 +15,33 @@ const TABS = [
   { id: "khong-che", label: "Khống Chế", icon: Sparkles },
   { id: "sp", label: "Khắc Ấn SP", icon: Star }
 ];
+// Hàm hỗ trợ định dạng chuỗi theo cú pháp [màu|nội dung]
+const formatText = (text: string) => {
+  if (!text) return null;
+  const parts = text.split(/(\[[^\]|]+\|[^\]]+\])/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("[") && part.endsWith("]")) {
+      const [color, label] = part.slice(1, -1).split("|");
+      const colorMap: Record<string, string> = {
+        red: "text-rose-500",
+        yellow: "text-amber-400",
+        blue: "text-blue-400",
+        green: "text-emerald-400",
+        purple: "text-purple-400",
+        orange: "text-orange-500",
+        cyan: "text-cyan-400",
+        gray: "text-slate-500",
+        white: "text-white",
+      };
+      return (
+        <span key={index} className={`font-black ${colorMap[color] || "text-slate-200"}`}>
+          {label}
+        </span>
+      );
+    }
+    return <React.Fragment key={index}>{part}</React.Fragment>;
+  });
+};
 
 interface Props {
   initialData: KhacAnSystem[];
@@ -366,7 +393,10 @@ export default function KhacAnClient({ initialData }: Props) {
                 <div>
                   <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Mô tả chi tiết ({viewMode})</h4>
                   <div className="text-sm text-slate-300 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5 min-h-[80px] whitespace-pre-wrap">
-                    {(viewMode === "PVE" ? selectedPiece.pieceData.descriptionPVE : selectedPiece.pieceData.descriptionPVP) || `Dữ liệu chi tiết ${viewMode} đang trong quá trình cập nhật.`}
+                    {(() => {
+                      const desc = viewMode === "PVE" ? selectedPiece.pieceData.descriptionPVE : selectedPiece.pieceData.descriptionPVP;
+                      return desc ? formatText(desc) : `Dữ liệu chi tiết ${viewMode} đang trong quá trình cập nhật.`;
+                    })()}
                   </div>
                 </div>
               </div>
@@ -411,8 +441,8 @@ export default function KhacAnClient({ initialData }: Props) {
                   <X size={20} />
                 </button>
               </div>
-              <div className="bg-emerald-500/5 rounded-2xl p-4 border border-emerald-500/20 text-sm text-emerald-400/90 leading-relaxed whitespace-pre-wrap min-h-[100px] relative z-10 shadow-inner">
-                {viewSetEffect.description || "Đang cập nhật hiệu ứng bộ."}
+              <div className="bg-emerald-500/5 rounded-2xl p-4 border border-emerald-500/20 text-sm text-slate-200 leading-relaxed whitespace-pre-wrap min-h-[100px] relative z-10 shadow-inner">
+                {viewSetEffect.description ? formatText(viewSetEffect.description) : "Đang cập nhật hiệu ứng bộ."}
               </div>
             </motion.div>
           </>

@@ -326,7 +326,7 @@ export default function ThanThuClient({ initialData }: Props) {
                                     <div className="shrink-0 bg-pink-500/20 text-pink-400 px-2 py-0.5 rounded text-[10px] font-black uppercase border border-pink-500/20">
                                       Lv.{eff.level}
                                     </div>
-                                    <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">
+                                    <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
                                       {eff.effect}
                                     </p>
                                   </div>

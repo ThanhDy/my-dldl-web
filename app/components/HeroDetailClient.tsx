@@ -424,21 +424,21 @@ function SoulBoneModal({
             <h3 className="text-amber-500/80 font-black uppercase text-[10px] tracking-widest mb-2 flex items-center gap-2">
               <Sword size={12} /> Hiệu quả cơ bản
             </h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              {bone.standard?.base}
+            <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
+              {formatText(bone.standard?.base)}
             </p>
             {(bone.standard?.star4 || bone.standard?.star6) && (
               <div className="pt-4 border-t border-white/5 space-y-3">
                 {bone.standard?.star4 && (
                   <div className="flex gap-3">
                     <span className="text-amber-400 font-black text-xs min-w-[30px]">4★</span>
-                    <span className="text-slate-400 text-sm leading-relaxed">{bone.standard.star4}</span>
+                    <span className="text-slate-400 text-sm leading-relaxed whitespace-pre-wrap">{formatText(bone.standard.star4)}</span>
                   </div>
                 )}
                 {bone.standard?.star6 && (
                   <div className="flex gap-3">
                     <span className="text-amber-500 font-black text-xs min-w-[30px]">6★</span>
-                    <span className="text-slate-400 text-sm leading-relaxed">{bone.standard.star6}</span>
+                    <span className="text-slate-400 text-sm leading-relaxed whitespace-pre-wrap">{formatText(bone.standard.star6)}</span>
                   </div>
                 )}
               </div>
@@ -462,7 +462,7 @@ function SoulBoneModal({
                   return (
                     <div key={star} className="flex gap-3">
                       <span className="text-rose-500 font-black text-xs min-w-[30px]">{star}★</span>
-                      <span className="text-slate-300 text-sm leading-relaxed">{desc}</span>
+                      <span className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{formatText(desc)}</span>
                     </div>
                   );
                 })}
@@ -487,7 +487,7 @@ function SoulBoneModal({
                        <span className="text-blue-400 font-black text-xs flex items-center gap-2">
                          <Star size={10} /> {star}★ Upgrade
                        </span>
-                       <p className="text-slate-400 text-sm leading-relaxed pl-4 border-l border-white/5">{desc}</p>
+                       <p className="text-slate-400 text-sm leading-relaxed pl-4 border-l border-white/5 whitespace-pre-wrap">{formatText(desc)}</p>
                     </div>
                    );
                 })}

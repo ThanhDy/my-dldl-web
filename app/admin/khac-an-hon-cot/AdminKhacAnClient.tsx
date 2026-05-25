@@ -293,11 +293,11 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                         </div>
                         <div>
                           <label className="text-[10px] text-slate-500 uppercase font-bold text-orange-400">Mô tả PVE</label>
-                          <textarea placeholder="Mô tả cho PVE..." value={piece.descriptionPVE} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVE", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-orange-500/50 resize-none custom-scrollbar" />
+                          <textarea placeholder="Mô tả cho PVE..." value={piece.descriptionPVE} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVE", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-orange-500/50 resize-y custom-scrollbar" />
                         </div>
                         <div>
                           <label className="text-[10px] text-slate-500 uppercase font-bold text-blue-400">Mô tả PVP</label>
-                          <textarea placeholder="Mô tả cho PVP..." value={piece.descriptionPVP} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVP", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-blue-500/50 resize-none custom-scrollbar" />
+                          <textarea placeholder="Mô tả cho PVP..." value={piece.descriptionPVP} onChange={(e) => handleUpdatePiece(1, piece.id, "descriptionPVP", e.target.value)} className="w-full mt-1.5 h-24 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-blue-500/50 resize-y custom-scrollbar" />
                         </div>
                       </div>
                     </div>
@@ -331,7 +331,7 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                     placeholder="Mô tả chung cho cả bộ..." 
                     value={set.description || ""}
                     onChange={(e) => handleUpdateSetField(set.setId, "description", e.target.value)}
-                    className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
+                    className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-y" 
                   />
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                             placeholder="Mô tả cho PVE..." 
                             value={piece.descriptionPVE}
                             onChange={(e) => handleUpdatePiece(set.setId, piece.id, "descriptionPVE", e.target.value)}
-                            className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
+                            className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-y" 
                           />
                         </div>
                         <div>
@@ -396,7 +396,7 @@ export default function AdminKhacAnClient({ initialData }: Props) {
                             placeholder="Mô tả cho PVP..." 
                             value={piece.descriptionPVP}
                             onChange={(e) => handleUpdatePiece(set.setId, piece.id, "descriptionPVP", e.target.value)}
-                            className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-none" 
+                            className="w-full mt-1 h-20 bg-slate-950/50 border border-white/5 rounded-xl p-3 text-sm text-slate-200 outline-none focus:border-emerald-500/50 resize-y" 
                           />
                         </div>
                       </div>
