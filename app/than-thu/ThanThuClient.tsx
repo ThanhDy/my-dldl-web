@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import BackToTop from "@/app/components/BackToTop";
 import { ThanThu } from "@/data/types";
 import { optimizeCloudinary } from "@/lib/utils";
+import { formatText } from "@/app/components/FormattedText";
 import { ThanThuIcon } from "@/app/components/Icons";
 
 interface Props {
@@ -246,7 +247,7 @@ export default function ThanThuClient({ initialData }: Props) {
                       <Star size={14} className="text-yellow-500" /> Mô Tả Cơ Bản
                     </h3>
                     <div className="bg-white/5 border border-white/5 rounded-2xl p-4 text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-                      {selectedItem.description}
+                      {formatText(selectedItem.description)}
                     </div>
                   </div>
                 )}
@@ -263,7 +264,7 @@ export default function ThanThuClient({ initialData }: Props) {
                             Lv.{effect.level}
                           </div>
                           <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap pt-0.5">
-                            {effect.effect}
+                            {formatText(effect.effect)}
                           </p>
                         </div>
                       ))}
@@ -281,7 +282,7 @@ export default function ThanThuClient({ initialData }: Props) {
                       {selectedItem.skills.map((skill, idx) => (
                         <div key={idx} className="bg-blue-500/5 border border-blue-500/10 rounded-2xl p-4">
                           <h4 className="font-black text-blue-400 uppercase tracking-tight text-sm mb-2">{skill.name}</h4>
-                          <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">{skill.description}</p>
+                          <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">{formatText(skill.description)}</p>
                         </div>
                       ))}
                     </div>
@@ -327,7 +328,7 @@ export default function ThanThuClient({ initialData }: Props) {
                                       Lv.{eff.level}
                                     </div>
                                     <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-                                      {eff.effect}
+                                      {formatText(eff.effect)}
                                     </p>
                                   </div>
                                 ))}
