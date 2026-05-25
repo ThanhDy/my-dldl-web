@@ -11,33 +11,7 @@ import { HonDaoKhiIcon } from "@/app/components/Icons";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dom5kcwri/image/upload/v1713080000/hung-thu-soul-rings/placeholder.png";
 
-const formatText = (text: string) => {
-  if (!text) return null;
-  const parts = text.split(/(\[[^\]|]+\|[^\]]+\])/g);
-  return parts.map((part, index) => {
-    if (part.startsWith("[") && part.endsWith("]")) {
-      const [color, label] = part.slice(1, -1).split("|");
-      const colorMap: Record<string, string> = {
-        red: "text-rose-500",
-        yellow: "text-amber-400",
-        blue: "text-blue-400",
-        green: "text-emerald-400",
-        purple: "text-purple-400",
-        orange: "text-orange-500",
-        cyan: "text-cyan-400",
-        gray: "text-slate-500",
-        white: "text-white",
-      };
-      return (
-        <span key={index} className={`font-black ${colorMap[color] || "text-slate-200"}`}>
-          {label}
-        </span>
-      );
-    }
-    return <React.Fragment key={index}>{part}</React.Fragment>;
-  });
-};
-
+import { formatText } from "@/app/components/FormattedText";
 const getBadgeStyle = (label: string) => {
   const l = label.toLowerCase();
   if (l.includes("đỏ")) return "bg-rose-500/10 text-rose-400 border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.2)]";
