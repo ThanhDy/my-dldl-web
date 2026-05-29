@@ -622,7 +622,8 @@ const NvvCardModal = ({
       </motion.div>
     </motion.div>
   );
-};
+}
+
 
 // --- DIVINE MODALS ---
 function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void }) {
@@ -631,13 +632,13 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
   const currentRing = skill.rings?.[activeRingIdx];
   
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/98 z-[100] flex items-center justify-center p-4 backdrop-blur-xl" onClick={onClose}>
-      <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-slate-950/90 rounded-[3rem] w-full max-w-5xl h-[85vh] border border-yellow-500/20 shadow-[0_0_100px_rgba(234,179,8,0.1)] overflow-hidden relative flex flex-col md:flex-row" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white bg-white/5 rounded-full transition-all hover:rotate-90 z-50"><X size={24} /></button>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/98 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-slate-950/90 rounded-[3rem] w-full max-w-7xl h-[85vh] border border-yellow-500/20 shadow-[0_0_100px_rgba(234,179,8,0.1)] overflow-y-auto md:overflow-hidden relative flex flex-col md:flex-row" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="fixed top-4 right-4 md:absolute md:top-6 md:right-6 p-2 text-slate-500 hover:text-white bg-white/5 rounded-full transition-all hover:rotate-90 z-50"><X size={24} /></button>
         
         {/* LEFT SIDE: Skill Intro */}
-        <div className="w-full md:w-[45%] bg-gradient-to-b from-yellow-500/5 to-transparent p-10 border-r border-white/5 flex flex-col shrink-0">
-           <div className="w-24 h-24 rounded-[2rem] bg-yellow-500/10 border-2 border-yellow-500/30 flex items-center justify-center text-yellow-500 mb-8 shadow-lg shadow-yellow-500/5 relative overflow-hidden">
+        <div className="w-full md:w-[45%] bg-gradient-to-b from-yellow-500/5 to-transparent p-6 md:p-10 border-b md:border-b-0 md:border-r border-white/5 flex flex-col shrink-0 md:h-full">
+           <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] bg-yellow-500/10 border-2 border-yellow-500/30 flex items-center justify-center text-yellow-500 mb-6 md:mb-8 shadow-lg shadow-yellow-500/5 relative overflow-hidden">
              {skill.iconUrl ? (
                <Image
                  src={optimizeCloudinary(skill.iconUrl, 200) || skill.iconUrl}
@@ -646,36 +647,36 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
                  className="object-cover"
                />
              ) : (
-               <Zap size={48} />
+               <Zap size={40} className="md:size-[48px]" />
              )}
            </div>
-           <h2 className="text-3xl font-black text-yellow-500 uppercase tracking-tighter mb-4">{skill.name}</h2>
-           <div className="flex-1 overflow-y-auto space-y-8 pr-2 custom-scrollbar">
-              <div className="space-y-4">
+           <h2 className="text-2xl md:text-3xl font-black text-yellow-500 uppercase tracking-tighter mb-4">{skill.name}</h2>
+           <div className="flex-1 md:overflow-y-auto space-y-6 md:space-y-8 pr-2 custom-scrollbar">
+              <div className="space-y-3 md:space-y-4">
                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Kỹ năng cơ bản</h4>
                  <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{formatText(skill.description)}</p>
               </div>
               {skill.notes?.length > 0 && (
-                <div className="space-y-4 pt-8 border-t border-white/5">
+                <div className="space-y-3 md:space-y-4 pt-6 md:pt-8 border-t border-white/5">
                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Ghi chú hiệu ứng</h4>
                    <div className="space-y-4">
                       {skill.notes.map((note: string, idx: number) => {
-                        const hasSeparator = note.includes(":");
-                        const title = hasSeparator ? note.split(":")[0].trim() : "";
-                        const content = hasSeparator ? note.split(":").slice(1).join(":").trim() : note;
-                        return (
-                          <div key={idx} className="bg-black/40 border border-yellow-500/10 rounded-[1.5rem] p-6 space-y-3 shadow-xl">
-                             {title && (
-                               <>
-                                 <h5 className="text-sm font-black text-yellow-500 uppercase tracking-tighter">{title}</h5>
-                                 <div className="h-px bg-white/5" />
-                               </>
-                             )}
-                             <p className="text-sm text-slate-400 leading-relaxed font-medium whitespace-pre-wrap">
-                                {formatText(content)}
-                             </p>
-                          </div>
-                        );
+                         const hasSeparator = note.includes(":");
+                         const title = hasSeparator ? note.split(":")[0].trim() : "";
+                         const content = hasSeparator ? note.split(":").slice(1).join(":").trim() : note;
+                         return (
+                           <div key={idx} className="bg-black/40 border border-yellow-500/10 rounded-[1.5rem] p-5 md:p-6 space-y-3 shadow-xl">
+                              {title && (
+                                <>
+                                  <h5 className="text-sm font-black text-yellow-500 uppercase tracking-tighter">{title}</h5>
+                                  <div className="h-px bg-white/5" />
+                                </>
+                              )}
+                              <p className="text-sm text-slate-400 leading-relaxed font-medium whitespace-pre-wrap">
+                                 {formatText(content)}
+                              </p>
+                           </div>
+                         );
                       })}
                    </div>
                 </div>
@@ -684,16 +685,16 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
         </div>
 
         {/* RIGHT SIDE: Ring Progression */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-black/20">
+        <div className="flex-1 flex flex-col md:overflow-hidden bg-black/20 shrink-0 md:shrink">
            {/* Ring Icons Selector */}
-           <div className="flex justify-center gap-12 border-b border-white/5 shrink-0 bg-white/[0.02] py-10">
+           <div className="flex justify-start md:justify-center gap-6 md:gap-12 border-b border-white/5 shrink-0 bg-white/[0.02] py-6 md:py-10 overflow-x-auto md:overflow-x-visible custom-scrollbar px-6 md:px-0">
               {skill.rings?.map((ring: any, idx: number) => (
                 <button 
                   key={idx} 
                   onClick={() => setActiveRingIdx(idx)}
-                  className="relative flex flex-col items-center gap-3 transition-all group"
+                  className="relative flex flex-col items-center gap-3 transition-all group shrink-0"
                 >
-                  <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden ${activeRingIdx === idx ? "border-yellow-500 bg-yellow-500/20 shadow-[0_0_40px_rgba(234,179,8,0.3)] scale-110" : "border-white/10 bg-white/5 hover:border-yellow-500/50 hover:scale-105"}`}>
+                  <div className={`w-14 h-14 md:w-20 md:h-20 rounded-full border-2 flex items-center justify-center transition-all duration-500 relative overflow-hidden ${activeRingIdx === idx ? "border-yellow-500 bg-yellow-500/20 shadow-[0_0_40px_rgba(234,179,8,0.3)] scale-110" : "border-white/10 bg-white/5 hover:border-yellow-500/50 hover:scale-105"}`}>
                     {ring.iconUrl ? (
                       <Image
                         src={optimizeCloudinary(ring.iconUrl, 160) || ring.iconUrl}
@@ -703,7 +704,7 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
                       />
                     ) : (
                       <Crown
-                        size={32}
+                        size={28}
                         className={
                           activeRingIdx === idx
                             ? "text-yellow-500"
@@ -722,7 +723,7 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
 
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className={`text-[10px] font-black uppercase tracking-tighter transition-colors max-w-[100px] text-center leading-none ${activeRingIdx === idx ? "text-yellow-500" : "text-slate-500 group-hover:text-slate-300"}`}>
+                    <span className={`text-[9px] md:text-[10px] font-black uppercase tracking-tighter transition-colors max-w-[80px] md:max-w-[100px] text-center leading-none ${activeRingIdx === idx ? "text-yellow-500" : "text-slate-500 group-hover:text-slate-300"}`}>
                       {ring.name}
                     </span>
                     <span className={`text-[8px] font-black uppercase tracking-widest ${activeRingIdx === idx ? "text-yellow-600" : "text-slate-700"}`}>
@@ -734,7 +735,7 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
            </div>
 
            {/* Ring Content */}
-           <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
+           <div className="flex-1 md:overflow-y-auto p-6 md:p-10 space-y-8 md:space-y-10 custom-scrollbar">
               {currentRing && (
                 <>
                   <section className="space-y-4">
@@ -752,9 +753,9 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
                         const isMax = y === "y1000k";
                         const label = y === "y50k" ? "5v" : y === "y100k" ? "10v" : y === "y500k" ? "50v" : "100v";
                         return (
-                          <div key={y} className={`flex items-start gap-6 p-6 rounded-[2rem] border transition-all ${isMax ? "bg-red-500/5 border-red-500/20 shadow-lg shadow-red-500/5" : "bg-white/[0.03] border-white/10 hover:border-yellow-500/30"}`}>
-                            <div className={`shrink-0 px-4 py-2 rounded-xl text-center min-w-[85px] mt-1 ${isMax ? "bg-red-500 text-white font-black shadow-lg shadow-red-500/20" : "bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-black"}`}>
-                              <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
+                          <div key={y} className={`flex items-start gap-4 md:gap-6 p-4 md:p-6 rounded-[2rem] border transition-all ${isMax ? "bg-red-500/5 border-red-500/20 shadow-lg shadow-red-500/5" : "bg-white/[0.03] border-white/10 hover:border-yellow-500/30"}`}>
+                            <div className={`shrink-0 px-3 md:px-4 py-1.5 md:py-2 rounded-xl text-center min-w-[70px] md:min-w-[85px] mt-1 ${isMax ? "bg-red-500 text-white font-black shadow-lg shadow-red-500/20" : "bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-black"}`}>
+                              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">{label}</span>
                             </div>
                             <p className={`text-sm leading-relaxed flex-1 whitespace-pre-wrap ${isMax ? "text-red-200" : "text-slate-300"}`}>{formatText(desc)}</p>
                           </div>
@@ -774,8 +775,8 @@ function DivineSkillModal({ skill, onClose }: { skill: any; onClose: () => void 
                       <div className="grid grid-cols-1 gap-2">
                         {currentRing.yearEffects.y1000kBuffs.map((buff: string, i: number) => (
                           buff.trim() !== "" && (
-                            <div key={i} className="bg-yellow-500/5 border border-yellow-500/10 rounded-xl px-5 py-3 flex items-center gap-6 hover:bg-yellow-500/10 transition-colors group/buff">
-                              <span className="text-[10px] font-black text-yellow-600 uppercase min-w-[35px]">+{i + 1}</span>
+                            <div key={i} className="bg-yellow-500/5 border border-yellow-500/10 rounded-xl px-4 md:px-5 py-2.5 md:py-3 flex items-center gap-4 md:gap-6 hover:bg-yellow-500/10 transition-colors group/buff">
+                              <span className="text-[9px] md:text-[10px] font-black text-yellow-600 uppercase min-w-[30px] md:min-w-[35px]">+{i + 1}</span>
                               <p className="text-xs text-slate-300 font-medium flex-1">{formatText(buff)}</p>
                             </div>
                           )
@@ -800,7 +801,7 @@ function DivineAvatarModal({ avatar, onClose }: { avatar: any; onClose: () => vo
         <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white bg-white/5 rounded-full transition-all hover:rotate-90 z-10"><X size={20} /></button>
         
         <div className="flex items-center gap-6 mb-8 shrink-0">
-          <div className="w-20 h-20 rounded-[2rem] bg-blue-500/10 border-2 border-blue-500/30 flex items-center justify-center text-blue-500 shadow-lg shadow-blue-500/5 relative overflow-hidden">
+          <div className="w-20 h-20 rounded-[2rem] bg-blue-500/10 border-2 border-blue-500/30 flex items-center justify-center text-blue-500 shadow-lg shadow-blue-500/5 relative overflow-hidden shrink-0">
             {avatar.iconUrl ? (
               <Image
                 src={optimizeCloudinary(avatar.iconUrl, 160) || avatar.iconUrl}
@@ -842,13 +843,13 @@ function DivineAvatarModal({ avatar, onClose }: { avatar: any; onClose: () => vo
 function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) {
   if (!wing) return null;
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/98 z-[100] flex items-center justify-center p-4 backdrop-blur-xl" onClick={onClose}>
-      <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-slate-950/90 rounded-[3rem] w-full max-w-6xl h-[80vh] border border-pink-500/20 shadow-[0_0_100px_rgba(236,72,153,0.1)] overflow-hidden relative flex flex-col" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white bg-white/5 rounded-full transition-all hover:rotate-90 z-50"><X size={24} /></button>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/98 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-slate-950/90 rounded-[3rem] w-full max-w-6xl h-[80vh] border border-pink-500/20 shadow-[0_0_100px_rgba(236,72,153,0.1)] overflow-y-auto md:overflow-hidden relative flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="fixed top-4 right-4 md:absolute md:top-6 md:right-6 p-2 text-slate-500 hover:text-white bg-white/5 rounded-full transition-all hover:rotate-90 z-50"><X size={24} /></button>
         
         {/* Header */}
-        <div className="p-8 md:p-10 border-b border-white/5 bg-gradient-to-r from-pink-500/10 to-transparent flex items-center gap-8 shrink-0">
-           <div className="w-16 h-16 rounded-[1.5rem] bg-pink-500/10 border-2 border-pink-500/30 flex items-center justify-center text-pink-500 shadow-lg shadow-pink-500/5 relative overflow-hidden">
+        <div className="p-6 md:p-10 border-b border-white/5 bg-gradient-to-r from-pink-500/10 to-transparent flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-8 shrink-0">
+           <div className="w-14 h-14 md:w-16 md:h-16 rounded-[1.5rem] bg-pink-500/10 border-2 border-pink-500/30 flex items-center justify-center text-pink-500 shadow-lg shadow-pink-500/5 relative overflow-hidden shrink-0">
               {wing.iconUrl ? (
                 <Image
                   src={optimizeCloudinary(wing.iconUrl, 160) || wing.iconUrl}
@@ -857,11 +858,11 @@ function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) 
                   className="object-cover"
                 />
               ) : (
-                <Bone size={32} />
+                <Bone size={28} className="md:size-8" />
               )}
            </div>
            <div className="space-y-1">
-              <h3 className="text-3xl font-black text-pink-500 uppercase tracking-tighter">{wing.name}</h3>
+              <h3 className="text-2xl md:text-3xl font-black text-pink-500 uppercase tracking-tighter">{wing.name}</h3>
               <div className="flex items-center gap-3">
                  <span className="text-[10px] font-black text-pink-400/50 uppercase tracking-[0.2em]">Divine Wing System</span>
               </div>
@@ -869,27 +870,27 @@ function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) 
         </div>
 
         {/* Two Panels */}
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col md:flex-row md:overflow-hidden">
            {/* LEFT: Regular Skill */}
-           <div className="flex-1 overflow-y-auto p-10 border-r border-white/5 custom-scrollbar space-y-8 bg-white/[0.01]">
+           <div className="flex-1 md:overflow-y-auto p-6 md:p-10 border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar space-y-6 md:space-y-8 bg-white/[0.01] shrink-0 md:shrink">
               <div className="flex items-center gap-3">
                  <div className="p-2 rounded-lg bg-slate-800 border border-white/5">
                     <Zap size={16} className="text-pink-400" />
                  </div>
                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Kỹ năng thường</h4>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                  <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{wing.regularSkill?.description || "Chưa có mô tả kỹ năng thường."}</p>
                  
                  {wing.regularSkill?.upgrades?.some((u: string) => u.trim() !== "") && (
                     <div className="grid grid-cols-1 gap-3 pt-4">
                        {wing.regularSkill.upgrades.map((up: any, i: number) => (
                          up.trim() !== "" && (
-                           <div key={i} className="bg-white/[0.03] p-5 rounded-2xl border border-white/5 flex gap-5 items-start group hover:bg-white/[0.05] transition-all">
-                              <span className="shrink-0 w-8 h-8 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-xs font-black text-pink-500">
+                           <div key={i} className="bg-white/[0.03] p-4 md:p-5 rounded-2xl border border-white/5 flex gap-4 md:gap-5 items-start group hover:bg-white/[0.05] transition-all">
+                              <span className="shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-xs font-black text-pink-500">
                                  {i + 1}
                               </span>
-                              <p className="text-[13px] text-slate-400 leading-relaxed font-medium">{up}</p>
+                              <p className="text-xs md:text-[13px] text-slate-400 leading-relaxed font-medium">{up}</p>
                            </div>
                          )
                        ))}
@@ -899,18 +900,16 @@ function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) 
            </div>
 
            {/* RIGHT: Mutated Skill */}
-           <div className="flex-1 overflow-y-auto p-10 custom-scrollbar space-y-8 bg-pink-500/[0.02]">
+           <div className="flex-1 md:overflow-y-auto p-6 md:p-10 custom-scrollbar space-y-6 md:space-y-8 bg-pink-500/[0.02] shrink-0 md:shrink">
               <div className="flex items-center gap-3">
                  <div className="p-2 rounded-lg bg-pink-500/10 border border-pink-500/20">
                     <Waves size={16} className="text-pink-500" />
                  </div>
                  <h4 className="text-[10px] font-black text-pink-500/50 uppercase tracking-[0.3em]">Kỹ năng suy biến</h4>
               </div>
-              <div className="space-y-6">
-                 <div className="bg-pink-500/5 p-8 rounded-[2rem] border border-pink-500/10 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                       <Waves size={120} />
-                    </div>
+              <div className="space-y-4 md:space-y-6">
+                 <div className="bg-pink-500/5 p-6 md:p-8 rounded-[2rem] border border-pink-500/10 relative overflow-hidden group">
+                    
                     <p className="text-slate-200 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">{wing.mutatedSkill?.description || "Chưa có mô tả kỹ năng suy biến."}</p>
                  </div>
               </div>
@@ -1483,7 +1482,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(234,179,8,0.03)_0%,transparent_100%)]" />
                    
                    {hero.divineSystem?.branches?.map((branch: any, bIdx: number) => (
-                     <div key={bIdx} className={`flex flex-col gap-8 relative z-10 ${bIdx === 1 ? "items-end" : "items-start"}`}>
+                     <div key={bIdx} className={`flex-1 w-1/2 flex flex-col gap-8 relative z-10 ${bIdx === 1 ? "items-end" : "items-start"}`}>
                         {branch.skills?.map((skill: any, sIdx: number) => (
                           <motion.div
                             key={sIdx}
@@ -1493,7 +1492,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                             className={`flex items-center gap-6 cursor-pointer group/skill ${bIdx === 1 ? "flex-row-reverse" : "flex-row"}`}
                           >
                              {/* Skill Icon */}
-                             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-yellow-400/20 to-yellow-600/10 border-2 border-yellow-500/30 flex items-center justify-center shadow-lg shadow-yellow-500/5 transition-all group-hover/skill:border-yellow-500 group-hover/skill:shadow-yellow-500/20 group-hover/skill:scale-110 relative overflow-hidden">
+                             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-yellow-400/20 to-yellow-600/10 border-2 border-yellow-500/30 flex items-center justify-center shadow-lg shadow-yellow-500/5 transition-all group-hover/skill:border-yellow-500 group-hover/skill:shadow-yellow-500/20 group-hover/skill:scale-110 relative overflow-hidden shrink-0">
                                {skill.iconUrl ? (
                                  <Image
                                    src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl}
@@ -1544,7 +1543,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                       )}
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest opacity-70">Pháp Tướng</p>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest opacity-70">Pháp Tướng {idx + 1}</p>
                       <h4 className="text-sm font-black text-blue-400 uppercase italic tracking-tight">{avatar.name}</h4>
                     </div>
                   </div>
@@ -1560,7 +1559,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(236,72,153,0.03)_0%,transparent_100%)]" />
                    
                    {/* Cánh Trái */}
-                   <div className="flex flex-col gap-8 relative z-10 items-start">
+                   <div className="flex-1 w-1/2 flex flex-col gap-8 relative z-10 items-start">
                       {hero.divineSystem?.wings?.left?.map((wing: any, idx: number) => (
                         <motion.div
                           key={idx}
@@ -1569,7 +1568,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                           onClick={() => setSelectedDivineWing(wing)}
                           className="flex items-center gap-6 cursor-pointer group/wing"
                         >
-                           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-600/10 border-2 border-pink-500/30 flex items-center justify-center shadow-lg shadow-pink-500/5 transition-all group-hover/wing:border-pink-500 group-hover/wing:shadow-pink-500/20 group-hover/wing:scale-110 relative overflow-hidden">
+                           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-600/10 border-2 border-pink-500/30 flex items-center justify-center shadow-lg shadow-pink-500/5 transition-all group-hover/wing:border-pink-500 group-hover/wing:shadow-pink-500/20 group-hover/wing:scale-110 relative overflow-hidden shrink-0">
                               {wing.iconUrl ? (
                                 <Image
                                   src={optimizeCloudinary(wing.iconUrl, 160) || wing.iconUrl}
@@ -1592,7 +1591,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                    </div>
 
                    {/* Cánh Phải */}
-                   <div className="flex flex-col gap-8 relative z-10 items-end">
+                   <div className="flex-1 w-1/2 flex flex-col gap-8 relative z-10 items-end">
                       {hero.divineSystem?.wings?.right?.map((wing: any, idx: number) => (
                         <motion.div
                           key={idx}
@@ -1601,7 +1600,7 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
                           onClick={() => setSelectedDivineWing(wing)}
                           className="flex flex-row-reverse items-center gap-6 cursor-pointer group/wing"
                         >
-                           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-600/10 border-2 border-pink-500/30 flex items-center justify-center shadow-lg shadow-pink-500/5 transition-all group-hover/wing:border-pink-500 group-hover/wing:shadow-pink-500/20 group-hover/wing:scale-110 relative overflow-hidden">
+                           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-600/10 border-2 border-pink-500/30 flex items-center justify-center shadow-lg shadow-pink-500/5 transition-all group-hover/wing:border-pink-500 group-hover/wing:shadow-pink-500/20 group-hover/wing:scale-110 relative overflow-hidden shrink-0">
                               {wing.iconUrl ? (
                                 <Image
                                   src={optimizeCloudinary(wing.iconUrl, 160) || wing.iconUrl}
@@ -1988,6 +1987,27 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
         .custom-scrollbar-visible::-webkit-scrollbar-thumb {
           background: #db2777;
           border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.25);
+        }
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          transform: translate3d(0, 0, 0);
+          will-change: scroll-position;
         }
       `}</style>
     </div>

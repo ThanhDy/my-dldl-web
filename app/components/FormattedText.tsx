@@ -15,7 +15,7 @@ const colorMap: Record<string, string> = {
 export const formatText = (text: string | undefined | null) => {
   if (!text) return null;
 
-  const parts = text.split(/(\[[^\]\|]+?\|(?:\[.*?\]|.*?)\])/g);
+  const parts = text.split(/(\[[^\|]+?\|(?:\[.*?\]|.*?)\])/g);
 
   return parts.map((part, index) => {
     if (part.startsWith("[") && part.endsWith("]")) {
