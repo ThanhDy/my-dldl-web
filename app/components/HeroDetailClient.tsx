@@ -832,7 +832,7 @@ function DivineAvatarModal({ avatar, onClose }: { avatar: any; onClose: () => vo
             <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
               <Zap size={14} /> Kỹ năng pháp tướng
             </h4>
-            <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap relative z-10">{avatar.skill || "Chưa có mô tả kỹ năng pháp tướng."}</p>
+            <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap relative z-10">{formatText(avatar.skill || "Chưa có mô tả kỹ năng pháp tướng.")}</p>
           </section>
         </div>
       </motion.div>
@@ -880,7 +880,7 @@ function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) 
                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Kỹ năng thường</h4>
               </div>
               <div className="space-y-4 md:space-y-6">
-                 <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{wing.regularSkill?.description || "Chưa có mô tả kỹ năng thường."}</p>
+                 <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{formatText(wing.regularSkill?.description || "Chưa có mô tả kỹ năng thường.")}</p>
                  
                  {wing.regularSkill?.upgrades?.some((u: string) => u.trim() !== "") && (
                     <div className="grid grid-cols-1 gap-3 pt-4">
@@ -890,7 +890,7 @@ function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) 
                               <span className="shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-xs font-black text-pink-500">
                                  {i + 1}
                               </span>
-                              <p className="text-xs md:text-[13px] text-slate-400 leading-relaxed font-medium">{up}</p>
+                              <p className="text-xs md:text-[13px] text-slate-400 leading-relaxed font-medium">{formatText(up)}</p>
                            </div>
                          )
                        ))}
@@ -910,7 +910,7 @@ function DivineWingModal({ wing, onClose }: { wing: any; onClose: () => void }) 
               <div className="space-y-4 md:space-y-6">
                  <div className="bg-pink-500/5 p-6 md:p-8 rounded-[2rem] border border-pink-500/10 relative overflow-hidden group">
                     
-                    <p className="text-slate-200 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">{wing.mutatedSkill?.description || "Chưa có mô tả kỹ năng suy biến."}</p>
+                    <p className="text-slate-200 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">{formatText(wing.mutatedSkill?.description || "Chưa có mô tả kỹ năng suy biến.")}</p>
                  </div>
               </div>
            </div>
