@@ -15,11 +15,13 @@ const colorMap: Record<string, string> = {
 export const formatText = (text: string | undefined | null) => {
   if (!text) return null;
 
-  const parts = text.split(/(\[[^\|]+?\|(?:\[.*?\]|.*?)\])/g);
+  const parts = text.split(/(\[[^\[\]\|]+?\|[^\]]*?(?:\[.*?\][^\]]*?)*\])/g);
 
   return parts.map((part, index) => {
     if (part.startsWith("[") && part.endsWith("]")) {
-      const [colorRaw, label] = part.slice(1, -1).split("|");
+      const partsOfPart = part.slice(1, -1).split("|");
+      const colorRaw = partsOfPart[0];
+      const label = partsOfPart.slice(1).join("|");
       const color = colorRaw ? colorRaw.trim().toLowerCase() : "";
       return (
         <span
