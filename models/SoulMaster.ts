@@ -2,14 +2,6 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 // --- 1. Sub-Schemas (Các thành phần con) ---
 
-// Build Schema
-const BuildSchema = new Schema(
-  {
-    title: { type: String, default: "" },
-  },
-  { _id: false },
-);
-
 // Skill Year Effect Schema
 const SkillYearEffectSchema = new Schema(
   {
@@ -32,7 +24,6 @@ const SkillDetailSchema = new Schema(
       enum: ["Chủ động", "Bị động", "Công thường"],
       default: "",
     },
-    soulRingType: { type: String, default: "" }, // Ma Nhện / Giáp Thuẫn...
     description: { type: String, default: "" },
     yearEffects: { type: SkillYearEffectSchema, default: {} },
     note: [String],
@@ -278,26 +269,27 @@ const SoulMasterSchema = new Schema(
     image: { type: String }, // Ảnh đại diện lớn
 
     // Arrays of Sub-Schemas
-    builds: [BuildSchema],
+    buildNote: { type: String, default: "" },
     skillDetails: [SkillDetailSchema],
     soulBones: [SoulBoneSchema],
     starUpgrades: [StarUpgradeSchema],
 
     // Hệ thống riêng cho Ninh Vinh Vinh SP+ (Optional)
     nvvCardSystem: {
-      cards: [NvvCardSchema],
+      type: new Schema({ cards: [NvvCardSchema] }, { _id: false }),
+      default: undefined,
     },
 
     // Hệ thống cho Hồn Sư Thần Chỉ (Optional)
-    divineSystem: { type: DivineSystemSchema },
+    divineSystem: { type: DivineSystemSchema, default: undefined },
 
     // Hệ thống Đệ thất, Đệ bát, Đệ cửu hồn kỹ
-    seventhSkill: { type: SeventhSkillSchema, default: () => ({}) },
-    eighthSkill: { type: EighthSkillSchema, default: () => ({}) },
-    ninthSkill: { type: NinthSkillSchema, default: () => ({}) },
+    seventhSkill: { type: SeventhSkillSchema, default: undefined },
+    eighthSkill: { type: EighthSkillSchema, default: undefined },
+    ninthSkill: { type: NinthSkillSchema, default: undefined },
 
     // Hệ thống Vũ Hồn Chân Thân
-    vuHonChanThan: { type: VuHonChanThanSchema, default: () => ({}) },
+    vuHonChanThan: { type: VuHonChanThanSchema, default: undefined },
   },
   {
     timestamps: true, // Tự động tạo createdAt, updatedAt

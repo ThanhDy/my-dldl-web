@@ -42,7 +42,6 @@ const createEmptySkill = (
   _tempBranch: branch,
   name: "",
   type: getDefaultSkillType(order),
-  soulRingType: "",
   description: "",
   yearEffects: { y1k: "", y10k: "", y25k: "", y50k: "", y100k: "" },
   note: [],
@@ -102,7 +101,6 @@ const INITIAL_HERO = {
   rarity: "SP",
   type: "Cường Công",
   image: "",
-  builds: [{ title: "PvE" }, { title: "PvP" }],
   skillDetails: INITIAL_SKILLS,
   soulBones: INITIAL_SOUL_BONES,
   nvvCardSystem: { cards: [] },
@@ -246,12 +244,7 @@ export default function EditHeroPage() {
         const foundHero = json.data;
 
         const hasDataInBranch2 = foundHero.skillDetails?.length > 4;
-        // Nếu là SP+ thì mặc định tắt nhánh 2, trừ khi trong DB đã lỡ lưu data nhánh 2 rồi
-        if (foundHero.rarity === "SP+" && !hasDataInBranch2) {
-          setHasBranch2(false);
-        } else {
-          setHasBranch2(hasDataInBranch2); // Tự động bật nếu có dữ liệu cũ
-        }
+        setHasBranch2(true);
 
         // Merge Skills
         const mergedSkills = INITIAL_SKILLS.map((emptySkill, index) => {
@@ -363,6 +356,7 @@ export default function EditHeroPage() {
 
         setFormData({
           ...foundHero,
+          buildNote: foundHero.buildNote || "",
           skillDetails: mergedSkills,
           soulBones: mergedBones,
           nvvCardSystem: foundHero.nvvCardSystem || { cards: [] },
@@ -404,11 +398,6 @@ export default function EditHeroPage() {
     setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  const updateBuild = (index: number, value: string) => {
-    const newBuilds = [...formData.builds];
-    newBuilds[index] = { ...newBuilds[index], title: value };
-    setFormData({ ...formData, builds: newBuilds });
-  };
 
   const updateSkill = (index: number, field: string, value: any) => {
     const newSkills = [...formData.skillDetails];
@@ -896,14 +885,7 @@ export default function EditHeroPage() {
           value={skill.name}
           onChange={(e) => updateSkill(idx, "name", e.target.value)}
           placeholder="Tên kỹ năng"
-          className="flex-1 bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
-        />
-        <input
-          type="text"
-          value={skill.soulRingType}
-          onChange={(e) => updateSkill(idx, "soulRingType", e.target.value)}
-          className="w-1/3 bg-transparent border-b border-slate-700 focus:border-slate-400 py-2 text-sm text-slate-300 outline-none transition"
-          placeholder="Loại (VD: Khống chế)"
+          className="w-full bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
         />
       </div>
       <textarea
@@ -1532,21 +1514,18 @@ export default function EditHeroPage() {
         seventhSkill: updatedSeventhSkill,
       };
 
-      // 1. Tự động sinh ID cho skill nếu bị thiếu
-      cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
-        // Nếu skill chưa có ID hoặc ID rỗng, hãy tạo mới theo chuẩn
-        if (!skill.id) {
-          return {
-            ...skill,
-            id: `${cleanData.id}-s${skill._tempOrder}-${skill._tempBranch}`,
-            // Tự động tạo luôn link icon nếu chưa có (Optional)
-            iconUrl:
-              skill.iconUrl ||
-              `/images/${cleanData.id}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
-          };
-        }
-        return skill;
-      });
+      // 1. Chỉ giữ lại và gán ID cho các kỹ năng thực sự có dữ liệu (name hoặc description)
+      cleanData.skillDetails = cleanData.skillDetails
+        .filter((skill: any) => skill.name?.trim() || skill.description?.trim() || (skill.iconUrl?.trim() && skill.iconUrl.startsWith("http")))
+        .map((skill: any) => {
+          if (!skill.id) {
+            return {
+              ...skill,
+              id: `${cleanData.id}-s${skill._tempOrder}-${skill._tempBranch}`,
+            };
+          }
+          return skill;
+        });
       if (!hasBranch2) {
         // Chỉ giữ lại 4 kỹ năng đầu tiên (Nhánh 1)
         cleanData.skillDetails = cleanData.skillDetails.slice(0, 4);
@@ -1734,25 +1713,17 @@ export default function EditHeroPage() {
                         className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm outline-none focus:border-blue-500"
                       />
                     </div>
-                    {!isSpecialNoBuild && !isAmKhi && (
+                    {!isAmKhi && (
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Gợi ý Build</label>
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="text"
-                            value={formData.builds?.[0]?.title || ""}
-                            onChange={(e) => updateBuild(0, e.target.value)}
-                            placeholder="PvE"
-                            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-blue-400 outline-none focus:border-blue-500"
-                          />
-                          <input
-                            type="text"
-                            value={formData.builds?.[1]?.title || ""}
-                            onChange={(e) => updateBuild(1, e.target.value)}
-                            placeholder="PvP"
-                            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-red-400 outline-none focus:border-red-500"
-                          />
-                        </div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Ghi Chú Gợi Ý Build</label>
+                        <textarea
+                          name="buildNote"
+                          rows={3}
+                          value={formData.buildNote || ""}
+                          onChange={handleChange}
+                          placeholder="Ghi chú chi tiết về cách chọn Hồn Hoàn, lối chơi khuyên dùng..."
+                          className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 outline-none focus:border-blue-500 transition"
+                        />
                       </div>
                     )}
                   </div>

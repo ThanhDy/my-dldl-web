@@ -129,9 +129,8 @@ function SkillModal({
 }) {
   if (!skill) return null;
 
-  const isSpider = skill.soulRingType.includes("Ma Nhện") || skill.soulRingType.includes("Giáp Thuẫn");
-  const themeColor = isSpider ? "rose" : "emerald";
-  const glowClass = isSpider ? "shadow-rose-500/20 border-rose-500/50" : "shadow-emerald-500/20 border-emerald-500/50";
+  const isBranch2 = skill.id?.endsWith("-2");
+  const glowClass = isBranch2 ? "shadow-rose-500/20 border-rose-500/50" : "shadow-emerald-500/20 border-emerald-500/50";
 
   return (
     <motion.div
@@ -160,7 +159,7 @@ function SkillModal({
             {skill.iconUrl ? (
               <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
             ) : (
-              <Zap className={isSpider ? "text-rose-400" : "text-emerald-400"} size={32} />
+              <Zap className={isBranch2 ? "text-rose-400" : "text-emerald-400"} size={32} />
             )}
           </div>
           <div>
@@ -168,9 +167,6 @@ function SkillModal({
             <div className="flex gap-2">
               <span className="bg-blue-600/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">
                 {skill.type}
-              </span>
-              <span className={`${isSpider ? "bg-rose-600/10 text-rose-400 border-rose-500/20" : "bg-emerald-600/10 text-emerald-400 border-emerald-500/20"} px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border`}>
-                {skill.soulRingType}
               </span>
             </div>
           </div>
@@ -977,17 +973,15 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
   const isSSR_Plus = hero?.rarity === "SSR+";
   const isDivine = hero?.rarity === "Thần Chỉ";
 
-  const hasSkillGrid = hero?.rarity === "SP+";
   const hasVhct = !!(hero.vuHonChanThan && (hero.vuHonChanThan.trieuHoi?.name || hero.vuHonChanThan.chuDong?.name || hero.vuHonChanThan.biDong?.name));
 
   useEffect(() => {
     if (mounted && hero) {
       if (isAmKhi) setActiveTab("stars");
       else if (isDivine) setActiveTab("divine_rings");
-      else if (hasSkillGrid) setActiveTab("skills");
       else setActiveTab("build");
     }
-  }, [mounted, hero, isAmKhi, isDivine, hasSkillGrid]);
+  }, [mounted, hero, isAmKhi, isDivine]);
 
   if (!mounted || !hero)
     return (
@@ -1115,10 +1109,9 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
               </div>
             ) : (
               <div className="flex gap-2">
-                 {!hasSkillGrid && <TabButton active={activeTab === "build"} onClick={() => setActiveTab("build")} icon={<LayoutGrid size={14} />} label="Hồn Hoàn" color="blue" />}
-                 {hasSkillGrid && <TabButton active={activeTab === "skills"} onClick={() => setActiveTab("skills")} icon={<Zap size={14} />} label="Hệ thống kỹ năng" color="blue" />}
+                 <TabButton active={activeTab === "build"} onClick={() => setActiveTab("build")} icon={<LayoutGrid size={14} />} label="Hồn Hoàn" color="blue" />
                  {isTranTam && <TabButton active={activeTab === "thien_phu"} onClick={() => setActiveTab("thien_phu")} icon={<Sparkles size={14} />} label="Thiên Phú" color="cyan" />}
-                 {isVinhVinh && hero.nvvCardSystem && <TabButton active={activeTab === "nvv_cards"} onClick={() => setActiveTab("nvv_cards")} icon={<Gamepad2 size={14} />} label="Thẻ Bài" color="pink" />}
+                 {isVinhVinh && (hero.nvvCardSystem?.cards?.length ?? 0) > 0 && <TabButton active={activeTab === "nvv_cards"} onClick={() => setActiveTab("nvv_cards")} icon={<Gamepad2 size={14} />} label="Thẻ Bài" color="pink" />}
                  <TabButton active={activeTab === "bones"} onClick={() => setActiveTab("bones")} icon={<Shield size={14} />} label="Hồn Cốt" color="amber" />
                  {hasVhct && <TabButton active={activeTab === "vhct"} onClick={() => setActiveTab("vhct")} icon={<Crown size={14} />} label="Chân Thân" color="gold" />}
               </div>
@@ -1126,86 +1119,130 @@ export default function HeroDetailClient({ hero }: { hero: any }) {
           </div>
 
           <div className="mt-4">
-            {/* NÂNG SAO & HIỆU ỨNG MẶC ĐỊNH (BUILDS) */}
-            {activeTab === "build" && !hasSkillGrid && !isAmKhi && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-                {hero.builds?.map((build: any, idx: number) => {
-                  const codes = build.title.match(/\d{4}/)?.[0].split("") || ["1", "1", "1", "1"];
+            {/* HỒN HOÀN (CHI TIẾT KỸ NĂNG 2 NHÁNH & Ô GHI CHÚ GỢI Ý BÊN DƯỚI) */}
+            {activeTab === "build" && !isAmKhi && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+                {/* 1. HỆ THỐNG KỸ NĂNG 2 NHÁNH (LẦN LƯỢT NHÁNH 1 VÀ NHÁNH 2, CHỈ HIỂN THỊ KHI CÓ DỮ LIỆU THỰC TẾ) */}
+                {hero.skillDetails && hero.skillDetails.length > 0 && (() => {
+                  const branch1Skills = hero.skillDetails.filter((s: any) => s.id?.endsWith("-1") || s._tempBranch === 1);
+                  const branch2Skills = hero.skillDetails.filter((s: any) => s.id?.endsWith("-2") || s._tempBranch === 2);
+                  
+                  const rawBranch1 = branch1Skills.length > 0 ? branch1Skills : hero.skillDetails.slice(0, 4);
+                  const rawBranch2 = branch2Skills.length > 0 ? branch2Skills : hero.skillDetails.slice(4, 8);
+
+                  const validBranch1 = rawBranch1.filter((s: any) => s.name?.trim() || s.description?.trim());
+                  const validBranch2 = rawBranch2.filter((s: any) => s.name?.trim() || s.description?.trim());
+
+                  const hasBranch1Data = validBranch1.length > 0;
+                  const hasBranch2Data = validBranch2.length > 0;
+
+                  if (!hasBranch1Data && !hasBranch2Data) return null;
+
                   return (
-                    <div key={idx} className="bg-white/[0.02] rounded-[2.5rem] p-8 border border-white/5 shadow-2xl backdrop-blur-sm group hover:bg-white/[0.04] transition-all duration-500">
-                      <div className="flex items-center gap-3 mb-8">
-                        <div className="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
-                          <LayoutGrid size={16} className="text-blue-400" />
-                        </div>
-                        <h4 className="text-sm font-black uppercase text-blue-500 italic tracking-[0.2em]">
-                          {build.title}
-                        </h4>
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                        <h3 className="text-xl font-black uppercase tracking-wider text-slate-100 italic flex items-center gap-3">
+                          <Zap size={20} className="text-blue-400" /> Hệ Thống Kỹ Năng Hồn Hoàn
+                        </h3>
+                        <span className="text-xs text-slate-400 font-medium hidden sm:inline">Bấm vào kỹ năng để xem chi tiết mốc kích hoạt</span>
                       </div>
-                      <div className="grid grid-cols-4 gap-4 max-w-sm">
-                        {codes.map((num: string, i: number) => {
-                          const skill = getSkillDetail(hero, i, num);
-                          return (
-                            <div
-                              key={i}
-                              className="flex flex-col items-center gap-4 cursor-pointer group/skill"
-                              onClick={() => skill && setSelectedSkill(skill)}
-                            >
-                              <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-2 p-1 transition-all duration-500 group-hover/skill:scale-110 group-hover/skill:rotate-6 ${num === "1" ? "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)] bg-emerald-950/20" : "border-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.2)] bg-rose-950/20"}`}>
-                                {skill?.iconUrl ? (
-                                  <div className="w-full h-full relative rounded-full overflow-hidden">
-                                    <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt="" fill className="object-cover" />
-                                  </div>
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-slate-900 rounded-full text-xs font-black">
-                                    {num}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex flex-col items-center">
-                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 group-hover/skill:text-slate-300 transition-colors">
-                                  Skill {i + 1}
-                                </span>
-                                <div className={`w-1 h-1 rounded-full ${num === "1" ? "bg-emerald-500" : "bg-rose-500"} shadow-[0_0_5px_currentColor] animate-pulse`} />
-                              </div>
+
+                      <div className={`grid grid-cols-1 ${hasBranch1Data && hasBranch2Data ? "lg:grid-cols-2" : "grid-cols-1"} gap-8`}>
+                        {/* NHÁNH 1 */}
+                        {hasBranch1Data && (
+                          <div className="bg-white/[0.02] rounded-[2.5rem] p-6 border border-white/5 space-y-6">
+                            <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+                              <h4 className="text-base font-black uppercase text-emerald-400 italic tracking-wider flex items-center gap-2">
+                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+                                Nhánh 1
+                              </h4>
+                              <span className="text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20">
+                                {validBranch1.length} Hồn Kỹ
+                              </span>
                             </div>
-                          );
-                        })}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                              {validBranch1.map((skill: any, idx: number) => (
+                                <div
+                                  key={idx}
+                                  className="flex flex-col items-center gap-3 bg-slate-900/60 p-4 rounded-2xl border border-white/5 hover:border-emerald-500/40 hover:bg-slate-900 transition-all cursor-pointer group"
+                                  onClick={() => setSelectedSkill(skill)}
+                                >
+                                  <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-emerald-500/30 relative overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300 bg-slate-950 flex items-center justify-center">
+                                    {skill.iconUrl ? (
+                                      <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
+                                    ) : (
+                                      <span className="text-sm font-black text-emerald-400">{idx + 1}</span>
+                                    )}
+                                  </div>
+                                  <div className="text-center w-full space-y-1">
+                                    <span className="text-[9px] font-black uppercase text-emerald-400/80 block">
+                                      {skill.type || `Skill ${idx + 1}`}
+                                    </span>
+                                    <h5 className="text-[11px] font-bold text-slate-200 truncate group-hover:text-emerald-400 transition-colors">
+                                      {skill.name || `Hồn Kỹ ${idx + 1}`}
+                                    </h5>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* NHÁNH 2 */}
+                        {hasBranch2Data && (
+                          <div className="bg-white/[0.02] rounded-[2.5rem] p-6 border border-white/5 space-y-6">
+                            <div className="flex items-center justify-between border-b border-rose-500/20 pb-3">
+                              <h4 className="text-base font-black uppercase text-rose-400 italic tracking-wider flex items-center gap-2">
+                                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e]" />
+                                Nhánh 2
+                              </h4>
+                              <span className="text-[10px] font-bold uppercase bg-rose-500/10 text-rose-400 px-3 py-1 rounded-full border border-rose-500/20">
+                                {validBranch2.length} Hồn Kỹ
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                              {validBranch2.map((skill: any, idx: number) => (
+                                <div
+                                  key={idx}
+                                  className="flex flex-col items-center gap-3 bg-slate-900/60 p-4 rounded-2xl border border-white/5 hover:border-rose-500/40 hover:bg-slate-900 transition-all cursor-pointer group"
+                                  onClick={() => setSelectedSkill(skill)}
+                                >
+                                  <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-rose-500/30 relative overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300 bg-slate-950 flex items-center justify-center">
+                                    {skill.iconUrl ? (
+                                      <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
+                                    ) : (
+                                      <span className="text-sm font-black text-rose-400">{idx + 1}</span>
+                                    )}
+                                  </div>
+                                  <div className="text-center w-full space-y-1">
+                                    <span className="text-[9px] font-black uppercase text-rose-400/80 block">
+                                      {skill.type || `Skill ${idx + 1}`}
+                                    </span>
+                                    <h5 className="text-[11px] font-bold text-slate-200 truncate group-hover:text-rose-400 transition-colors">
+                                      {skill.name || `Hồn Kỹ ${idx + 1}`}
+                                    </h5>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
-                })}
-              </motion.div>
-            )}
+                })()}
 
-            {/* KỸ NĂNG CHI TIẾT (GRID) */}
-            {activeTab === "skills" && hasSkillGrid && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                {hero.skillDetails?.map((skill: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center gap-4 bg-white/[0.02] p-6 rounded-[2rem] border border-white/5 hover:border-blue-500/50 hover:bg-white/[0.05] transition-all cursor-pointer group shadow-xl"
-                    onClick={() => setSelectedSkill(skill)}
-                  >
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/10 relative overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                      {skill.iconUrl ? (
-                        <Image src={optimizeCloudinary(skill.iconUrl, 160) || skill.iconUrl} alt={skill.name} fill className="object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-900 text-xl font-black italic">
-                          {index + 1}
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* 2. GHI CHÚ GỢI Ý (BÊN DƯỚI THÔNG TIN VỀ NHÁNH HỒN HOÀN) */}
+                {hero.buildNote && (
+                  <div className="bg-white/[0.02] border border-blue-500/20 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-sm space-y-3">
+                    <div className="flex items-center gap-2.5 text-sm font-black uppercase text-blue-400 tracking-wider">
+                      <Sparkles size={18} /> Ghi Chú Gợi Ý Build
                     </div>
-                    <div className="space-y-1 text-center w-full">
-                       <p className="text-[10px] font-black uppercase text-blue-400/70 tracking-tighter opacity-70">
-                         {skill.type}
-                       </p>
-                       <h4 className="text-[11px] font-black text-slate-200 truncate group-hover:text-white transition-colors uppercase italic tracking-tight">
-                         {skill.name}
-                       </h4>
-                    </div>
+                    <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+                      {hero.buildNote}
+                    </p>
                   </div>
-                ))}
+                )}
               </motion.div>
             )}
 

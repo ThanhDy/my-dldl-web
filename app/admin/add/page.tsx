@@ -37,7 +37,6 @@ const createEmptySkill = (
   _tempBranch: branch,
   name: "",
   type: getDefaultSkillType(order),
-  soulRingType: "",
   description: "",
   yearEffects: { y1k: "", y10k: "", y25k: "", y50k: "", y100k: "" },
   note: [],
@@ -159,7 +158,7 @@ const INITIAL_HERO = {
   rarity: "SP",
   type: "Cường Công",
   image: "",
-  builds: [{ title: "PvE - 1111" }, { title: "PvP - 2222" }],
+  buildNote: "",
   skillDetails: INITIAL_SKILLS,
   soulBones: INITIAL_SOUL_BONES,
   starUpgrades: AM_KHI_STAR_CONFIG,
@@ -257,11 +256,7 @@ export default function AddHeroPage() {
   const isDivine = formData.rarity === "Thần Chỉ";
 
   useEffect(() => {
-    if (formData.rarity === "SP+") {
-      setHasBranch2(false);
-    } else {
-      setHasBranch2(true);
-    }
+    setHasBranch2(true);
 
     // Tự động chuyển hệ thành "Thần" nếu là rarity "Thần Chỉ"
     if (formData.rarity === "Thần Chỉ") {
@@ -309,13 +304,6 @@ export default function AddHeroPage() {
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prev: any) => ({ ...prev, [name]: value }));
-  };
-
-  const updateBuild = (index: number, value: string) => {
-    const newBuilds = [...formData.builds];
-    if (!newBuilds[index]) newBuilds[index] = { title: "" };
-    newBuilds[index].title = value;
-    setFormData({ ...formData, builds: newBuilds });
   };
 
   const updateStarUpgrade = (index: number, value: string) => {
@@ -840,19 +828,18 @@ export default function AddHeroPage() {
         cleanData.skillDetails = cleanData.skillDetails.slice(0, 4);
       }
 
-      // Đảm bảo ID được sinh ra nếu chưa có
-      cleanData.skillDetails = cleanData.skillDetails.map((skill: any) => {
-        if (!skill.id && currentId) {
-          return {
-            ...skill,
-            id: `${currentId}-s${skill._tempOrder}-${skill._tempBranch}`,
-            iconUrl:
-              skill.iconUrl ||
-              `/images/${currentId}/hh${skill._tempOrder}-${skill._tempBranch}.webp`,
-          };
-        }
-        return skill;
-      });
+      // Chỉ giữ lại và gán ID cho các kỹ năng thực sự có dữ liệu (name hoặc description)
+      cleanData.skillDetails = cleanData.skillDetails
+        .filter((skill: any) => skill.name?.trim() || skill.description?.trim() || (skill.iconUrl?.trim() && skill.iconUrl.startsWith("http")))
+        .map((skill: any) => {
+          if (!skill.id && currentId) {
+            return {
+              ...skill,
+              id: `${currentId}-s${skill._tempOrder}-${skill._tempBranch}`,
+            };
+          }
+          return skill;
+        });
 
       const res = await fetch("/api/soul-masters", {
         method: "POST",
@@ -917,14 +904,7 @@ export default function AddHeroPage() {
           value={skill.name}
           onChange={(e) => updateSkill(idx, "name", e.target.value)}
           placeholder="Tên kỹ năng"
-          className="flex-1 bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
-        />
-        <input
-          type="text"
-          value={skill.soulRingType}
-          onChange={(e) => updateSkill(idx, "soulRingType", e.target.value)}
-          className="w-1/3 bg-transparent border-b border-slate-700 focus:border-slate-400 py-2 text-sm text-slate-300 outline-none transition"
-          placeholder="Loại (VD: Khống chế)"
+          className="w-full bg-transparent border-b border-slate-800 py-2 font-bold text-white outline-none focus:border-blue-500 transition text-lg"
         />
       </div>
       <textarea
@@ -1489,23 +1469,17 @@ export default function AddHeroPage() {
               </div>
 
               {!isAmKhi && (
-                <div className="bg-slate-950/50 p-3 rounded-lg border border-slate-800 space-y-3">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase">
-                    Build Kỹ Năng
-                  </p>
-                  <input
-                    type="text"
-                    value={formData.builds[0]?.title}
-                    onChange={(e) => updateBuild(0, e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-white outline-none"
-                    placeholder="PvE"
-                  />
-                  <input
-                    type="text"
-                    value={formData.builds[1]?.title}
-                    onChange={(e) => updateBuild(1, e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-white outline-none"
-                    placeholder="PvP"
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                    Ghi Chú Gợi Ý Build
+                  </label>
+                  <textarea
+                    name="buildNote"
+                    rows={3}
+                    value={formData.buildNote || ""}
+                    onChange={handleChange}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 outline-none focus:border-blue-500 transition"
+                    placeholder="Ghi chú chi tiết về cách chọn Hồn Hoàn, lối chơi khuyên dùng..."
                   />
                 </div>
               )}

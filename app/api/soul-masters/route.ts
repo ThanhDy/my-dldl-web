@@ -23,6 +23,19 @@ export async function GET() {
   }
 }
 
+function hasRealContent(obj: any): boolean {
+  if (!obj || typeof obj !== "object") return false;
+  for (const key of Object.keys(obj)) {
+    const val = obj[key];
+    if (typeof val === "string" && val.trim() !== "") return true;
+    if (typeof val === "number" && !isNaN(val)) return true;
+    if (typeof val === "boolean" && val === true) return true;
+    if (Array.isArray(val) && val.length > 0) return true;
+    if (typeof val === "object" && val !== null && hasRealContent(val)) return true;
+  }
+  return false;
+}
+
 // 2. HÀM POST: Thêm tướng mới vào MongoDB (Dùng cho trang Admin)
 export async function POST(request: Request) {
   await dbConnect();
@@ -39,6 +52,28 @@ export async function POST(request: Request) {
         },
         { status: 400 },
       );
+    }
+
+    // Lọc làm sạch dữ liệu trước khi lưu
+    if (
+      body.id !== "ninh-vinh-vinh-sp" ||
+      !hasRealContent(body.nvvCardSystem)
+    ) {
+      delete body.nvvCardSystem;
+    }
+
+    if (
+      body.rarity !== "Thần Chỉ" ||
+      !hasRealContent(body.divineSystem)
+    ) {
+      delete body.divineSystem;
+    }
+
+    const optionalFields = ["vuHonChanThan", "seventhSkill", "eighthSkill", "ninthSkill"];
+    for (const field of optionalFields) {
+      if (!hasRealContent(body[field])) {
+        delete body[field];
+      }
     }
 
     // Tạo bản ghi mới

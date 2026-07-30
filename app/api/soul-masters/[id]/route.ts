@@ -37,6 +37,19 @@ export async function GET(
   }
 }
 
+function hasRealContent(obj: any): boolean {
+  if (!obj || typeof obj !== "object") return false;
+  for (const key of Object.keys(obj)) {
+    const val = obj[key];
+    if (typeof val === "string" && val.trim() !== "") return true;
+    if (typeof val === "number" && !isNaN(val)) return true;
+    if (typeof val === "boolean" && val === true) return true;
+    if (Array.isArray(val) && val.length > 0) return true;
+    if (typeof val === "object" && val !== null && hasRealContent(val)) return true;
+  }
+  return false;
+}
+
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -46,8 +59,41 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
+    // Lọc làm sạch payload
+    const updateData = { ...body };
+    const unsetData: any = {};
+
+    if (
+      updateData.id !== "ninh-vinh-vinh-sp" ||
+      !hasRealContent(updateData.nvvCardSystem)
+    ) {
+      delete updateData.nvvCardSystem;
+      unsetData.nvvCardSystem = "";
+    }
+
+    if (
+      updateData.rarity !== "Thần Chỉ" ||
+      !hasRealContent(updateData.divineSystem)
+    ) {
+      delete updateData.divineSystem;
+      unsetData.divineSystem = "";
+    }
+
+    const optionalFields = ["vuHonChanThan", "seventhSkill", "eighthSkill", "ninthSkill"];
+    for (const field of optionalFields) {
+      if (!hasRealContent(updateData[field])) {
+        delete updateData[field];
+        unsetData[field] = "";
+      }
+    }
+
+    const updateQuery: any = { $set: updateData };
+    if (Object.keys(unsetData).length > 0) {
+      updateQuery.$unset = unsetData;
+    }
+
     // Tìm và update (new: true để trả về dữ liệu sau khi sửa)
-    const updatedHero = await SoulMaster.findOneAndUpdate({ id: id }, body, {
+    const updatedHero = await SoulMaster.findOneAndUpdate({ id: id }, updateQuery, {
       new: true,
       runValidators: true,
     });

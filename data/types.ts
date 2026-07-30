@@ -1,7 +1,3 @@
-export interface Build {
-  title: string; // Ví dụ: "PvE - 1111" hoặc "PvP - 2212"
-}
-
 export interface SkillYearEffect {
   y1k?: string;
   y10k?: string; // 1 Vạn năm
@@ -14,7 +10,6 @@ export interface SkillDetail {
   id: string; // Quy ước: {heroId}-s{thứ_tự_skill}-{hệ_skill (1 hoặc 2)}
   name: string; // Tên kỹ năng (Phần 1)
   type: "Chủ động" | "Bị động" | "Công thường"; // Loại (Phần 1)
-  soulRingType: string;
   description: string; // Mô tả chính (Phần 2)
   yearEffects: SkillYearEffect; // Các mốc kích hoạt (Phần 3)
   note?: string[]; // Chú thích thêm (Phần 4 - Optional)
@@ -113,7 +108,7 @@ export interface SoulMaster {
     | "Phòng Ngự"
     | "Ám Khí";
   image: string; // Link ảnh
-  builds: Build[]; // Danh sách các cách build
+  buildNote?: string; // Ghi chú gợi ý build
   skillDetails: SkillDetail[];
   soulBones: SoulBone[];
   starUpgrades?: StarUpgrade[];
