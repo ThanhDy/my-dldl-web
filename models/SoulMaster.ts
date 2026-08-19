@@ -60,14 +60,6 @@ const SoulBoneSchema = new Schema(
           _id: false,
         },
       ],
-      star1Red: String,
-      star4Red: String,
-      star5Red: String,
-      star6Red: String,
-      star1Gold: String,
-      star4Gold: String,
-      star5Gold: String,
-      star6Gold: String,
     },
     // Nâng cấp (Optional)
     upgrade: {
