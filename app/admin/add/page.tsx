@@ -13,8 +13,10 @@ import {
   FaDna,
   FaArrowUp,
   FaPlus,
+  FaTrash,
 } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import MutationPanel from "@/app/admin/components/MutationPanel";
 
 const getDefaultSkillType = (order: number) => {
   switch (order) {
@@ -69,10 +71,15 @@ const createEmptySoulBone = (position: string) => ({
   standard: { base: "", star4: "", star6: "" },
   mutation: {
     name: "",
+    effects: [],
     star1Red: "",
     star4Red: "",
     star5Red: "",
     star6Red: "",
+    star1Gold: "",
+    star4Gold: "",
+    star5Gold: "",
+    star6Gold: "",
   },
   upgrade: { name: "", star2: "", star3: "", star5: "" },
   _extraType: "none",
@@ -355,8 +362,56 @@ export default function AddHeroPage() {
     value: string,
   ) => {
     const newBones = [...formData.soulBones];
+    if (!newBones[index].mutation) {
+      newBones[index].mutation = { name: "", effects: [] };
+    }
     newBones[index].mutation[key] = value;
     setFormData({ ...formData, soulBones: newBones });
+  };
+
+  const addMutationEffect = (
+    boneIdx: number,
+    type: "red" | "gold" = "red",
+  ) => {
+    const newBones = [...formData.soulBones];
+    if (!newBones[boneIdx].mutation) {
+      newBones[boneIdx].mutation = { name: "", effects: [] };
+    }
+    if (!newBones[boneIdx].mutation.effects) {
+      newBones[boneIdx].mutation.effects = [];
+    }
+    newBones[boneIdx].mutation.effects.push({
+      starLevel: "",
+      type: type,
+      effect: "",
+    });
+    setFormData({ ...formData, soulBones: newBones });
+  };
+
+  const updateMutationEffect = (
+    boneIdx: number,
+    effectIdx: number,
+    field: string,
+    value: any,
+  ) => {
+    const newBones = [...formData.soulBones];
+    if (!newBones[boneIdx].mutation.effects) {
+      newBones[boneIdx].mutation.effects = [];
+    }
+    let val = value;
+    if (field === "starLevel" && typeof val === "string") {
+      val = val.replace(/sao\s*(đỏ|kim|vàng)?/gi, "").trim();
+    }
+    newBones[boneIdx].mutation.effects[effectIdx][field] = val;
+    setFormData({ ...formData, soulBones: newBones });
+  };
+
+  const removeMutationEffect = (boneIdx: number, effectIdx: number) => {
+    const newBones = [...formData.soulBones];
+    if (newBones[boneIdx].mutation.effects) {
+      newBones[boneIdx].mutation.effects.splice(effectIdx, 1);
+      setFormData({ ...formData, soulBones: newBones });
+    }
   };
 
   const updateSoulBoneUpgrade = (index: number, key: string, value: string) => {
@@ -1669,7 +1724,7 @@ export default function AddHeroPage() {
                         onChange={(e) =>
                           updateSoulBoneStandard(idx, "star4", e.target.value)
                         }
-                        placeholder="4 Sao Vàng..."
+                        placeholder="4..."
                         className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-yellow-500 outline-none focus:border-yellow-600 min-h-[60px] resize-y"
                       />
                       <textarea
@@ -1677,75 +1732,51 @@ export default function AddHeroPage() {
                         onChange={(e) =>
                           updateSoulBoneStandard(idx, "star6", e.target.value)
                         }
-                        placeholder="6 Sao Vàng..."
+                        placeholder="6..."
                         className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-yellow-600 outline-none focus:border-yellow-700 min-h-[60px] resize-y"
                       />
                     </div>
 
                     {/* SUY BIẾN */}
                     {bone._extraType === "mutation" && (
-                      <div className="space-y-2.5 pt-3 border-t border-red-900/30 bg-red-950/10 p-2.5 rounded-lg animate-fadeIn">
-                        <div className="flex items-center gap-1 text-[10px] text-red-400 font-black mb-1">
-                          <FaDna /> SUY BIẾN
+                      <div className="space-y-4 pt-3 border-t border-red-900/30 bg-slate-950/40 p-3 rounded-lg animate-fadeIn">
+                        <div className="flex items-center gap-1 text-[11px] text-red-400 font-black uppercase tracking-wider">
+                          <FaDna /> SUY BIẾN HỒN CỐT
                         </div>
                         <input
-                          value={bone.mutation.name}
+                          value={bone.mutation?.name || ""}
                           onChange={(e) =>
                             updateSoulBoneMutation(idx, "name", e.target.value)
                           }
                           placeholder="Tên Hồn Cốt Suy Biến..."
-                          className="w-full bg-slate-950 border border-red-900/30 rounded p-2 text-sm text-red-200 outline-none focus:border-red-500"
+                          className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-sm text-red-200 outline-none focus:border-red-500 font-bold"
                         />
-                        <div className="grid grid-cols-1 gap-2">
-                          <textarea
-                            value={bone.mutation.star1Red}
-                            onChange={(e) =>
-                              updateSoulBoneMutation(
-                                idx,
-                                "star1Red",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="1 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
-                          />
-                          <textarea
-                            value={bone.mutation.star4Red}
-                            onChange={(e) =>
-                              updateSoulBoneMutation(
-                                idx,
-                                "star4Red",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="4 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
-                          />
-                          <textarea
-                            value={bone.mutation.star5Red}
-                            onChange={(e) =>
-                              updateSoulBoneMutation(
-                                idx,
-                                "star5Red",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="5 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
-                          />
-                          <textarea
-                            value={bone.mutation.star6Red}
-                            onChange={(e) =>
-                              updateSoulBoneMutation(
-                                idx,
-                                "star6Red",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="6 Sao Đỏ..."
-                            className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
-                          />
-                        </div>
+
+                        {/* KHỐI 1: SUY BIẾN THƯỜNG (SAO ĐỎ) */}
+                        <MutationPanel
+                          type="red"
+                          title="Suy Biến Thường (Sao Đỏ)"
+                          icon={<FaDna />}
+                          effects={bone.mutation?.effects || []}
+                          onAdd={() => addMutationEffect(idx, "red")}
+                          onUpdate={(effIdx, field, val) =>
+                            updateMutationEffect(idx, effIdx, field, val)
+                          }
+                          onRemove={(effIdx) => removeMutationEffect(idx, effIdx)}
+                        />
+
+                        {/* KHỐI 2: HIỆU QUẢ BẤT HỦ (SAO KIM) */}
+                        <MutationPanel
+                          type="gold"
+                          title="Hiệu quả Bất Hủ (Sao Kim)"
+                          icon={<FaStar />}
+                          effects={bone.mutation?.effects || []}
+                          onAdd={() => addMutationEffect(idx, "gold")}
+                          onUpdate={(effIdx, field, val) =>
+                            updateMutationEffect(idx, effIdx, field, val)
+                          }
+                          onRemove={(effIdx) => removeMutationEffect(idx, effIdx)}
+                        />
                       </div>
                     )}
 
@@ -1773,7 +1804,7 @@ export default function AddHeroPage() {
                                 e.target.value,
                               )
                             }
-                            placeholder="2 Sao..."
+                            placeholder="2..."
                             className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
                           <textarea
@@ -1785,7 +1816,7 @@ export default function AddHeroPage() {
                                 e.target.value,
                               )
                             }
-                            placeholder="3 Sao..."
+                            placeholder="3..."
                             className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
                           <textarea
@@ -1797,7 +1828,7 @@ export default function AddHeroPage() {
                                 e.target.value,
                               )
                             }
-                            placeholder="5 Sao..."
+                            placeholder="5..."
                             className="w-full bg-slate-950 border border-slate-800 p-2 rounded text-sm text-slate-300 min-h-[60px] resize-y"
                           />
                         </div>

@@ -23,7 +23,7 @@ import {
   Waves,
   ZapOff
 } from "lucide-react";
-import { SkillDetail, SoulBone, NvvCard, NvvCardType } from "@/data/types";
+import { SkillDetail, SoulBone, NvvCard, NvvCardType, MutationStarEffect } from "@/data/types";
 import BackToTop from "@/app/components/BackToTop";
 import { optimizeCloudinary } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,6 +37,11 @@ const YEAR_LABELS: Record<string, string> = {
 };
 
 const YEAR_ORDER = ["y1k", "y10k", "y25k", "y50k", "y100k"];
+
+const formatStarLabel = (starLevel: string) => {
+  const trimmed = (starLevel || "").trim();
+  return /^\d+$/.test(trimmed) ? `${trimmed}★` : trimmed;
+};
 
 import { formatText } from "@/app/components/FormattedText";
 // --- THIÊN PHÚ (DÀNH RIÊNG CHO TRẦN TÂM) ---
@@ -336,10 +341,57 @@ function SoulBoneModal({
 }) {
   if (!bone) return null;
 
-  const isMutated = !!bone.mutation?.name;
+  const isMutated = !!bone.mutation?.name || (bone.mutation?.effects && bone.mutation.effects.length > 0);
   const isUpgraded = !!bone.upgrade?.name;
   const themeColor = isMutated ? "rose" : "amber";
   const glowClass = isMutated ? "shadow-rose-500/20 border-rose-500/50" : "shadow-amber-500/20 border-amber-500/50";
+
+  // Phân loại danh sách hiệu ứng suy biến (Sao Đỏ vs Sao Kim SP+)
+  const redEffects: MutationStarEffect[] = [];
+  const goldEffects: MutationStarEffect[] = [];
+  if (bone.mutation) {
+    if (bone.mutation.effects && bone.mutation.effects.length > 0) {
+      bone.mutation.effects.forEach((eff) => {
+        if (eff.effect && eff.effect.trim()) {
+          const rawStar = eff.starLevel ? eff.starLevel.replace(/sao\s*(đỏ|kim|vàng)?/gi, "").trim() : "";
+          const lowerStar = (eff.starLevel || "").toLowerCase();
+          const isGold = eff.type === "gold" || lowerStar.includes("kim") || lowerStar.includes("sp+");
+          const cleanedEff: MutationStarEffect = {
+            ...eff,
+            starLevel: rawStar || eff.starLevel,
+          };
+          if (isGold) {
+            goldEffects.push(cleanedEff);
+          } else {
+            redEffects.push(cleanedEff);
+          }
+        }
+      });
+    } else {
+      // Legacy Red stars
+      [1, 4, 5, 6].forEach((star) => {
+        const desc = (bone.mutation as any)[`star${star}Red`];
+        if (desc && desc.trim()) {
+          redEffects.push({
+            starLevel: `${star}`,
+            type: "red",
+            effect: desc,
+          });
+        }
+      });
+      // Legacy Gold stars
+      [1, 4, 5, 6].forEach((star) => {
+        const desc = (bone.mutation as any)[`star${star}Gold`];
+        if (desc && desc.trim()) {
+          goldEffects.push({
+            starLevel: `${star}`,
+            type: "gold",
+            effect: desc,
+          });
+        }
+      });
+    }
+  }
 
   return (
     <motion.div
@@ -409,27 +461,55 @@ function SoulBoneModal({
             )}
           </div>
 
-          {isMutated && bone.mutation && (
+          {/* Khối Hiệu Quả Suy Biến (Sao Đỏ) */}
+          {redEffects.length > 0 && bone.mutation && (
             <div className="bg-rose-500/[0.03] p-6 rounded-3xl border border-rose-500/10 space-y-4">
               <h3 className="text-rose-500 font-black uppercase text-[10px] tracking-widest flex items-center gap-2">
                 <Dna size={14} /> Hiệu quả Suy Biến
               </h3>
-              <p className="text-rose-400 text-base font-black italic uppercase tracking-tight">
-                {bone.mutation.name}
-              </p>
+              {bone.mutation.name && (
+                <p className="text-rose-400 text-base font-black italic uppercase tracking-tight">
+                  {bone.mutation.name}
+                </p>
+              )}
               <div className="space-y-3 pt-2">
-                {[1, 4, 5, 6].map((star) => {
-                  const key = `star${star}${star === 1 ? "Red" : "Red"}` as any; 
-                  // Note: star1Red, star4Red, etc. based on the previous code.
-                  const desc = (bone.mutation as any)[`star${star}Red`];
-                  if (!desc) return null;
-                  return (
-                    <div key={star} className="flex gap-3">
-                      <span className="text-rose-500 font-black text-xs min-w-[30px]">{star}★</span>
-                      <span className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{formatText(desc)}</span>
-                    </div>
-                  );
-                })}
+                {redEffects.map((item, idx) => (
+                  <div key={idx} className="flex gap-3 items-start">
+                    <span className="font-black text-xs px-2.5 py-1 rounded-xl shrink-0 border uppercase tracking-wider bg-rose-500/10 text-rose-400 border-rose-500/30">
+                      {formatStarLabel(item.starLevel)}
+                    </span>
+                    <span className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap flex-1 pt-0.5">
+                      {formatText(item.effect)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Khối Hiệu Quả Bất Hủ (Xanh dương - trắng nhạt gradient) */}
+          {goldEffects.length > 0 && (
+            <div className="bg-gradient-to-br from-cyan-950/40 via-sky-900/20 to-slate-950/60 p-6 rounded-3xl border border-cyan-400/30 space-y-4 shadow-[0_0_25px_rgba(56,189,248,0.12)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/5 rounded-full blur-2xl pointer-events-none" />
+              <h3 className="text-cyan-300 font-black uppercase text-[10px] tracking-widest flex items-center gap-2">
+                <Sparkles size={14} className="text-cyan-300 animate-pulse" /> Hiệu quả Bất Hủ
+              </h3>
+              {(!redEffects.length && bone.mutation?.name) && (
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-sky-300 to-white text-base font-black italic uppercase tracking-tight">
+                  {bone.mutation.name}
+                </p>
+              )}
+              <div className="space-y-3 pt-2">
+                {goldEffects.map((item, idx) => (
+                  <div key={idx} className="flex gap-3 items-start">
+                    <span className="font-black text-xs px-2.5 py-1 rounded-xl shrink-0 border uppercase tracking-wider bg-gradient-to-r from-cyan-500/20 to-sky-400/20 text-cyan-200 border-cyan-400/40 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
+                      {formatStarLabel(item.starLevel)}
+                    </span>
+                    <span className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap flex-1 pt-0.5">
+                      {formatText(item.effect)}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           )}

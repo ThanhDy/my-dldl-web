@@ -8,12 +8,18 @@ export interface SkillYearEffect {
 
 export interface SkillDetail {
   id: string; // Quy ước: {heroId}-s{thứ_tự_skill}-{hệ_skill (1 hoặc 2)}
-  name: string; // Tên kỹ năng (Phần 1)
-  type: "Chủ động" | "Bị động" | "Công thường"; // Loại (Phần 1)
-  description: string; // Mô tả chính (Phần 2)
-  yearEffects: SkillYearEffect; // Các mốc kích hoạt (Phần 3)
-  note?: string[]; // Chú thích thêm (Phần 4 - Optional)
+  name: string; // Tên kỹ năng
+  type: "Chủ động" | "Bị động" | "Công thường"; // Loại kỹ năng
+  description: string; // Mô tả chính
+  yearEffects: SkillYearEffect; // Các mốc kích hoạt theo năm
+  note?: string[]; // Chú thích thêm (Optional)
   iconUrl?: string;
+}
+
+export interface MutationStarEffect {
+  starLevel: string; // Số sao, VD: "1", "4", "5", "6"
+  type: "red" | "gold"; // "red" (Sao Đỏ) hoặc "gold" (Sao Kim SP+)
+  effect: string; // Mô tả hiệu ứng suy biến
 }
 
 export interface SoulBone {
@@ -34,26 +40,24 @@ export interface SoulBone {
     star6: string; // 6 Sao Vàng
   };
 
-  // Chỉ số/Hiệu ứng Suy Biến (Có thể có hoặc không)
+  // Chỉ số/Hiệu ứng Suy Biến
   mutation?: {
     name: string; // Tên cốt suy biến
-    iconUrl?: string; // Ảnh cốt suy biến (thường màu đỏ)
-    star1Red: string; // 1 Sao Đỏ
-    star4Red: string; // 4 Sao Đỏ
-    star5Red: string; // 5 Sao Đỏ
-    star6Red: string; // 6 Sao Đỏ
+    iconUrl?: string; // Ảnh cốt suy biến
+    effects?: MutationStarEffect[]; // Danh sách hiệu quả suy biến tự nhập mốc sao
+    [key: string]: any; // Tương thích dữ liệu legacy (star1Red, star4Gold, v.v...)
   };
 
   upgrade?: {
-    name: string; // Tên sau khi nâng cấp (VD: Cốt 10 vạn năm...)
+    name: string; // Tên sau khi nâng cấp
     iconUrl?: string; // Ảnh cốt mới
-    star2: string; // Dòng mới thêm
-    star3: string; // Dòng mới thêm
-    star5: string; // Dòng mới thêm
+    star2: string; // Mốc 2 sao nâng cấp
+    star3: string; // Mốc 3 sao nâng cấp
+    star5: string; // Mốc 5 sao nâng cấp
   };
 }
 
-// --- [MỚI] HỆ THỐNG THẺ BÀI NINH VINH VINH SP+ ---
+// --- HỆ THỐNG THẺ BÀI NINH VINH VINH SP+ ---
 
 export type NvvCardType =
   | "Thông Dụng"
@@ -67,16 +71,15 @@ export interface NvvCard {
   name: string;
   type: NvvCardType;
   image: string;
-  shortDescription: string; // Mô tả ngắn hiển thị bên ngoài
+  shortDescription: string;
 
   // Chi tiết kỹ năng
-  basicSkill: string; // Kỹ năng cơ bản
+  basicSkill: string;
 
   detailedEffect: {
-    condition: string; // Điều kiện kích hoạt chung
-    effect?: string; // TRƯỜNG HỢP 1: Hiệu ứng trực tiếp
+    condition: string;
+    effect?: string;
     quest?: {
-      // TRƯỜNG HỢP 2: Nhiệm vụ
       description: string;
       buff: string;
     };
@@ -99,7 +102,7 @@ export interface SoulMaster {
   name: string;
   title: string;
   rarity: "SP" | "SSR" | "SSR+" | "SP+";
-  isSpPlus?: boolean; // Cờ nhận biết SP+
+  isSpPlus?: boolean;
   type:
     | "Cường Công"
     | "Mẫn Công"
@@ -107,13 +110,13 @@ export interface SoulMaster {
     | "Phụ Trợ"
     | "Phòng Ngự"
     | "Ám Khí";
-  image: string; // Link ảnh
-  buildNote?: string; // Ghi chú gợi ý build
+  image: string;
+  buildNote?: string;
   skillDetails: SkillDetail[];
   soulBones: SoulBone[];
   starUpgrades?: StarUpgrade[];
 
-  // Dữ liệu riêng cho NVV
+  // Dữ liệu NVV SP+
   nvvCardSystem?: {
     cards: NvvCard[];
   };
@@ -136,44 +139,45 @@ export interface SoulMaster {
   };
   ninthSkill?: {
     active?: { name: string; description: string };
-    passive?: { name: string; description: string; unlockCondition?: string }; // Khí Nguyên Thần Khí
+    passive?: { name: string; description: string; unlockCondition?: string };
   };
 }
 
-//==========================================================================
+// --- NGUỒN HỒN TÂM ---
 
-export interface starEffect {
+export interface StarEffect {
   star: number;
   description: string;
   condition: number;
 }
+export type starEffect = StarEffect;
 
 export interface SourceSoulHeart {
   id: string;
   name: string;
-  character: string; // Tên nhân vật
-  rarity: string; // Độ hiếm (SP, SSR, SP+)
+  character: string;
+  rarity: string;
   type: string;
-  avatar: string; // Link ảnh đại diện
-  basicStat: string; // Chỉ số cơ bản
-  basicSkill: string; // Kỹ năng cơ bản
+  avatar: string;
+  basicStat: string;
+  basicSkill: string;
   isExtend?: boolean;
-  starEffects: starEffect[];
+  starEffects: StarEffect[];
 }
 
 export interface BoneBurningLevel {
   level: number;
-  levelName: string; // "Cấp 1" ... "Tiến hóa"
+  levelName: string;
   description: string;
 }
 
 export interface BoneBurning {
   id: string;
-  type: string; // "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ/Phòng Ngự"
+  type: string;
   levels: BoneBurningLevel[];
 }
 
-// --- [MỚI] HỆ THỐNG HỒN HOÀN HUNG THÚ ---
+// --- HỆ THỐNG HỒN HOÀN HUNG THÚ ---
 
 export type HungThuSystem = "Cường Công" | "Mẫn Công" | "Khống Chế" | "Phụ Trợ/Phòng Ngự";
 export type HungThuType = "Regular" | "Combined";
@@ -191,18 +195,17 @@ export interface HungThuSoulRing {
   type: HungThuType;
   basicEffect: string;
   yearEffects: HungThuYearEffect[];
-  // References
-  componentIds?: string[]; // IDs of the 2 regular rings (for Combined)
-  suitableWithId?: string; // ID of the other regular ring (for Regular)
+  componentIds?: string[];
+  suitableWithId?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
-// --- [MỚI] HỆ THỐNG HỒN ĐẠO KHÍ ---
+// --- HỆ THỐNG HỒN ĐẠO KHÍ ---
 
 export interface HonDaoKhiStarEffect {
-  starLevel: string; // Tên hiển thị mốc sao, VD: "1 Sao Đỏ", "1 Sao Tím"
-  effect: string; // Hiệu ứng text có dính HTML tô màu
+  starLevel: string;
+  effect: string;
 }
 
 export interface HonDaoKhi {
@@ -214,10 +217,10 @@ export interface HonDaoKhi {
   updatedAt?: string;
 }
 
-// --- [MỚI] HỆ THỐNG KHẮC ẤN HỒN CỐT ---
+// --- HỆ THỐNG KHẮC ẤN HỒN CỐT ---
 
 export interface KhacAnPiece {
-  id: string; // 'main' | 'sub1' | 'sub2' | 'sub3' | 'sub4' | 'sub5'
+  id: string;
   name: string;
   image: string;
   descriptionPVP: string;
@@ -225,21 +228,21 @@ export interface KhacAnPiece {
 }
 
 export interface KhacAnSet {
-  setId: number; // 1, 2, 3, 4
-  name: string; // Ví dụ: "Bộ Khắc Ấn 1"
+  setId: number;
+  name: string;
   description?: string;
   pieces: KhacAnPiece[];
 }
 
 export interface KhacAnSystem {
   id: string;
-  type: string; // 'Cường Công - Mẫn Công' | 'Hỗ Trợ' | 'Khống Chế'
+  type: string;
   sets: KhacAnSet[];
   createdAt?: string;
   updatedAt?: string;
 }
 
-// --- [MỚI] HỆ THỐNG THẦN THÚ ---
+// --- HỆ THỐNG THẦN THÚ ---
 
 export interface ThanThuSkill {
   name: string;
@@ -254,17 +257,14 @@ export interface ThanThuLevelEffect {
 export interface ThanThuUnionSkill {
   name: string;
   linkedThanThuId: string;
-  levelEffects: {
-    level: number;
-    effect: string;
-  }[];
+  levelEffects: ThanThuLevelEffect[];
 }
 
 export interface ThanThu {
   id: string;
   name: string;
   image: string;
-  rarity?: string; // R, SR, SSR, SSR+, SP, SP+
+  rarity?: string;
   description: string;
   skills: ThanThuSkill[];
   unionSkills?: ThanThuUnionSkill[];

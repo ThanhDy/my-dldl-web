@@ -52,10 +52,22 @@ const SoulBoneSchema = new Schema(
     mutation: {
       name: String,
       iconUrl: String,
+      effects: [
+        {
+          starLevel: String,
+          type: { type: String, enum: ["red", "gold"], default: "red" },
+          effect: String,
+          _id: false,
+        },
+      ],
       star1Red: String,
       star4Red: String,
       star5Red: String,
       star6Red: String,
+      star1Gold: String,
+      star4Gold: String,
+      star5Gold: String,
+      star6Gold: String,
     },
     // Nâng cấp (Optional)
     upgrade: {
